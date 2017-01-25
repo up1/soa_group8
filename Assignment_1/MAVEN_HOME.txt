@@ -1,0 +1,11 @@
+﻿========== Temporary Solution ==========
+1. เปิด https://maven.apache.org/download.cgi เพื่อดาวน์โหลด 
+Binary zip archive: apache-maven-3.3.9-bin.zip
+
+2. แตกไฟล์ apache-maven-3.3.9-bin.zip
+
+3. เปิด Command Prompt และพิมพ์คำสั่งที่โยงไปยังที่เก็บไฟล์ที่ดาวน์โหลด:
+$ set MAVEN_HOME=D:\Download Programs\Apache Maven\apache-maven-3.3.9
+$ set PATH=.;%MAVEN_HOME%\bin;%PATH%
+
+โดยสามารถตรวจสอบได้ว่าการติดตั้งสำเร็จหรือไม่โดยพิมพ์คำสั่ง mvn -version ถ้าสำเร็จจะแสดง version ของ Apache Maven

@@ -1,0 +1,14 @@
+﻿1. ดาวน์โหลดไฟล์ demo-service จาก https://github.com/up1/demo-service
+
+2. แตกไฟล์ demo-service-master
+
+3. เปิด Command Prompt โดยย้ายไดเร็กทอรี่ cd ไปที่โฟล์เดอร์ user-service ที่ได้ดาวน์โหลดมา
+
+4. ทำการ Build Project โดยใช้คำสั่ง mvn clean package 
+
+5. ทำการ Run user-service.jar โดยใช้คำสั่ง 
+$ java -jar ./target/user-service.jar 
+
+6. TomcatEmbeddedServletContainer: Tomcat started on port 9001 
+
+7. เปิด Browser โดยเข้า URL (localhost:9001/user) 
