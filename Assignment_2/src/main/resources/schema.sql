@@ -7,17 +7,3 @@ CREATE TABLE USERS
     lastname varchar(100) NOT NULL,
     PRIMARY KEY (id)
 );
-
-INSERT INTO USERS (firstname, lastname)
-VALUES
-	('Sirirach', 'Junta'),
-	('Akkapon', 'Chainarong'),
-	('Adisorn', 'Sripakpaisit'),
-	('Tytle', 'Teerachart'),
-	('Patcharapon', 'Sophon'),
-	('Donald', 'Trump'),
-	('Barack', 'Obama'),
-	('Hilary', 'Clinton'),
-	('Bill', 'Clinton'),
-	('Abraham', 'Lincoln')
-;

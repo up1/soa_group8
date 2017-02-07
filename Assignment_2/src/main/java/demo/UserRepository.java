@@ -1,12 +1,11 @@
 package demo;
 
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Repository
 public class UserRepository {
@@ -24,13 +23,21 @@ public class UserRepository {
     }
     
     @Transactional(readOnly = true)
-    public List<User> findAll(Long page, Long limit){
-    	if(limit < 1){
-    		throw new BadParameterException("item_per_page", limit);
-    	}
-    	int start = (int)(Math.max((page - 1), 0) * limit);
-    	List<User> users = this.jdbcTemplate.query("SELECT * FROM USERS LIMIT ?, ?",new Object[]{start, limit}, new UserRowMapper());
-    	return users;
+    public List<User> findAll(int page, int item_per_page){
+        List<User> usersList;
+        final String SELECT_SQL = "SELECT id, firstname, lastname FROM users LIMIT ? OFFSET ?;";
+
+        try {
+            if (item_per_page > 0) {
+                int offset = item_per_page * (page - 1);
+                usersList = this.jdbcTemplate.query(SELECT_SQL, new Object[]{item_per_page, offset}, new UserRowMapper());
+            } else {
+                throw new UserNotFoundException();
+            }
+        } catch (Exception ex) {
+            throw new UserNotFoundException();
+        }
+        return usersList;
     }
 
     @Transactional
