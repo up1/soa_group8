@@ -14,7 +14,7 @@
 
     
     <build>
-        <finalName>user-service</finalName>
+        <finalName>rooms-service</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
