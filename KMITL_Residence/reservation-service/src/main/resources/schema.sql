@@ -10,7 +10,6 @@ CREATE TABLE reservation (
   reservation_status INTEGER NOT NULL DEFAULT 0,
   reservation_payment_type INTEGER NOT NULL DEFAULT 0,
   room_type INTEGER NOT NULL,
-  room_id INTEGER,
   customer_title_name VARCHAR(10),
   customer_full_name VARCHAR(150) NOT NULL,
   customer_email VARCHAR(150) NOT NULL,

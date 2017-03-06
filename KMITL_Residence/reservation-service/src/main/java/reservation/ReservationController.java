@@ -1,9 +1,9 @@
 package reservation;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,6 +26,17 @@ public class ReservationController {
 
         return this.reservationRepository.getReservation();
 
+    }
+
+    @RequestMapping(value = "/reservation/add",method = RequestMethod.POST)
+    public ResponseEntity saveReservation(@RequestBody Reservation reservation) {
+        if(reservation != null) {
+            reservationRepository.saveReservation(reservation);
+        }
+        else {
+            new NotFoundException();
+        }
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
 }

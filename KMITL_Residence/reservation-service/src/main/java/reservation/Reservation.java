@@ -11,7 +11,6 @@ public class Reservation {
     private int reservation_adult;
     private int reservation_children;
     private int room_type;
-    private int room_id;
     private int reservation_status;
     private int reservation_payment_type;
 
@@ -27,7 +26,7 @@ public class Reservation {
     private String credit_card_cvv;
 
     public Reservation(int reservation_id, String reservation_date, int reservation_night, int reservation_adult,
-                       int reservation_children, int room_type, int reservation_payment_type, String customer_title_name,
+                       int reservation_children, int reservation_payment_type, String customer_title_name,
                        String customer_full_name, String customer_email, String customer_tel, String customer_country,
                        String customer_nation, String credit_card_id, String credit_card_expired_date, String credit_card_cvv) {
         this.reservation_id = reservation_id;
@@ -99,14 +98,6 @@ public class Reservation {
 
     public void setRoom_type(int room_type) {
         this.room_type = room_type;
-    }
-
-    public int getRoom_id() {
-        return room_id;
-    }
-
-    public void setRoom_id(int room_id) {
-        this.room_id = room_id;
     }
 
     public int getReservation_status() {

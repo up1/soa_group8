@@ -20,7 +20,6 @@ public class ReservationRowMapper implements RowMapper<Reservation> {
         reservation.setReservation_status(rs.getInt("reservation_status"));
         reservation.setReservation_payment_type(rs.getInt("reservation_payment_type"));
         reservation.setRoom_type(rs.getInt("room_type"));
-        reservation.setRoom_id(rs.getInt("room_id"));
 
         reservation.setCustomer_title_name(rs.getString("customer_title_name"));
         reservation.setCustomer_full_name(rs.getString("customer_full_name"));

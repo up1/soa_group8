@@ -37,4 +37,25 @@ public class ReservationRepository {
         return reservations;
     }
 
+    @Transactional
+    public void saveReservation(Reservation reservation) {
+        String sql = "insert into reservation values(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbc.update(sql, reservation.getReservation_date(),
+                reservation.getReservation_night(),
+                reservation.getReservation_adult(),
+                reservation.getReservation_children(),
+                reservation.getReservation_status(),
+                reservation.getReservation_payment_type(),
+                reservation.getRoom_type(),
+                reservation.getCustomer_title_name(),
+                reservation.getCustomer_full_name(),
+                reservation.getCustomer_email(),
+                reservation.getCustomer_tel(),
+                reservation.getCustomer_country(),
+                reservation.getCustomer_nation(),
+                reservation.getCredit_card_id(),
+                reservation.getCredit_card_expired_date(),
+                reservation.getCredit_card_cvv());
+    }
+
 }
