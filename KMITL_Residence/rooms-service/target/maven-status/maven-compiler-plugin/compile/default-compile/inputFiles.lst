@@ -1,6 +1,8 @@
 /Users/madooding/Documents/Works/SOA/soa_group8/KMITL_Residence/rooms-service/src/main/java/room/RoomRowMapper.java
+/Users/madooding/Documents/Works/SOA/soa_group8/KMITL_Residence/rooms-service/src/main/java/room/model/Room.java
 /Users/madooding/Documents/Works/SOA/soa_group8/KMITL_Residence/rooms-service/src/main/java/room/RoomController.java
-/Users/madooding/Documents/Works/SOA/soa_group8/KMITL_Residence/rooms-service/src/main/java/room/Room.java
+/Users/madooding/Documents/Works/SOA/soa_group8/KMITL_Residence/rooms-service/src/main/java/room/RoomTypeRowMapper.java
+/Users/madooding/Documents/Works/SOA/soa_group8/KMITL_Residence/rooms-service/src/main/java/room/model/RoomType.java
 /Users/madooding/Documents/Works/SOA/soa_group8/KMITL_Residence/rooms-service/src/main/java/room/RoomServiceApplication.java
 /Users/madooding/Documents/Works/SOA/soa_group8/KMITL_Residence/rooms-service/src/main/java/room/config/DatabaseConfiguration.java
 /Users/madooding/Documents/Works/SOA/soa_group8/KMITL_Residence/rooms-service/src/main/java/room/RoomRepository.java
