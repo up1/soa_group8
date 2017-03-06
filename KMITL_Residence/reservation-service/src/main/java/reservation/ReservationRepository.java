@@ -82,4 +82,16 @@ public class ReservationRepository {
                 reservation.getCredit_card_cvv());
     }
 
+    @Transactional
+    public void cancelReservation(int reservation_id) {
+        String sql = "update reservation set reservation_status=3 where reservation_id=?;";
+        this.jdbc.update(sql, reservation_id);
+    }
+
+    @Transactional
+    public void confirmReservation(int reservation_id) {
+        String sql = "update reservation set reservation_status=2 where reservation_id=?;";
+        this.jdbc.update(sql, reservation_id);
+    }
+
 }
