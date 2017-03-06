@@ -21,21 +21,14 @@ public class ReservationController {
         this.reservationRepository = reservationRepository;
     }
 
-    @GetMapping("/reservations")
-    public List<Reservation> getReservations() {
-
-        return this.reservationRepository.getReservation();
-
+    @RequestMapping("/reservation/{reservation_id}")
+    public ReservationDetail getReservation(@PathVariable String reservation_id) {
+        return this.reservationRepository.getReservation(Integer.valueOf(reservation_id));
     }
 
     @RequestMapping(value = "/reservation/add",method = RequestMethod.POST)
     public ResponseEntity saveReservation(@RequestBody Reservation reservation) {
-        if(reservation != null) {
-            reservationRepository.saveReservation(reservation);
-        }
-        else {
-            new NotFoundException();
-        }
+        reservationRepository.saveReservation(reservation);
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
