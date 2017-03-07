@@ -21,22 +21,27 @@ public class ReservationController {
         this.reservationRepository = reservationRepository;
     }
 
-    @GetMapping("/reservations")
-    public List<Reservation> getReservations() {
-
-        return this.reservationRepository.getReservation();
-
+    @RequestMapping("/reservation/{reservation_id}")
+    public ReservationDetail getReservation(@PathVariable String reservation_id) {
+        return this.reservationRepository.getReservation(Integer.valueOf(reservation_id));
     }
 
     @RequestMapping(value = "/reservation/add",method = RequestMethod.POST)
     public ResponseEntity saveReservation(@RequestBody Reservation reservation) {
-        if(reservation != null) {
-            reservationRepository.saveReservation(reservation);
-        }
-        else {
-            new NotFoundException();
-        }
+        reservationRepository.saveReservation(reservation);
         return new ResponseEntity(HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/reservation/{reservation_id}/confirm", method = RequestMethod.PUT)
+    public ResponseEntity confirmReservation(@PathVariable String reservation_id) {
+        reservationRepository.confirmReservation(Integer.valueOf(reservation_id));
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reservation/{reservation_id}/cancel", method = RequestMethod.PUT)
+    public ResponseEntity cancelReservation(@PathVariable String reservation_id) {
+        reservationRepository.cancelReservation(Integer.valueOf(reservation_id));
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 }
