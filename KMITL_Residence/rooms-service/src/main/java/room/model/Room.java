@@ -1,4 +1,4 @@
-package room;
+package room.model;
 
 public class Room {
 	private int room_id;
