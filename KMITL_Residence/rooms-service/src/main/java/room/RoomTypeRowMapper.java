@@ -16,15 +16,15 @@ public class RoomTypeRowMapper implements RowMapper<RoomType> {
     public RoomType mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
         // TODO Auto-generated method stub
         RoomType roomType = new RoomType();
-        roomType.setType_id(resultSet.getInt("type_id"));
-        roomType.setType_name_th(resultSet.getString("type_name_th"));
-        roomType.setType_name_en(resultSet.getString("type_name_en"));
-        roomType.setType_details_th(resultSet.getString("type_details_th"));
-        roomType.setType_details_en(resultSet.getString("type_details_en"));
-        roomType.setType_price(resultSet.getDouble("type_price"));
-        roomType.setType_adult_limit(resultSet.getInt("type_adult_limit"));
-        roomType.setType_children_limit(resultSet.getInt("type_children_limit"));
-        roomType.setType_total_rooms(resultSet.getInt("total"));
+        roomType.setTypeId(resultSet.getInt("type_id"));
+        roomType.setTypeNameTh(resultSet.getString("type_name_th"));
+        roomType.setTypeNameEn(resultSet.getString("type_name_en"));
+        roomType.setTypeDetailsTh(resultSet.getString("type_details_th"));
+        roomType.setTypeDetailsEn(resultSet.getString("type_details_en"));
+        roomType.setTypePrice(resultSet.getDouble("type_price"));
+        roomType.setTypeAdultLimit(resultSet.getInt("type_adult_limit"));
+        roomType.setTypeChildrenLimit(resultSet.getInt("type_children_limit"));
+        roomType.setTypeTotalRooms(resultSet.getInt("total"));
         return roomType;
     }
 }

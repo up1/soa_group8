@@ -30,75 +30,75 @@ public class RoomType {
         this.type_total_rooms = type_total_rooms;
     }
 
-    public int getType_id() {
+    public int getTypeId() {
         return type_id;
     }
 
-    public void setType_id(int type_id) {
+    public void setTypeId(int type_id) {
         this.type_id = type_id;
     }
 
-    public String getType_name_th() {
+    public String getTypeNameTh() {
         return type_name_th;
     }
 
-    public void setType_name_th(String type_name_th) {
+    public void setTypeNameTh(String type_name_th) {
         this.type_name_th = type_name_th;
     }
 
-    public String getType_name_en() {
+    public String getTypeNameEn() {
         return type_name_en;
     }
 
-    public void setType_name_en(String type_name_en) {
+    public void setTypeNameEn(String type_name_en) {
         this.type_name_en = type_name_en;
     }
 
-    public String getType_details_th() {
+    public String getTypeDetailsTh() {
         return type_details_th;
     }
 
-    public void setType_details_th(String type_details_th) {
+    public void setTypeDetailsTh(String type_details_th) {
         this.type_details_th = type_details_th;
     }
 
-    public String getType_details_en() {
+    public String getTypeDetailsEn() {
         return type_details_en;
     }
 
-    public void setType_details_en(String type_detailse_en) {
+    public void setTypeDetailsEn(String type_detailse_en) {
         this.type_details_en = type_detailse_en;
     }
 
-    public double getType_price() {
+    public double getTypePrice() {
         return type_price;
     }
 
-    public void setType_price(double type_price) {
+    public void setTypePrice(double type_price) {
         this.type_price = type_price;
     }
 
-    public int getType_adult_limit() {
+    public int getTypeAdultLimit() {
         return type_adult_limit;
     }
 
-    public void setType_adult_limit(int type_adult_limit) {
+    public void setTypeAdultLimit(int type_adult_limit) {
         this.type_adult_limit = type_adult_limit;
     }
 
-    public int getType_children_limit() {
+    public int getTypeChildrenLimit() {
         return type_children_limit;
     }
 
-    public void setType_children_limit(int type_children_limit) {
+    public void setTypeChildrenLimit(int type_children_limit) {
         this.type_children_limit = type_children_limit;
     }
 
-    public int getType_total_rooms() {
+    public int getTypeTotalRooms() {
         return type_total_rooms;
     }
 
-    public void setType_total_rooms(int type_total_rooms) {
+    public void setTypeTotalRooms(int type_total_rooms) {
         this.type_total_rooms = type_total_rooms;
     }
 }
