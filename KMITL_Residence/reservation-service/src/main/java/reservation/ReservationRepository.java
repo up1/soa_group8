@@ -94,4 +94,9 @@ public class ReservationRepository {
         this.jdbc.update(sql, reservation_id);
     }
 
+    @Transactional(readOnly = true)
+    public void searchAvailable() {
+
+    }
+
 }
