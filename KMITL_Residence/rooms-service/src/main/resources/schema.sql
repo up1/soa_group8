@@ -17,15 +17,15 @@ CREATE TABLE Room_Type
 CREATE TABLE Rooms
 (
     room_id int PRIMARY KEY,
-    room_details VARCHAR(500),
-    room_type_id int,
+    room_details VARCHAR(500) CHARACTER  SET utf8 COLLATE utf8_general_ci,
+    room_type_id int NOT NULL,
     room_availability int
 );
 
 CREATE TABLE RoomsChecker
 (
     reservation_id INT PRIMARY KEY,
-    checkin DATE NOT NULL,
-    checkout DATE,
-    room_id INT
+    checkin DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    checkout DATETIME,
+    room_id INT NOT NULL
 );

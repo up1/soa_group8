@@ -39,5 +39,19 @@ public class RoomServiceRepository {
         return this.jdbcTemplate.query("SELECT * FROM Rooms WHERE room_type_id = ? and room_availability = 1", new Object[]{roomTypeId}, new RoomRowMapper());
     }
 
+    @Transactional
+    public void roomCheckInByReservationId(int roomId, int reservationId){
+        String sql = "UPDATE Rooms SET room_availability = 0 WHERE room_id = ?";
+        this.jdbcTemplate.update(sql, roomId);
+        sql = "INSERT INTO RoomsChecker(reservation_id, room_id) VALUES (?,?)";
+        this.jdbcTemplate.update(sql, roomId, reservationId);
+    }
 
+    @Transactional
+    public void roomCheckOutByReservationId(int roomId, int reservationId){
+        String sql = "UPDATE Rooms SET room_availability = 1 WHERE room_id = ?";
+        this.jdbcTemplate.update(sql, roomId);
+        sql = "UPDATE RoomsChecker SET checkout = CURRENT_TIMESTAMP WHERE reservation_id = ?";
+        this.jdbcTemplate.update(sql, reservationId);
+    }
 }
