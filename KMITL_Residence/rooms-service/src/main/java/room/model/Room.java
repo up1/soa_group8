@@ -1,52 +1,51 @@
 package room.model;
 
 public class Room {
-	private int room_id;
-	private String room_detail;
-	private int room_status;
-	private int room_type_id;
-	
-	public Room (int room_id){
-		this.room_id = room_id;
-		this.room_detail = "sample detail";
-		this.room_status = 0;
-		this.room_type_id = 1;
+	private int roomId;
+	private String roomDetails;
+	private int roomTypeId;
+	private int roomAvailability;
+
+	public Room(int roomId, String roomDetails, int roomTypeId, int roomAvailability) {
+		this.roomId = roomId;
+		this.roomDetails = roomDetails;
+		this.roomTypeId = roomTypeId;
+		this.roomAvailability = roomAvailability;
 	}
-	
+
 	public Room(){
-		
+
 	}
 
-	public int getRoom_id() {
-		return room_id;
+	public int getRoomId() {
+		return roomId;
 	}
 
-	public void setRoom_id(int room_id) {
-		this.room_id = room_id;
+	public void setRoomId(int roomId) {
+		this.roomId = roomId;
 	}
 
-	public String getRoom_detail() {
-		return room_detail;
+	public String getRoomDetails() {
+		return roomDetails;
 	}
 
-	public void setRoom_detail(String room_detail) {
-		this.room_detail = room_detail;
+	public void setRoomDetails(String roomDetails) {
+		this.roomDetails = roomDetails;
 	}
 
-	public int getRoom_status() {
-		return room_status;
+	public int getRoomTypeId() {
+		return roomTypeId;
 	}
 
-	public void setRoom_status(int room_status) {
-		this.room_status = room_status;
+	public void setRoomTypeId(int roomTypeId) {
+		this.roomTypeId = roomTypeId;
 	}
 
-	public int getRoom_type_id() {
-		return room_type_id;
+	public int getRoomAvailability() {
+		return roomAvailability;
 	}
 
-	public void setRoom_type_id(int room_type_id) {
-		this.room_type_id = room_type_id;
+	public void setRoomAvailability(int roomAvailability) {
+		this.roomAvailability = roomAvailability;
 	}
-	
 }

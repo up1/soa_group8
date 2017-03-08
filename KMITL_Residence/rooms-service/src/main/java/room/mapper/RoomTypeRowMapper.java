@@ -1,4 +1,4 @@
-package room;
+package room.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
 import room.model.RoomType;

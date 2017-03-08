@@ -18,7 +18,8 @@ CREATE TABLE Rooms
 (
     room_id int PRIMARY KEY,
     room_details VARCHAR(500),
-    room_type_id int
+    room_type_id int,
+    room_availability int
 );
 
 CREATE TABLE RoomsChecker
