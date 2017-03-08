@@ -37,4 +37,9 @@ public class RoomServiceController {
 	    return this.roomServiceRepository.getRoomInformationByRoomId(room_id);
     }
 
+    @RequestMapping(value = "/rooms/available/{room_type_id}", method = RequestMethod.GET)
+    public List<Room> getAvailableRoomsByRoomTypeId(@PathVariable int room_type_id){
+        return this.roomServiceRepository.getAvailableRoomsByRoomTypeId(room_type_id);
+    }
+
 }

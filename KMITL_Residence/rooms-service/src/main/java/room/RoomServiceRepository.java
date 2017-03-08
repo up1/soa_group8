@@ -33,4 +33,11 @@ public class RoomServiceRepository {
     public Room getRoomInformationByRoomId(int roomId){
         return this.jdbcTemplate.queryForObject("SELECT * FROM Rooms WHERE room_id = ?", new Object[]{roomId}, new RoomRowMapper());
     }
+
+    @Transactional(readOnly = true)
+    public List<Room> getAvailableRoomsByRoomTypeId(int roomTypeId){
+        return this.jdbcTemplate.query("SELECT * FROM Rooms WHERE room_type_id = ? and room_availability = 1", new Object[]{roomTypeId}, new RoomRowMapper());
+    }
+
+
 }
