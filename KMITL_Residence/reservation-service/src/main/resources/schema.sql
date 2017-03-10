@@ -4,7 +4,7 @@ CREATE TABLE reservation (
 
   reservation_id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
   reservation_date DATE NOT NULL,
-  reservation_night INTEGER NOT NULL DEFAULT 1,
+  reservation_checkout DATE NOT NULL,
   reservation_adult INTEGER NOT NULL DEFAULT 0,
   reservation_children INTEGER NOT NULL DEFAULT 0,
   reservation_status INTEGER NOT NULL DEFAULT 1,

@@ -1,4 +1,4 @@
-package reservation;
+package reservation.model;
 
 /**
  * Created by Adisorn on 6/3/2560.

@@ -1,11 +1,12 @@
-package reservation;
+package reservation.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import reservation.repository.ReservationRepository;
+import reservation.model.Reservation;
+import reservation.model.ReservationDetail;
 
 /**
  * Created by Adisorn on 1/3/2560.
@@ -28,7 +29,12 @@ public class ReservationController {
 
     @RequestMapping(value = "/reservation/add",method = RequestMethod.POST)
     public ResponseEntity saveReservation(@RequestBody Reservation reservation) {
-        reservationRepository.saveReservation(reservation);
+        if(reservation != null) {
+            reservationRepository.saveReservation(reservation);
+        }
+        else {
+            System.out.print("Null");
+        }
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
