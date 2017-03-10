@@ -1,0 +1,88 @@
+package reservation.repository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import reservation.exception.NotFoundException;
+import reservation.mapper.ReservationDetailRowMapper;
+import reservation.model.Reservation;
+import reservation.model.ReservationDetail;
+
+/**
+ * Created by Adisorn on 1/3/2560.
+ */
+@Repository
+public class ReservationRepository {
+
+    @Autowired
+    private JdbcTemplate jdbc;
+
+    public ReservationRepository(JdbcTemplate jdbc) {
+        this.jdbc = jdbc;
+    }
+
+    @Transactional(readOnly = true)
+    public ReservationDetail getReservation(int reservation_id) {
+        ReservationDetail reservation = null;
+
+        String sql = "select r.reservation_id, r.reservation_date, r.reservation_checkout, r.reservation_adult, " +
+                "r.reservation_children, s.status_description, p.payment_type_description, r.room_type, " +
+                "r.customer_title_name, r.customer_full_name, r.customer_email, r.customer_tel, r.customer_country, " +
+                "r.customer_nation " +
+                "from reservation r " +
+                "join reservation_status s ON r.reservation_status = s.status_id " +
+                "join payment_type p ON r.reservation_payment_type = p.payment_type_id " +
+                "where reservation_id=?;";
+        try {
+            reservation = jdbc.queryForObject(sql, new Object[]{reservation_id}, new ReservationDetailRowMapper());
+        } catch(Exception ex) {
+            ex.printStackTrace();
+            throw new NotFoundException();
+        }
+
+        return reservation;
+    }
+
+
+
+    @Transactional
+    public void saveReservation(Reservation reservation) {
+        String sql = "insert into reservation values(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        System.out.println(reservation.getId());
+        jdbc.update(sql, reservation.getCheckIn(),
+                reservation.getCheckOut(),
+                reservation.getAdults(),
+                reservation.getChildren(),
+                reservation.getStatus(),
+                reservation.getPaymentType(),
+                reservation.getRoomType(),
+                reservation.getCustomer().getTitleName(),
+                reservation.getCustomer().getFullName(),
+                reservation.getCustomer().getEmail(),
+                reservation.getCustomer().getTel(),
+                reservation.getCustomer().getCountry(),
+                reservation.getCustomer().getNation(),
+                reservation.getCreditCard().getNumber(),
+                reservation.getCreditCard().getExpiredDate(),
+                reservation.getCreditCard().getCvv());
+    }
+
+    @Transactional
+    public void cancelReservation(int reservation_id) {
+        String sql = "update reservation set reservation_status=3 where reservation_id=?;";
+        this.jdbc.update(sql, reservation_id);
+    }
+
+    @Transactional
+    public void confirmReservation(int reservation_id) {
+        String sql = "update reservation set reservation_status=2 where reservation_id=?;";
+        this.jdbc.update(sql, reservation_id);
+    }
+
+    @Transactional(readOnly = true)
+    public void searchAvailable() {
+
+    }
+
+}
