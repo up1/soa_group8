@@ -4,9 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reservation.model.AvailableRoomsType;
+import reservation.model.RoomType;
 import reservation.repository.ReservationRepository;
 import reservation.model.Reservation;
 import reservation.model.ReservationDetail;
+
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * Created by Adisorn on 1/3/2560.
@@ -48,6 +53,17 @@ public class ReservationController {
     public ResponseEntity cancelReservation(@PathVariable String reservation_id) {
         reservationRepository.cancelReservation(Integer.valueOf(reservation_id));
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/reservation/availableSearch", method = RequestMethod.GET)
+    public List<AvailableRoomsType> availableSearch(@RequestParam(value = "checkin", required = true) String checkin,
+                                                    @RequestParam(value = "checkout", required = true) String checkout,
+                                                    @RequestParam(value = "adults", required = true) int adults,
+                                                    @RequestParam(value = "children", required = true) int children) {
+
+            List<AvailableRoomsType> availableRoomsTypes = reservationRepository.searchAvailable(checkin, checkout, adults, children);
+            return availableRoomsTypes;
+
     }
 
 }

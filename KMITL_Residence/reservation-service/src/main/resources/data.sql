@@ -6,7 +6,7 @@ INSERT INTO reservation values(
   1,
   1,
   1,
-  101,
+  1,
   "Mr.",
   "Adisorn Sripakpaisit",
   "example@example.com",
