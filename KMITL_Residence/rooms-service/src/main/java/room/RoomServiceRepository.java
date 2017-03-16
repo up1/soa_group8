@@ -7,14 +7,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import room.exception.ReceptionException;
-import room.exception.RoomIsUnavailable;
-import room.exception.RoomNotFound;
-import room.exception.RoomTypeNotFound;
+import org.springframework.web.client.RestTemplate;
+import room.exception.*;
 import room.mapper.CheckerRowMapper;
 import room.mapper.RoomRowMapper;
 import room.mapper.RoomTypeRowMapper;
 import room.model.Checker;
+import room.model.Reservation;
 import room.model.Room;
 import room.model.RoomType;
 
@@ -67,18 +66,38 @@ public class RoomServiceRepository {
 
     @Transactional
     public void roomCheckInByReservationId(int roomId, int reservationId){
+
+        RestTemplate template = new RestTemplate();
+        Reservation reservation = new Reservation();
+        try {
+            reservation = template.getForObject("http://localhost:9000/reservation/" + reservationId + "/", Reservation.class);
+        }catch(Exception e) {
+            throw new ReservationNotFoundException("Reservation not found: " + reservationId);
+        }
+
         Room room = getRoomInformationByRoomId(roomId);
-        if(room.getRoomAvailability() == 0) {
-            throw new RoomIsUnavailable(roomId);
+
+        if(reservation.getRoomType() == room.getRoomTypeId() && reservation.getId() == reservationId) {
+
+            if (room.getRoomAvailability() == 0) {
+                throw new RoomIsUnavailable(roomId);
+            }
+            List<Checker> checkers = this.jdbcTemplate.query("SELECT * FROM ROOMSCHECKER WHERE reservation_id = ?", new Object[]{reservationId}, new CheckerRowMapper());
+            if (checkers.size() > 0) {
+                throw new ReceptionException("This reservation id has already checked-in, Reservation id : " + reservationId);
+            }
+            if(reservation.getStatus().equals("waiting")) {
+                throw new ReservationNotConfirmException("This reservation id not yet confirmed The reservation: " + reservationId);
+            }
+            String sql = "UPDATE Rooms SET room_availability = 0 WHERE room_id = ?";
+            this.jdbcTemplate.update(sql, roomId);
+            sql = "INSERT INTO RoomsChecker(reservation_id, room_id) VALUES (?,?)";
+            this.jdbcTemplate.update(sql, reservationId, roomId);
         }
-        List<Checker> checkers = this.jdbcTemplate.query("SELECT * FROM ROOMSCHECKER WHERE reservation_id = ?", new Object[]{reservationId}, new CheckerRowMapper());
-        if(checkers.size() > 0){
-            throw new ReceptionException("This reservation id has already checked-in, Reservation id : " + reservationId);
+        else {
+            throw new ReservationNotMatchException("Reservation id not match with room: " + reservationId);
         }
-        String sql = "UPDATE Rooms SET room_availability = 0 WHERE room_id = ?";
-        this.jdbcTemplate.update(sql, roomId);
-        sql = "INSERT INTO RoomsChecker(reservation_id, room_id) VALUES (?,?)";
-        this.jdbcTemplate.update(sql, roomId, reservationId);
+
     }
 
     @Transactional
