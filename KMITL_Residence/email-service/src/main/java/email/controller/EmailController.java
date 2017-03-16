@@ -1,9 +1,8 @@
 package email.controller;
 
+import email.model.Email;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import email.repository.EmailRepository;
 
 import java.io.UnsupportedEncodingException;
@@ -15,17 +14,25 @@ import java.io.UnsupportedEncodingException;
 @CrossOrigin(origins = "*")
 public class EmailController {
 
-    @Autowired
-    private EmailRepository emailRepository;
+    private final EmailRepository emailRepository;
 
-    @RequestMapping("/sendmail")
-    public String sendEmail() {
-        try {
-            emailRepository.sendEmail();
-        } catch(UnsupportedEncodingException e) {
-            e.printStackTrace();
+    @Autowired
+    public EmailController(EmailRepository emailRepository) {
+        this.emailRepository = emailRepository;
+    }
+
+    @RequestMapping(value = "/sendmail",method = RequestMethod.POST)
+    public String sendEmail(@RequestBody Email email_info) {
+        if(email_info != null) {
+            try {
+                emailRepository.sendEmail(email_info);
+            } catch(UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        } else {
+            return "Something went wrong!";
         }
-        return "Mail Sent La Jaaaaa!";
+        return "Mail Sent!";
     }
 
 }
