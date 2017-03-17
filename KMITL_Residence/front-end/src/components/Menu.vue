@@ -39,7 +39,24 @@ div.ui.secondary.menu {
 }
 
 div.ui.secondary.menu * {
-    font-size: 12pt;
+    font-size: 10pt;
+}
+
+div.ui.secondary.menu .item {
+    border-radius: 0px;
+    margin: 0px 20px;
+}
+
+div.ui.secondary.menu .right.menu > .item:first-child {
+    margin-left: 0px;
+}
+
+div.ui.secondary.menu .right.menu > .item:last-child {
+    margin-right: 0px;
+}
+
+div.ui.secondary.menu .active.item {
+    border-radius: 0px;
 }
 
 div.ui.secondary.menu.inverted .active.item {
@@ -50,6 +67,10 @@ div.ui.secondary.menu.inverted .active.item {
 div.ui.secondary.menu.inverted .logo {
     font-size: 22px !important;
     color: rgba(255, 255, 255, .68) !important;
+}
+
+div.ui.secondary.menu.inverted .logo:hover {
+    background-color: transparent;
 }
 
 div.ui.secondary.menu.inverted .logo > div {
