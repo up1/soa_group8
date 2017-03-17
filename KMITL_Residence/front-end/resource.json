@@ -1,0 +1,10 @@
+{
+  "css": {
+    "site": [
+      "node_modules/semantic-ui/dist/semantic.css"
+    ],
+    "style": [
+      "src/assets/css/custom.css"
+    ]
+  }
+}
