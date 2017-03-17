@@ -4,12 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
-import reservation.exception.NotFoundException;
+import reservation.exception.*;
 import reservation.mapper.AvailableRoomsTypeRowMapper;
 import reservation.mapper.ReservationDetailRowMapper;
 import reservation.model.AvailableRoomsType;
@@ -48,7 +47,7 @@ public class ReservationRepository {
             reservation = jdbc.queryForObject(sql, new Object[]{reservation_id}, new ReservationDetailRowMapper());
         } catch(Exception ex) {
             ex.printStackTrace();
-            throw new NotFoundException();
+            throw new NotFoundException(reservation_id);
         }
 
         return reservation;
@@ -58,35 +57,67 @@ public class ReservationRepository {
 
     @Transactional
     public void saveReservation(Reservation reservation) {
-        String sql = "insert into reservation values(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbc.update(sql, reservation.getCheckIn(),
-                reservation.getCheckOut(),
-                reservation.getAdults(),
-                reservation.getChildren(),
-                reservation.getStatus(),
-                reservation.getPaymentType(),
-                reservation.getRoomType(),
-                reservation.getCustomer().getTitleName(),
-                reservation.getCustomer().getFullName(),
-                reservation.getCustomer().getEmail(),
-                reservation.getCustomer().getTel(),
-                reservation.getCustomer().getCountry(),
-                reservation.getCustomer().getNation(),
-                reservation.getCreditCard().getNumber(),
-                reservation.getCreditCard().getExpiredDate(),
-                reservation.getCreditCard().getCvv());
+
+        if(searchAvailable(reservation.getCheckIn(), reservation.getCheckOut(),
+                reservation.getAdults(), reservation.getChildren()).size() > 0) {
+
+            String sql = "insert into reservation values(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            int result = jdbc.update(sql, reservation.getCheckIn(),
+                    reservation.getCheckOut(),
+                    reservation.getAdults(),
+                    reservation.getChildren(),
+                    reservation.getStatus(),
+                    reservation.getPaymentType(),
+                    reservation.getRoomType(),
+                    reservation.getCustomer().getTitleName(),
+                    reservation.getCustomer().getFullName(),
+                    reservation.getCustomer().getEmail(),
+                    reservation.getCustomer().getTel(),
+                    reservation.getCustomer().getCountry(),
+                    reservation.getCustomer().getNation(),
+                    reservation.getCreditCard().getNumber(),
+                    reservation.getCreditCard().getExpiredDate(),
+                    reservation.getCreditCard().getCvv());
+            if (result < 0) {
+                throw new AddReservationFailedException();
+            }
+        }
+        else {
+            throw new RoomTypeNotAvailableException();
+        }
     }
 
     @Transactional
     public void cancelReservation(int reservation_id) {
-        String sql = "update reservation set reservation_status=3 where reservation_id=?;";
-        this.jdbc.update(sql, reservation_id);
+        ReservationDetail rs = getReservation(reservation_id);
+        if(rs.getStatus().equals("completed")) {
+            String sql = "update reservation set reservation_status=3 where reservation_id=?;";
+            int result = this.jdbc.update(sql, reservation_id);
+            if (result < 0) {
+                throw new CancelFailedException(reservation_id);
+            }
+        }
+        else {
+            throw new CancelDeniedException(reservation_id);
+        }
+
     }
 
     @Transactional
     public void confirmReservation(int reservation_id) {
-        String sql = "update reservation set reservation_status=2 where reservation_id=?;";
-        this.jdbc.update(sql, reservation_id);
+
+        if(getReservation(reservation_id).getStatus().equals("waiting")) {
+
+            String sql = "update reservation set reservation_status=2 where reservation_id=?;";
+            int result = this.jdbc.update(sql, reservation_id);
+            if(result < 0) {
+                throw new ConfirmFailedException(reservation_id);
+            }
+        }
+        else {
+            throw new ConfirmDeniedException(reservation_id);
+        }
+
     }
 
     @Transactional(readOnly = true)
@@ -113,10 +144,6 @@ public class ReservationRepository {
 
         List<AvailableRoomsType> available = this.jdbc.query(sql, new AvailableRoomsTypeRowMapper());
         List<AvailableRoomsType> tempRoom = new ArrayList<>();
-
-        if(available.isEmpty()) {
-            System.out.println(sql);
-        }
 
         for(AvailableRoomsType availableRoomsType: available) {
             for(RoomType roomType: roomTypes) {
