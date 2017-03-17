@@ -51,13 +51,15 @@ div.ui.secondary.menu .right.menu > .item:first-child {
     margin-left: 0px;
 }
 
-div.ui.secondary.menu .right.menu > .item:last-child {
-    margin-right: 0px;
-}
 
 div.ui.secondary.menu .active.item {
     border-radius: 0px;
 }
+
+div.ui.secondary.menu.inverted .item:hover {
+    background-color: transparent;
+}
+
 
 div.ui.secondary.menu.inverted .active.item {
     background-color: #FFFFFF;
@@ -69,9 +71,6 @@ div.ui.secondary.menu.inverted .logo {
     color: rgba(255, 255, 255, .68) !important;
 }
 
-div.ui.secondary.menu.inverted .logo:hover {
-    background-color: transparent;
-}
 
 div.ui.secondary.menu.inverted .logo > div {
     color: white !important;
