@@ -20,7 +20,7 @@ div.content-container {
 }
 
 .padding-content {
-    padding: 15px;
+    padding: 63.857px 36px;
 }
 
 .side-padding-content {
@@ -42,6 +42,7 @@ div.background-homepage-container h1 {
     font-family: 'Montserrat';
     font-weight: 500;
     font-size: 48px;
+    line-height: 58px;
 }
 
 button.ui.white.basic.button.radiusless {
@@ -49,16 +50,19 @@ button.ui.white.basic.button.radiusless {
     font-size: 14px;
     border-color: white;
     border-style: solid;
-    border-width: 0.25em;
+    border-width: 0.2em;
     border-radius: 0px;
-    padding-left: 28px;
-    padding-right: 28px;
+    padding: 15px 36px;
     color: white !important;
 }
 
-button.ui.white.basic.button.radiusless:hover {
+button.ui.white.basic.button.radiusless:hover, button.ui.white.basic.button.radiusless:focus {
     color: black !important;
     box-shadow: 0 0 0 0px rgba(34,36,38,.15) inset;
 
 }
 
+.section-header {
+    margin-bottom: 35.857px !important;
+    color: #3F3F3F !important;
+} 
