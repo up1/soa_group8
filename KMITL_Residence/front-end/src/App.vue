@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <Menu></Menu>
+    <menu-bar/>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Menu from './components/Menu'
+import MenuBar from './components/Menu'
 
 export default {
   components: {
-    Menu
+    MenuBar
   }
 }
 </script>

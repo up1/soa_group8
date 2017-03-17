@@ -3,7 +3,7 @@
     Contact : madooding@yahoo.co.th
 */
 
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700');
 
 
 body {
@@ -24,14 +24,41 @@ div.content-container {
 }
 
 .side-padding-content {
-    padding: 0 15px;
+    padding: 0 36px;
 }
 
 div.background-homepage-container {
     width: 100%;
-    height: 80vh;
+    padding-top: 139px;
+    padding-bottom: 63.857px;
+    height: auto;
     background: url('../images/homepage-background.png');
     background-size: cover;
     background-position: right;
+    color: white;
+}
+
+div.background-homepage-container h1 { 
+    font-family: 'Montserrat';
+    font-weight: 500;
+    font-size: 48px;
+}
+
+button.ui.white.basic.button.radiusless {
+    font-weight: 700;
+    font-size: 14px;
+    border-color: white;
+    border-style: solid;
+    border-width: 0.25em;
+    border-radius: 0px;
+    padding-left: 28px;
+    padding-right: 28px;
+    color: white !important;
+}
+
+button.ui.white.basic.button.radiusless:hover {
+    color: black !important;
+    box-shadow: 0 0 0 0px rgba(34,36,38,.15) inset;
+
 }
 

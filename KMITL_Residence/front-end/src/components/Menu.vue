@@ -23,7 +23,7 @@
 
 </script>
 
-<style>
+<style scoped>
 
 div.content-container {
     position: absolute;
@@ -34,7 +34,6 @@ div.content-container {
 
 div.ui.secondary.menu {
     font-family: 'Montserrat';
-    font-weight: 700 !important;
     background-color: transparent;
 }
 
@@ -45,6 +44,8 @@ div.ui.secondary.menu * {
 div.ui.secondary.menu .item {
     border-radius: 0px;
     margin: 0px 20px;
+    transition: color .1s ease-in 0s;
+    font-weight: 500 !important;
 }
 
 div.ui.secondary.menu .right.menu > .item:first-child {
@@ -67,14 +68,14 @@ div.ui.secondary.menu.inverted .active.item {
 }
 
 div.ui.secondary.menu.inverted .logo {
-    font-size: 22px !important;
+    font-size: 24px !important;
     color: rgba(255, 255, 255, .68) !important;
 }
 
 
 div.ui.secondary.menu.inverted .logo > div {
     color: white !important;
-    font-size: 22px !important;
+    font-size: 24px !important;
 }
 
 </style>
