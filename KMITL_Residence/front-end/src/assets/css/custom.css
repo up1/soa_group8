@@ -62,7 +62,20 @@ button.ui.white.basic.button.radiusless:hover, button.ui.white.basic.button.radi
 
 }
 
+button.ui.button.luxury-primary {
+    background-color: #3F3F3F;
+    color: white;
+}
+
+button.ui.button.luxury-primary:hover{
+    background-color: black;
+}
+
 .section-header {
     margin-bottom: 35.857px !important;
     color: #3F3F3F !important;
-} 
+}
+
+label {
+    color: #3F3F3F !important;
+}

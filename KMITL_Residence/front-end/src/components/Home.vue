@@ -23,25 +23,35 @@
         <div class="sixteen wide column">
           <form class="ui form">
             <div class="fields">
-              <div class="ui large input five wide field">
+              <div class="ui large input four wide field">
                 <label>Date Check-in</label>
-                <input type="text">
+                <input type="date">
               </div>
-              <div class="ui large input five wide field">
+              <div class="ui large input four wide field">
                 <label>Date Check-out</label>
-                <input type="text">
+                <input type="date">
               </div>
               <div class="ui large input two wide field">
                 <label>Adults</label>
-                <input type="text">
+                <select class="ui dropdown">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
               </div>
               <div class="ui large input two wide field">
                 <label>Children</label>
-                <input type="text">
+                <select class="ui dropdown">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                </select>
               </div>
-              <div class="ui large input two wide field">
+              <div class="ui large input four wide field">
                 <label>​&nbsp;</label>
-                <input type="text">
+                <button class="ui button fluid luxury-primary">
+                  Book Room
+                </button>
               </div>
             </div>
           </form>
@@ -70,6 +80,10 @@ div.hero-middle-vertical {
 
 div.input {
   display: block;
+}
+
+div.large.input.field > select, div.large.input.field > button{
+  height: 43.11px;
 }
 
 </style>
