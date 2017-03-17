@@ -5,42 +5,51 @@ package email.model;
  */
 public class Content {
 
-    private int room_type;
-    private int price;
-    private String confirmation_link;
-
+    private int reservationId;
+    private int roomType;
+    private int total;
+    private String confirmationLink;
 
     public void Content() {
 
     }
 
-    public void Content(int room_type, int price, String confirmation_link) {
-        this.setRoom_type(room_type);
-        this.setPrice(price);
-        this.setConfirmation_link(confirmation_link);
+    public void Content(int reservationId, int roomType, int total, String confirmationLink) {
+        this.reservationId = reservationId;
+        this.roomType = roomType;
+        this.total = total;
+        this.confirmationLink = confirmationLink;
     }
 
-    public int getRoom_type() {
-        return room_type;
+    public int getReservationId() {
+        return reservationId;
     }
 
-    public void setRoom_type(int room_type) {
-        this.room_type = room_type;
+    public void setReservationId(int reservationId) {
+        this.reservationId = reservationId;
     }
 
-    public int getPrice() {
-        return price;
+    public int getRoomType() {
+        return roomType;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setRoomType(int roomType) {
+        this.roomType = roomType;
     }
 
-    public String getConfirmation_link() {
-        return confirmation_link;
+    public int getTotal() {
+        return total;
     }
 
-    public void setConfirmation_link(String confirmation_link) {
-        this.confirmation_link = confirmation_link;
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public String getConfirmationLink() {
+        return confirmationLink;
+    }
+
+    public void setConfirmationLink(String confirmationLink) {
+        this.confirmationLink = confirmationLink;
     }
 }

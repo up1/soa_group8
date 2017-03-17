@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class NotFoundException extends RuntimeException {
-    public NotFoundException() {
-        super("Could not find reservation");
+    public NotFoundException(int reservationId) {
+        super("Not reservation found id: " + reservationId);
     }
 }

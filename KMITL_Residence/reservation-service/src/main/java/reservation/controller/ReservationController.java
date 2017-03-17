@@ -4,11 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reservation.model.AvailableRoomsType;
-import reservation.model.RoomType;
+import reservation.model.*;
 import reservation.repository.ReservationRepository;
-import reservation.model.Reservation;
-import reservation.model.ReservationDetail;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -33,26 +30,32 @@ public class ReservationController {
     }
 
     @RequestMapping(value = "/reservation/add",method = RequestMethod.POST)
-    public ResponseEntity saveReservation(@RequestBody Reservation reservation) {
+    public ResponseEntity<ResultMessage> saveReservation(@RequestBody Reservation reservation) {
+
+        ResultMessage resultMessage = new ResultMessage("Success");
+
         if(reservation != null) {
             reservationRepository.saveReservation(reservation);
         }
-        else {
-            System.out.print("Null");
-        }
-        return new ResponseEntity(HttpStatus.CREATED);
+
+        return new ResponseEntity(resultMessage, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/reservation/{reservation_id}/confirm", method = RequestMethod.PUT)
-    public ResponseEntity confirmReservation(@PathVariable String reservation_id) {
+    public ResponseEntity<ResultMessage> confirmReservation(@PathVariable String reservation_id) {
+
+        ResultMessage resultMessage = new ResultMessage("Success");
         reservationRepository.confirmReservation(Integer.valueOf(reservation_id));
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(resultMessage, HttpStatus.OK);
+
     }
 
     @RequestMapping(value = "/reservation/{reservation_id}/cancel", method = RequestMethod.PUT)
     public ResponseEntity cancelReservation(@PathVariable String reservation_id) {
+
+        ResultMessage resultMessage = new ResultMessage("Success");
         reservationRepository.cancelReservation(Integer.valueOf(reservation_id));
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(resultMessage, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/reservation/availableSearch", method = RequestMethod.GET)
