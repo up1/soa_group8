@@ -1,13 +1,13 @@
 <template>
-    <div class="content-container" ref="menucontainer">
+    <div class="content-container side-padding-content" ref="menucontainer">
         <div class="ui secondary menu inverted">
             <a class="item logo">
                 <div>KMITL</div>RESIDENCE
             </a>
             <div class="right menu">
-                <router-link to="/" class="item">HOME</router-link>
+                <router-link to="/" class="item" active-class="active" exact>HOME</router-link>
 
-                <router-link to="/reservation" class="item">RESERVATION</router-link>
+                <router-link to="/reservation" class="item" active-class="active">RESERVATION</router-link>
                 <a class="item">
                     ADMINISTRATOR
                 </a>
@@ -18,8 +18,16 @@
 
 <script>
 export default {
+
+    data: () => ({
+        activeStatus: {
+            home: false,
+            reservation: false
+        }
+    }),
     mounted(){
         this.changeMenuStyle()
+        this.setActive()
     },
 
     watch: {
@@ -29,6 +37,16 @@ export default {
     },
 
     methods: {
+        setActive(){
+            this.activeStatus.home = false
+            this.activeStatus.reservation = false
+            switch(this.getPath()){
+                case "/": this.activeStatus.home = true
+                            break
+                case "/reservation": this.activeStatus.reservation = true
+                       break
+            }
+        },
         getPath() {
             return this.$route.path
         },
@@ -73,7 +91,7 @@ div.ui.secondary.menu .item:first-child {
 }
 
 div.ui.secondary.menu .item:last-child {
-    margin-left: 0px;
+    margin-right: 0px;
 }
 
 
