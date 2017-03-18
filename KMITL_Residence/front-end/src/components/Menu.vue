@@ -1,16 +1,13 @@
 <template>
-    <div class="content-container">
+    <div class="content-container" ref="menucontainer">
         <div class="ui secondary menu inverted">
             <a class="item logo">
                 <div>KMITL</div>RESIDENCE
             </a>
             <div class="right menu">
-                <a class="active item">
-                    HOME
-                </a>
-                <a class="item">
-                    RESERVATION
-                </a>
+                <router-link to="/" class="item">HOME</router-link>
+
+                <router-link to="/reservation" class="item">RESERVATION</router-link>
                 <a class="item">
                     ADMINISTRATOR
                 </a>
@@ -20,7 +17,30 @@
 </template>
 
 <script>
+export default {
+    mounted(){
+        this.changeMenuStyle()
+    },
 
+    watch: {
+        $route(){
+            this.changeMenuStyle()
+        }
+    },
+
+    methods: {
+        getPath() {
+            return this.$route.path
+        },
+        changeMenuStyle() {
+            if(this.getPath() != "/"){
+                $(this.$refs.menucontainer).addClass('inverted-menu')
+            }else{
+                $(this.$refs.menucontainer).removeClass('inverted-menu')
+            }
+        }
+    }
+}
 </script>
 
 <style scoped>
@@ -29,7 +49,7 @@ div.content-container {
     position: absolute;
     left:0;
     right:0;
-    top: 45px;
+    top: 25px;
 }
 
 div.ui.secondary.menu {
@@ -48,7 +68,11 @@ div.ui.secondary.menu .item {
     font-weight: 500 !important;
 }
 
-div.ui.secondary.menu .right.menu > .item:first-child {
+div.ui.secondary.menu .item:first-child {
+    margin-left: 0px;
+}
+
+div.ui.secondary.menu .item:last-child {
     margin-left: 0px;
 }
 
@@ -70,6 +94,7 @@ div.ui.secondary.menu.inverted .active.item {
 div.ui.secondary.menu.inverted .logo {
     font-size: 24px !important;
     color: rgba(255, 255, 255, .68) !important;
+    padding-left: 14px !important;
 }
 
 
