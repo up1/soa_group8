@@ -1,0 +1,81 @@
+/*
+    Written by : madooding
+    Contact : madooding@yahoo.co.th
+*/
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700');
+
+
+body {
+    font-family: 'Montserrat';
+    font-weight: 400;
+    color: #3F3F3F;
+    background-color: #F7F7F7;
+}
+
+div.content-container {
+    width: 100%;
+    max-width: 1012px;
+    margin: 0px auto;
+}
+
+.padding-content {
+    padding: 63.857px 36px;
+}
+
+.side-padding-content {
+    padding: 0 36px;
+}
+
+div.background-homepage-container {
+    width: 100%;
+    padding-top: 139px;
+    padding-bottom: 63.857px;
+    height: auto;
+    background: url('../images/homepage-background.png');
+    background-size: cover;
+    background-position: right;
+    color: white;
+}
+
+div.background-homepage-container h1 { 
+    font-family: 'Montserrat';
+    font-weight: 500;
+    font-size: 48px;
+    line-height: 58px;
+}
+
+button.ui.white.basic.button.radiusless {
+    font-weight: 700;
+    font-size: 14px;
+    border-color: white;
+    border-style: solid;
+    border-width: 0.2em;
+    border-radius: 0px;
+    padding: 15px 36px;
+    color: white !important;
+}
+
+button.ui.white.basic.button.radiusless:hover, button.ui.white.basic.button.radiusless:focus {
+    color: black !important;
+    box-shadow: 0 0 0 0px rgba(34,36,38,.15) inset;
+
+}
+
+button.ui.button.luxury-primary {
+    background-color: #3F3F3F;
+    color: white;
+}
+
+button.ui.button.luxury-primary:hover{
+    background-color: black;
+}
+
+.section-header {
+    margin-bottom: 35.857px !important;
+    color: #3F3F3F !important;
+}
+
+label {
+    color: #3F3F3F !important;
+}
