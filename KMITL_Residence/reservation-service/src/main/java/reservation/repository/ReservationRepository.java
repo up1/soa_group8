@@ -35,13 +35,12 @@ public class ReservationRepository {
     public ReservationDetail getReservation(int reservation_id) {
         ReservationDetail reservation = null;
 
-        String sql = "select r.reservation_id, r.reservation_date, r.reservation_checkout, r.reservation_adult, " +
-                "r.reservation_children, s.status_description, p.payment_type_description, r.room_type, " +
+        String sql = "select r.reservation_id, r.reservation_date, r.reservation_checkout, r.reservation_adults, " +
+                "r.reservation_children, s.status_description, r.reservation_partial, r.reservation_timestamp,r.room_type, " +
                 "r.customer_title_name, r.customer_full_name, r.customer_email, r.customer_tel, r.customer_country, " +
                 "r.customer_nation " +
                 "from reservation r " +
                 "join reservation_status s ON r.reservation_status = s.status_id " +
-                "join payment_type p ON r.reservation_payment_type = p.payment_type_id " +
                 "where reservation_id=?;";
         try {
             reservation = jdbc.queryForObject(sql, new Object[]{reservation_id}, new ReservationDetailRowMapper());
@@ -61,13 +60,18 @@ public class ReservationRepository {
         if(searchAvailable(reservation.getCheckIn(), reservation.getCheckOut(),
                 reservation.getAdults(), reservation.getChildren()).size() > 0) {
 
-            String sql = "insert into reservation values(null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            int result = jdbc.update(sql, reservation.getCheckIn(),
+            String sql = "INSERT INTO reservation (reservation_date, reservation_checkout, " +
+                    "reservation_adults, reservation_children, reservation_status, " +
+                    "room_type, customer_title_name, customer_full_name, customer_email, " +
+                    "customer_tel, customer_country, customer_nation, " +
+                    "credit_card_id, credit_card_expired_date, credit_card_cvv) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            int result = jdbc.update(sql,
+                    reservation.getCheckIn(),
                     reservation.getCheckOut(),
                     reservation.getAdults(),
                     reservation.getChildren(),
                     reservation.getStatus(),
-                    reservation.getPaymentType(),
                     reservation.getRoomType(),
                     reservation.getCustomer().getTitleName(),
                     reservation.getCustomer().getFullName(),
