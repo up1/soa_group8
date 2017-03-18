@@ -24,6 +24,7 @@
         <div class="ui large input two wide field">
             <label>Children</label>
             <select class="ui dropdown">
+                <option value="0">0</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
             </select>

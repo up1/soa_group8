@@ -67,12 +67,20 @@ div.content-container {
     position: absolute;
     left:0;
     right:0;
-    top: 25px;
+    height: 86.69px;
 }
 
 div.ui.secondary.menu {
     font-family: 'Montserrat';
     background-color: transparent;
+    padding-top: 25px;
+}
+
+
+div.content-container.inverted-menu > div.ui.secondary.menu {
+    padding-top:0px;
+    left: 0;
+    right: 0;
 }
 
 div.ui.secondary.menu * {
@@ -91,7 +99,7 @@ div.ui.secondary.menu .item:first-child {
 }
 
 div.ui.secondary.menu .item:last-child {
-    margin-right: 0px;
+    margin-right: 1.619px;
 }
 
 

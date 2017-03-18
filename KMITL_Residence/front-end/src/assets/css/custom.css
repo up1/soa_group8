@@ -16,19 +16,22 @@ body {
 div.content-container {
     width: 100%;
     margin: 0px auto;
-    transition: background-color .2s ease-in 0s, top .2s ease-in 0s;
+    transition: background-color .2s ease-in 0s, height .2s ease-in 0s;
 }
 
 div.content-container.inverted-menu {
-    background-color: #3F3F3F;
+    background-color: #353535;
     max-width: 100%;
     top: 0px !important;
+    height: auto !important;
 
 }
+
 
 div.content-container > div {
     max-width: 1012px !important;
     margin: 0px auto !important;
+    transition: padding-top .2s ease-in 0s;
 }
 
 
@@ -38,6 +41,23 @@ div.content-container > div {
 
 .side-padding-content {
     padding: 0 36px;
+}
+
+.extra-top-menubar-padding {
+    margin-top: 76.69px !important;
+}
+
+
+/* Card property */
+
+.card-padding {
+    padding: 0px 14px 15px 14px;
+}
+
+.card {
+    background-color: white;
+    border: 1px solid #E0E0E0;
+    border-radius: 3px;
 }
 
 div.background-homepage-container {
