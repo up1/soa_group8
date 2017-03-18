@@ -58,7 +58,7 @@ public class ReservationController {
         return new ResponseEntity(resultMessage, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/reservation/{reservation_id}/partialCheckout")
+    @RequestMapping(value = "/reservation/{reservation_id}/partialCheckout", method = RequestMethod.PUT)
     public ResponseEntity<ResultMessage> updatePartialCheckout(@PathVariable String reservation_id) {
         ResultMessage resultMessage = new ResultMessage("Success");
         reservationRepository.updatePartialCheckout(Integer.valueOf(reservation_id));
