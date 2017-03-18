@@ -92,34 +92,50 @@ public class ReservationRepository {
     }
 
     @Transactional
-    public void cancelReservation(int reservation_id) {
-        ReservationDetail rs = getReservation(reservation_id);
+    public void cancelReservation(int reservationId) {
+        ReservationDetail rs = getReservation(reservationId);
         if(rs.getStatus().equals("completed")) {
             String sql = "update reservation set reservation_status=3 where reservation_id=?;";
-            int result = this.jdbc.update(sql, reservation_id);
+            int result = this.jdbc.update(sql, reservationId);
             if (result < 0) {
-                throw new CancelFailedException(reservation_id);
+                throw new CancelFailedException(reservationId);
             }
         }
         else {
-            throw new CancelDeniedException(reservation_id);
+            throw new CancelDeniedException(reservationId);
         }
 
     }
 
     @Transactional
-    public void confirmReservation(int reservation_id) {
+    public void confirmReservation(int reservationId) {
 
-        if(getReservation(reservation_id).getStatus().equals("waiting")) {
+        if(getReservation(reservationId).getStatus().equals("waiting")) {
 
             String sql = "update reservation set reservation_status=2 where reservation_id=?;";
-            int result = this.jdbc.update(sql, reservation_id);
+            int result = this.jdbc.update(sql, reservationId);
             if(result < 0) {
-                throw new ConfirmFailedException(reservation_id);
+                throw new ConfirmFailedException(reservationId);
             }
         }
         else {
-            throw new ConfirmDeniedException(reservation_id);
+            throw new ConfirmDeniedException(reservationId);
+        }
+
+    }
+
+    @Transactional
+    public void updatePartialCheckout(int reservationId) {
+        ReservationDetail rs = getReservation(reservationId);
+        if(rs.getStatus().equals("completed")) {
+            String sql = "update reservation set reservation_partial = 1 where reservation_id = ?";
+            int result = this.jdbc.update(sql, reservationId);
+            if(result < 0) {
+                throw new PartialCheckoutFailedException(reservationId);
+            }
+        }
+        else {
+            throw new PartialCheckoutDeniedException(reservationId);
         }
 
     }
@@ -143,7 +159,7 @@ public class ReservationRepository {
         String sql = "select room_type, count(reservation_id) as total from reservation " +
                 "where ((reservation_date >= " + checkin + " and reservation_date <= " + checkout + ") or " +
                 "(reservation_checkout <= " + checkin + " and reservation_checkout >= " + checkout + ")) and " +
-                "reservation_status = 2 and room_type in " + whereIn +
+                "reservation_status = 2 and room_type in " + whereIn + " and reservation_partial = 0" +
                 " GROUP BY room_type;";
 
         List<AvailableRoomsType> available = this.jdbc.query(sql, new AvailableRoomsTypeRowMapper());
