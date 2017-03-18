@@ -10,13 +10,12 @@ public class Reservation {
     private String checkOut;
     private int adults;
     private int children;
-    private int roomType;
     private int status;
-    private int paymentType;
+    private int roomType;
     private Customer customer;
     private CreditCard creditCard;
 
-    public Reservation(int id, String checkIn, String checkOut, int adults, int children, int roomType, int paymentType,
+    public Reservation(int id, String checkIn, String checkOut, int adults, int children, int roomType,
                        Customer customer, CreditCard creditCard) {
 
         this.id = id;
@@ -26,7 +25,6 @@ public class Reservation {
         this.children = children;
         this.roomType = roomType;
         this.status = 1;
-        this.paymentType = paymentType;
         this.customer = customer;
         this.creditCard = creditCard;
 
@@ -90,14 +88,6 @@ public class Reservation {
 
     public void setStatus(int status) {
         this.status = status;
-    }
-
-    public int getPaymentType() {
-        return paymentType;
-    }
-
-    public void setPaymentType(int paymentType) {
-        this.paymentType = paymentType;
     }
 
     public Customer getCustomer() {

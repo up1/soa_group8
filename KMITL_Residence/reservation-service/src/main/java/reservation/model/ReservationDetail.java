@@ -1,5 +1,7 @@
 package reservation.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Created by Adisorn on 6/3/2560.
  */
@@ -11,11 +13,12 @@ public class ReservationDetail {
     private int total;
     private int roomType;
     private String status;
-    private String paymentType;
+    private int partial;
+    private String timestamp;
     private Customer customer;
 
-    public ReservationDetail(int id, String checkIn, String checkOut, int total, int roomType,
-                             String status, String paymentType, Customer customer) {
+    public ReservationDetail(int id, String checkIn, String checkOut, int total, int roomType, int partial,
+                             String timestamp, String status, Customer customer) {
 
         this.id = id;
         this.checkIn = checkIn;
@@ -23,7 +26,8 @@ public class ReservationDetail {
         this.total = total;
         this.roomType = roomType;
         this.status = status;
-        this.paymentType = paymentType;
+        this.partial = partial;
+        this.timestamp = timestamp;
         this.customer = customer;
 
     }
@@ -76,16 +80,26 @@ public class ReservationDetail {
         return status;
     }
 
+    @JsonIgnore
+    public int getPartial() {
+        return partial;
+    }
+
+    public void setPartial(int partial) {
+        this.partial = partial;
+    }
+
+    @JsonIgnore
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
+    }
+
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getPaymentType() {
-        return paymentType;
-    }
-
-    public void setPaymentType(String paymentType) {
-        this.paymentType = paymentType;
     }
 
     public Customer getCustomer() {
