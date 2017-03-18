@@ -33,7 +33,7 @@
         <div class="ui large input four wide field">
             <label>​&nbsp;</label>
             <button class="ui button fluid luxury-primary">
-                Book Room
+                Check Available
             </button>
         </div>
     </div>
