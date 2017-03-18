@@ -15,9 +15,22 @@ body {
 
 div.content-container {
     width: 100%;
-    max-width: 1012px;
     margin: 0px auto;
+    transition: background-color .2s ease-in 0s, top .2s ease-in 0s;
 }
+
+div.content-container.inverted-menu {
+    background-color: #3F3F3F;
+    max-width: 100%;
+    top: 0px !important;
+
+}
+
+div.content-container > div {
+    max-width: 1012px !important;
+    margin: 0px auto !important;
+}
+
 
 .padding-content {
     padding: 63.857px 36px;
@@ -29,7 +42,7 @@ div.content-container {
 
 div.background-homepage-container {
     width: 100%;
-    padding-top: 139px;
+    padding-top: 111.69px;
     padding-bottom: 63.857px;
     height: auto;
     background: url('../images/homepage-background.png');

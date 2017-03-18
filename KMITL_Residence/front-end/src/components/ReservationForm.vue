@@ -2,13 +2,13 @@
 <form class="ui form">
     <div class="fields">
         <div class="ui large input four wide field">
-            <label>Date Check-in</label>
-            <input type="date">
+            <label>Check-in date</label>
+            <input type="date" placeholder="Choose check-in date">
         </div>
 
         <div class="ui large input four wide field">
-            <label>Date Check-out</label>
-            <input type="date">
+            <label>Check-out date</label>
+            <input type="date" placeholder="Choose check-out date">
         </div>
 
         <div class="ui large input two wide field">
