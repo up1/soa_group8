@@ -90,7 +90,7 @@ div.ui.secondary.menu * {
 div.ui.secondary.menu .item {
     border-radius: 0px;
     margin: 0px 20px;
-    transition: color .1s ease-in 0s;
+    transition: color .1s ease-in 0s, padding .15s ease-in .12s;
     font-weight: 500 !important;
 }
 
@@ -115,6 +115,12 @@ div.ui.secondary.menu.inverted .item:hover {
 div.ui.secondary.menu.inverted .active.item {
     background-color: #FFFFFF;
     color: #000000 !important;
+
+}
+
+div.content-container.inverted-menu > div.ui.secondary.menu .item.active {
+    padding-top: 24.3525px;
+    padding-bottom: 24.3525px;
 }
 
 div.ui.secondary.menu.inverted .logo {
