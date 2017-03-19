@@ -12,17 +12,20 @@ The microservices of hotel reservation system named KMITL Residence.
 ### What have we done?
 Tasks we have been through:
 - [x] Reservation Service
-  - room_availability API :heavy_check_mark:
-  - reservation API :heavy_check_mark:
+  - :heavy_check_mark: room_availability API
+  - :heavy_check_mark: reservation API
   - cancellation API
 - [x] Reservation Database Schema
 - [x] Room Service
-  - room_type API :heavy_check_mark:
+  - :heavy_check_mark: room_type API
   - room_checker API
 - [x] Room Database Schema
 - [x] E-mail Service
-  - confirmation API :heavy_check_mark:
+  - :heavy_check_mark: confirmation API
 
 To-do list:
 - [ ] Staff Service
+  - available_room API
+  - update_room API
+  - room API
 - [ ] Staff Database Schema
