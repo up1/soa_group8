@@ -5,33 +5,39 @@
                 <reservation-progress/>
             </div>
         </div>
+
         <div class="content-container">
             <div class="card-padding">
                 <div class="card padding-content">
-                    <div class="ui grid">
-                        <div class="sixteen wide column">
-                            <h1 class="ui center aligned header section-header">Check Availability</h1>
-                        </div>
-                        <div class="sixteen wide column">
-                            <reservation-form/>
-                        </div>
-                    </div>
+                    <CheckAvailabilitySection/>
                 </div>
             </div>
         </div>
+
+        <div class="content-container">
+            <div class="card-padding">
+                <div class="card padding-content">
+                    <ChooseRoomTypeSection/>
+                </div>
+            </div>
+        </div>
+
+
     </div>
 </template>
 
 <script>
 
 import ReservationProgress from './ReservationProgress'
-import ReservationForm from './ReservationForm'
+import CheckAvailabilitySection from './CheckAvailabilitySection'
+import ChooseRoomTypeSection from './ChooseRoomTypeSection'
 
 export default {
     name: 'reservation',
     components: {
         ReservationProgress,
-        ReservationForm
+        CheckAvailabilitySection,
+        ChooseRoomTypeSection
     }
 }
 
