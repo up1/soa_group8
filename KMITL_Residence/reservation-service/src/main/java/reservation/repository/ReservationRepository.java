@@ -18,6 +18,8 @@ import reservation.mapper.ReservationRowMapper;
 import reservation.model.*;
 
 import java.security.MessageDigest;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -54,12 +56,12 @@ public class ReservationRepository {
         return reservation;
     }
 
-    public Reservation getFullReservation(int reservation_id) {
+    private Reservation getFullReservation(int reservation_id) {
         Reservation reservation = new Reservation();
         String sql = "select reservation_id, reservation_date, reservation_checkout, reservation_adults, " +
                 "reservation_children, reservation_status, reservation_partial, reservation_timestamp, room_type, " +
                 "customer_title_name, customer_full_name, customer_email, customer_tel, customer_country, customer_nation, " +
-                "credit_card_id, credit_card_expired_date, credit_card_cvv " +
+                "credit_card_id, credit_card_type, credit_card_expired_date, credit_card_cvv " +
                 "from reservation " +
                 "where reservation_id=?";
         try {
@@ -74,12 +76,15 @@ public class ReservationRepository {
     @Transactional
     public void saveReservation(Reservation reservation) {
 
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+
         String sql = "INSERT INTO reservation (reservation_date, reservation_checkout, " +
                 "reservation_adults, reservation_children, reservation_status, " +
                 "room_type, customer_title_name, customer_full_name, customer_email, " +
                 "customer_tel, customer_country, customer_nation, " +
-                "credit_card_id, credit_card_expired_date, credit_card_cvv) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                "credit_card_id, credit_card_type, credit_card_expired_date, credit_card_cvv) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         int result = jdbc.update(sql,
                 reservation.getCheckIn(),
                 reservation.getCheckOut(),
@@ -94,6 +99,7 @@ public class ReservationRepository {
                 reservation.getCustomer().getCountry(),
                 reservation.getCustomer().getNation(),
                 reservation.getCreditCard().getNumber(),
+                reservation.getCreditCard().getType(),
                 reservation.getCreditCard().getExpiredDate(),
                 reservation.getCreditCard().getCvv());
         if (result < 0) {
@@ -231,7 +237,8 @@ public class ReservationRepository {
 
         RestTemplate template = new RestTemplate();
 
-        ResponseEntity<List<RoomType>> responseEntity = template.exchange("http://localhost:9001/rooms/types/" + adults + "/" + children,
+        ResponseEntity<List<RoomType>> responseEntity = template.exchange(
+                "http://localhost:9001/rooms/types?adults=" + adults + "&children=" + children,
                 HttpMethod.GET, null, new ParameterizedTypeReference<List<RoomType>>() { });
 
         List<RoomType> roomTypes = responseEntity.getBody();

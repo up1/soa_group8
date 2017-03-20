@@ -18,6 +18,7 @@ CREATE TABLE reservation (
   customer_country VARCHAR(50),
   customer_nation VARCHAR(50),
   credit_card_id VARCHAR(20) NOT NULL,
+  credit_card_type VARCHAR(20) NOT NULL,
   credit_card_expired_date DATE NOT NULL,
   credit_card_cvv VARCHAR(4) NOT NULL
 

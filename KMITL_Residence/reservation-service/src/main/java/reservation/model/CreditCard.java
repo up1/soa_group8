@@ -6,6 +6,7 @@ package reservation.model;
 public class CreditCard {
 
     private String number;
+    private String type;
     private String expiredDate;
     private String cvv;
 
@@ -13,8 +14,9 @@ public class CreditCard {
 
     }
 
-    public CreditCard(String number, String expiredDate, String cvv) {
+    public CreditCard(String number, String type, String expiredDate, String cvv) {
         this.number = number;
+        this.type = type;
         this.expiredDate = expiredDate;
         this.cvv = cvv;
     }
@@ -25,6 +27,14 @@ public class CreditCard {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getExpiredDate() {
