@@ -38,6 +38,10 @@ export default {
         ReservationProgress,
         CheckAvailabilitySection,
         ChooseRoomTypeSection
+    },
+    beforeRouteLeave(to, from, next){
+        this.$store.dispatch('clearReservationState')
+        next()
     }
 }
 

@@ -16,26 +16,18 @@
     </div>
 
     <div class="content-container padding-content">
-      <div class="ui grid">
-        <div class="sixteen wide column">
-          <h1 class="ui center aligned header section-header">Check Availability</h1>
-        </div>
-        <div class="sixteen wide column">
-          <reservation-form/>
-        </div>
-      </div>
+      <check-availability-section/>
     </div>
-
   </div>
 </template>
 
 <script>
-import ReservationForm from './ReservationForm'
+import CheckAvailabilitySection from './CheckAvailabilitySection'
 
 export default {
     name: 'home',
     components: {
-      ReservationForm
+      CheckAvailabilitySection
     }
 }
 </script>

@@ -4,17 +4,17 @@
             <h1 class="ui center aligned header section-header">Check Availability</h1>
         </div>
         <div class="sixteen wide column">
-            <reservation-form/>
+            <check-availability-form/>
         </div>
     </div>
 </template>
 
 <script>
-import ReservationForm from './ReservationForm'
+import CheckAvailabilityForm from './CheckAvailabilityForm'
 
 export default {
     components: {
-        ReservationForm
+        CheckAvailabilityForm
     }
 }
 </script>
