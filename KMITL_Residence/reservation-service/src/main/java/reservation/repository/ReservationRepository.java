@@ -54,7 +54,7 @@ public class ReservationRepository {
         return reservation;
     }
 
-    public Reservation getFullReservation(int reservation_id) {
+    private Reservation getFullReservation(int reservation_id) {
         Reservation reservation = new Reservation();
         String sql = "select reservation_id, reservation_date, reservation_checkout, reservation_adults, " +
                 "reservation_children, reservation_status, reservation_partial, reservation_timestamp, room_type, " +
@@ -231,7 +231,8 @@ public class ReservationRepository {
 
         RestTemplate template = new RestTemplate();
 
-        ResponseEntity<List<RoomType>> responseEntity = template.exchange("http://localhost:9001/rooms/types/" + adults + "/" + children,
+        ResponseEntity<List<RoomType>> responseEntity = template.exchange(
+                "http://localhost:9001/rooms/types?adults=" + adults + "&children=" + children,
                 HttpMethod.GET, null, new ParameterizedTypeReference<List<RoomType>>() { });
 
         List<RoomType> roomTypes = responseEntity.getBody();
