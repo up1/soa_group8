@@ -38,6 +38,7 @@ public class ReservationRowMapper implements RowMapper<Reservation> {
         creditCard.setNumber(rs.getString("credit_card_id"));
         creditCard.setExpiredDate(rs.getString("credit_card_expired_date"));
         creditCard.setCvv(rs.getString("credit_card_cvv"));
+        creditCard.setType(rs.getString("credit_card_type"));
 
         reservation.setCustomer(customer);
         reservation.setCreditCard(creditCard);
