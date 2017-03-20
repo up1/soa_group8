@@ -9,19 +9,11 @@
         <div class="content-container">
             <div class="card-padding">
                 <div class="card padding-content">
-                    <CheckAvailabilitySection/>
+                    <CheckAvailabilitySection v-if="getCurrentStep() == 1"/>
+                    <ChooseRoomTypeSection v-else-if="getCurrentStep() == 2"/>
                 </div>
             </div>
         </div>
-
-        <div class="content-container">
-            <div class="card-padding">
-                <div class="card padding-content">
-                    <ChooseRoomTypeSection/>
-                </div>
-            </div>
-        </div>
-
 
     </div>
 </template>
@@ -42,6 +34,11 @@ export default {
     beforeRouteLeave(to, from, next){
         this.$store.dispatch('clearReservationState')
         next()
+    },
+    methods: {
+        getCurrentStep() {
+            return this.$store.getters.getCurrentStep
+        }
     }
 }
 

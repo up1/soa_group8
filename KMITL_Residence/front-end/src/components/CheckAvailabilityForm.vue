@@ -52,17 +52,23 @@ export default {
     }),
     methods: {
         checkAvailability(){
+            if(this.checkInDate == '' || this.checkOutDate ==''){
+                return
+            }
             $(this.$refs.submitBtn).addClass('loading')
             axios.get(`http://localhost:9000/reservation/availableSearch?checkin='${this.checkInDate}'&checkout='${this.checkOutDate}'&adults=${this.adults}&children=${this.children}`)
                 .then((res) => this.getAvailableRoomsCallback(res))
                 .catch(function(err){
                     console.log(err)
                 })
-            //this.$router.push({path: '/reservation'})
         },
         getAvailableRoomsCallback(res){
-            let roomType = res.data
-            console.log(roomType)
+            let totalAvailableRooms = res.data
+            if(totalAvailableRooms[0].total > 0 || totalAvailableRooms[1].total > 0 || totalAvailableRooms[2].total > 0){
+                this.$router.push({path: '/reservation'})
+                this.$store.dispatch('nextStep')
+                this.$store.dispatch('setTotalAvailableRooms', totalAvailableRooms)
+            }
             $(this.$refs.submitBtn).removeClass('loading')
         }
     }

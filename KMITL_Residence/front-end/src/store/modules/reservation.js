@@ -1,5 +1,6 @@
 const state = {
     step: 1,
+    totalAvailableRooms: [],
     data: {
         stayingInformation: {
             checkInDate: '',
@@ -43,6 +44,10 @@ const actions = {
     },
     clearReservationState({commit, state}) {
         commit('clearReservationState')
+    },
+    setTotalAvailableRooms({commit, state}, totalAvailableRooms){
+        commit('setTotalAvailableRooms', totalAvailableRooms)
+        commit('setTotalAvailableRooms', [])
     }
 }
 
@@ -81,6 +86,9 @@ const mutations = {
                 creditCardType: 0
             }
         }
+    },
+    setTotalAvailableRooms(state, totalAvailableRooms){
+        state.totalAvailableRooms = totalAvailableRooms
     } 
 
 }
