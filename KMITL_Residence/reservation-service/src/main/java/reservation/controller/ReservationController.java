@@ -42,10 +42,11 @@ public class ReservationController {
     }
 
     @RequestMapping(value = "/reservation/{reservation_id}/confirm", method = RequestMethod.PUT)
-    public ResponseEntity<ResultMessage> confirmReservation(@PathVariable String reservation_id) {
+    public ResponseEntity<ResultMessage> confirmReservation(@PathVariable String reservation_id,
+                                                            @RequestParam(value = "id", required = true) String id) {
 
         ResultMessage resultMessage = new ResultMessage("Success");
-        reservationRepository.confirmReservation(Integer.valueOf(reservation_id));
+        reservationRepository.confirmReservation(Integer.valueOf(reservation_id), id);
         return new ResponseEntity(resultMessage, HttpStatus.OK);
 
     }

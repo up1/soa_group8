@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 import reservation.exception.*;
 import reservation.mapper.AvailableRoomsTypeRowMapper;
 import reservation.mapper.ReservationDetailRowMapper;
+import reservation.mapper.ReservationRowMapper;
 import reservation.model.*;
 
 import java.security.MessageDigest;
@@ -53,7 +54,22 @@ public class ReservationRepository {
         return reservation;
     }
 
-
+    public Reservation getFullReservation(int reservation_id) {
+        Reservation reservation = new Reservation();
+        String sql = "select reservation_id, reservation_date, reservation_checkout, reservation_adults, " +
+                "reservation_children, reservation_status, reservation_partial, reservation_timestamp, room_type, " +
+                "customer_title_name, customer_full_name, customer_email, customer_tel, customer_country, customer_nation, " +
+                "credit_card_id, credit_card_expired_date, credit_card_cvv " +
+                "from reservation " +
+                "where reservation_id=?";
+        try {
+            reservation = jdbc.queryForObject(sql, new Object[]{reservation_id}, new ReservationRowMapper());
+        } catch(Exception ex) {
+            ex.printStackTrace();
+            throw new NotFoundException(reservation_id);
+        }
+        return reservation;
+    }
 
     @Transactional
     public void saveReservation(Reservation reservation) {
@@ -107,13 +123,13 @@ public class ReservationRepository {
             email.setDestination(reservation.getCustomer().getEmail());
             email.setEmailType(1);
 
-            ReservationDetail rs = getReservation(getLastInsertId());
+            Reservation rs = getFullReservation(getLastInsertId());
 
             Content content = new Content();
             content.setRoomType(reservation.getRoomType());
             content.setReservationId(rs.getId());
             content.setTotal((int)(days * roomType.getTypePrice()));
-            content.setConfirmationLink(getConfirmationLink(rs));
+            content.setConfirmationLink("http://localhost:9000/reservation/" + rs.getId() + "/confirm?id=" + getConfirmationId(rs));
 
             email.setContent(content);
             sendEmail(email);
@@ -131,7 +147,7 @@ public class ReservationRepository {
                 throw new CancelFailedException(reservationId);
             }
             else {
-                ReservationDetail reservation = getReservation(reservationId);
+                Reservation reservation = getFullReservation(reservationId);
 
                 Email email = new Email();
                 email.setFullName(reservation.getCustomer().getTitleName() + reservation.getCustomer().getFullName());
@@ -142,7 +158,7 @@ public class ReservationRepository {
                 content.setRoomType(reservation.getRoomType());
                 content.setReservationId(reservation.getId());
                 content.setTotal((int)(0));
-                content.setConfirmationLink(getConfirmationLink(reservation));
+                content.setConfirmationLink(getConfirmationId(reservation));
 
                 email.setContent(content);
                 sendEmail(email);
@@ -155,33 +171,41 @@ public class ReservationRepository {
     }
 
     @Transactional
-    public void confirmReservation(int reservationId) {
+    public void confirmReservation(int reservationId, String confirmId) {
+        Reservation rs = getFullReservation(reservationId);
+        if(confirmId.equals(getConfirmationId(rs))) {
+            if (searchAvailable(rs.getCheckIn(), rs.getCheckOut(), rs.getAdults(), rs.getChildren()).size() > 0) {
+                if (rs.getStatus() == 1) {
 
-        if(getReservation(reservationId).getStatus().equals("waiting")) {
+                    String sql = "update reservation set reservation_status=2 where reservation_id=?;";
+                    int result = this.jdbc.update(sql, reservationId);
+                    if (result < 0) {
+                        throw new ConfirmFailedException(reservationId);
+                    } else {
+                        ReservationDetail reservation = getReservation(reservationId);
 
-            String sql = "update reservation set reservation_status=2 where reservation_id=?;";
-            int result = this.jdbc.update(sql, reservationId);
-            if(result < 0) {
-                throw new ConfirmFailedException(reservationId);
-            }
-            else {
-                ReservationDetail reservation = getReservation(reservationId);
+                        Email email = new Email();
+                        email.setFullName(reservation.getCustomer().getTitleName() + reservation.getCustomer().getFullName());
+                        email.setDestination(reservation.getCustomer().getEmail());
+                        email.setEmailType(2);
 
-                Email email = new Email();
-                email.setFullName(reservation.getCustomer().getTitleName() + reservation.getCustomer().getFullName());
-                email.setDestination(reservation.getCustomer().getEmail());
-                email.setEmailType(2);
+                        Content content = new Content();
+                        content.setRoomType(reservation.getRoomType());
+                        content.setReservationId(reservation.getId());
 
-                Content content = new Content();
-                content.setRoomType(reservation.getRoomType());
-                content.setReservationId(reservation.getId());
-
-                email.setContent(content);
-                sendEmail(email);
+                        email.setContent(content);
+                        sendEmail(email);
+                    }
+                } else {
+                    throw new ConfirmDeniedException(reservationId);
+                }
+            } else {
+                throw new RoomTypeNotAvailableException();
             }
         }
         else {
-            throw new ConfirmDeniedException(reservationId);
+            System.out.println(confirmId);
+            throw new ConfirmIDNotMatchException(reservationId);
         }
 
     }
@@ -274,20 +298,20 @@ public class ReservationRepository {
 
     }
 
-    private String getConfirmationLink(ReservationDetail reservation) {
-        String link = "";
+    private String getConfirmationId(Reservation reservation) {
+        String id = "";
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             String textToHash = String.valueOf(reservation.getId())+reservation.getCustomer().getEmail() + reservation.getTimestamp(); // ex. reservation_id = 24 -> "24kmitlresidence@gmail.com"
             md.update(textToHash.getBytes("UTF-8"));
             byte[] digest = md.digest();
             String confirmation_id = String.format("%064x", new java.math.BigInteger(1, digest)).substring(0, 30); // slice string from 64 to 32 chars (reduce)
-            link = "http://localhost:9000/reservation/" + reservation.getId() + "/confirm?id=" + confirmation_id;
-            System.out.println(link);
+            id = confirmation_id;
+            System.out.println(id);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return link;
+        return id;
     }
 
     private int getLastInsertId() {
