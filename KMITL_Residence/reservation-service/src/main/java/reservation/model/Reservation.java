@@ -1,5 +1,7 @@
 package reservation.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Created by Adisorn on 1/3/2560.
  */
@@ -12,6 +14,8 @@ public class Reservation {
     private int children;
     private int status;
     private int roomType;
+    @JsonIgnore
+    private String timestamp;
     private Customer customer;
     private CreditCard creditCard;
 
@@ -88,6 +92,15 @@ public class Reservation {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    @JsonIgnore
+    public String getTimestamp() {
+        return timestamp;
+    }
+    @JsonIgnore
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 
     public Customer getCustomer() {

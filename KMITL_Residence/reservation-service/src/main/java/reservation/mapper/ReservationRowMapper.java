@@ -18,10 +18,11 @@ public class ReservationRowMapper implements RowMapper<Reservation> {
         reservation.setId(rs.getInt("reservation_id"));
         reservation.setCheckIn(rs.getString("reservation_date"));
         reservation.setCheckOut(rs.getString("reservation_checkout"));
-        reservation.setAdults(rs.getInt("reservation_adult"));
+        reservation.setAdults(rs.getInt("reservation_adults"));
         reservation.setChildren(rs.getInt("reservation_children"));
         reservation.setStatus(rs.getInt("reservation_status"));
         reservation.setRoomType(rs.getInt("room_type"));
+        reservation.setTimestamp(rs.getString("reservation_timestamp"));
 
         Customer customer = new Customer();
 
