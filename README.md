@@ -25,7 +25,8 @@ Tasks we have been through:
 
 To-do list:
 - [ ] Staff Service
-  - available_room API
+  - stay_guest API
   - update_room API
-  - room API
+  - summary_report API
+  - staff_crud API
 - [ ] Staff Database Schema
