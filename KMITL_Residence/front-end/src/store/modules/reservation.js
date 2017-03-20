@@ -44,10 +44,10 @@ const actions = {
     },
     clearReservationState({commit, state}) {
         commit('clearReservationState')
+        commit('setTotalAvailableRooms', [])
     },
     setTotalAvailableRooms({commit, state}, totalAvailableRooms){
         commit('setTotalAvailableRooms', totalAvailableRooms)
-        commit('setTotalAvailableRooms', [])
     }
 }
 
