@@ -47,6 +47,7 @@ Request JSON
 	},
     "creditCard": {
 	  	"number": "1234567890",
+		"type": "Visa",
 	  	"expiredDate": "2018-01-01",
 	  	"cvv": "1234"
 	}
