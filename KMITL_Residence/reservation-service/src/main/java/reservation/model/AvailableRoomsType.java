@@ -32,4 +32,8 @@ public class AvailableRoomsType {
     public void setTotal(int total) {
         this.total = total;
     }
+
+    public String toString() {
+        return "{ 'roomType': " + roomType + ", 'total': " + total;
+    }
 }

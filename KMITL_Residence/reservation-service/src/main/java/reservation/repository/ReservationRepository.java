@@ -180,7 +180,18 @@ public class ReservationRepository {
     public void confirmReservation(int reservationId, String confirmId) {
         Reservation rs = getFullReservation(reservationId);
         if(confirmId.equals(getConfirmationId(rs))) {
-            if (searchAvailable(rs.getCheckIn(), rs.getCheckOut(), rs.getAdults(), rs.getChildren()).size() > 0) {
+
+            List<AvailableRoomsType> roomsTypes = searchAvailable(rs.getCheckIn(), rs.getCheckOut(), rs.getAdults(), rs.getChildren());
+            boolean checkRoomType = false;
+            for(AvailableRoomsType roomsType: roomsTypes) {
+                if(roomsType.getRoomType() == rs.getRoomType()) {
+                    checkRoomType = true;
+                    break;
+                }
+            }
+
+            if (roomsTypes.size() > 0 && checkRoomType) {
+
                 if (rs.getStatus() == 1) {
 
                     String sql = "update reservation set reservation_status=2 where reservation_id=?;";
@@ -250,8 +261,8 @@ public class ReservationRepository {
         String whereIn = tempId.toString().replace("[", "(").replace("]", ")");
 
         String sql = "select room_type, count(reservation_id) as total from reservation " +
-                "where ((reservation_date >= " + checkin + " and reservation_date <= " + checkout + ") or " +
-                "(reservation_checkout <= " + checkin + " and reservation_checkout >= " + checkout + ")) and " +
+                "where ((reservation_date >= '" + checkin + "' and reservation_date <= '" + checkout + "') or " +
+                "(reservation_checkout <= '" + checkin + "' and reservation_checkout >= '" + checkout + "')) and " +
                 "reservation_status = 2 and room_type in " + whereIn + " and reservation_partial = 0" +
                 " GROUP BY room_type;";
 
