@@ -1,4 +1,4 @@
-#Rooms Service
+# Rooms Service
 > GET /rooms/type/{room_type_id}
 ```
 Response
