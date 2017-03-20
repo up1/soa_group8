@@ -41,13 +41,25 @@ const actions = {
     },
     setStep({commit, state}, val) {
         commit('setStep', val)
+        if(val < 2){
+            commit('clearStayingInformation')
+        }
+        if(val < 3){
+            commit('clearPersonalInformation')
+        }
+        if(val < 4){
+            commit('clearPaymentInformation')
+        }
     },
-    clearReservationState({commit, state}) {
-        commit('clearReservationState')
+    clearReservationState({commit, state, dispatch}) {
+        dispatch('setStep', 1)
         commit('setTotalAvailableRooms', [])
     },
     setTotalAvailableRooms({commit, state}, totalAvailableRooms){
         commit('setTotalAvailableRooms', totalAvailableRooms)
+    },
+    setStayingInformation({commit, state}, stayingInformation){
+        commit('setStayingInformation', stayingInformation)
     }
 }
 
@@ -61,35 +73,52 @@ const mutations = {
     setStep(state, val){
         state.step = val
     },
-    clearReservationState(state) {
-        state.step = 1
-        state.data = {
-            stayingInformation: {
+
+    setTotalAvailableRooms(state, totalAvailableRooms){
+        state.totalAvailableRooms = totalAvailableRooms
+    },
+
+    setStayingInformation(state, stayingInformation){
+        state.data.stayingInformation = stayingInformation
+    },
+
+    setPersonalInformation(state, personalInformation){
+        state.data.personalInformation = personalInformation
+    },
+
+    setPaymentInformation(state, paymentInformation){
+        state.data.paymentInformation = paymentInformation
+    },
+
+    clearStayingInformation(state){
+        state.data.stayingInformation = {
                 checkInDate: '',
                 checkOutDate: '',
                 adults: 0,
                 children: 0,
                 roomType: 0
-            },
-            personalInformation: {
+        }
+    },
+
+    clearPersonalInformation(state){
+        state.data.stayingInformation = {
                 firstName: '',
                 lastName: '',
                 email: '',
                 tel: '',
                 country: '',
                 nation: ''
-            },
-            paymentInformation: {
+        }
+    },
+
+    clearPaymentInformation(state) {
+        state.data.paymentInformation = {
                 creditCardId: '',
                 creditCardExp: '',
                 creditCardCvv: '',
                 creditCardType: 0
-            }
         }
-    },
-    setTotalAvailableRooms(state, totalAvailableRooms){
-        state.totalAvailableRooms = totalAvailableRooms
-    } 
+    }
 
 }
 
