@@ -7,6 +7,7 @@ import '!script-loader!semantic-ui/dist/semantic.min.js'
 import '!style-loader!css-loader!semantic-ui/dist/semantic.min.css'
 import '!style-loader!css-loader!./assets/css/custom.css'
 
+import store from './store'
 import App from './App'
 import router from './router'
 
@@ -16,5 +17,6 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 })
