@@ -28,4 +28,5 @@ div.ui.three.column.grid {
     justify-content: center !important;
 }
 
+
 </style>
