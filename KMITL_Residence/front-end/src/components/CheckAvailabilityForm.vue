@@ -3,12 +3,12 @@
     <div class="fields">
         <div class="ui large input four wide field">
             <label>Check-in date</label>
-            <input type="date" placeholder="Choose check-in date" v-model="checkInDate">
+            <input type="date" placeholder="Choose check-in date" :min="currentDate" v-model="checkInDate">
         </div>
 
         <div class="ui large input four wide field">
             <label>Check-out date</label>
-            <input type="date" placeholder="Choose check-out date" v-model="checkOutDate">
+            <input type="date" placeholder="Choose check-out date" :min="currentDate" v-model="checkOutDate">
         </div>
 
         <div class="ui large input two wide field">
@@ -42,6 +42,7 @@
 
 <script>
 import axios from 'axios'
+import moment from 'moment'
 
 export default {
     data: () => ({
@@ -56,7 +57,7 @@ export default {
                 return
             }
             $(this.$refs.submitBtn).addClass('loading')
-            axios.get(`http://localhost:9000/reservation/availableSearch?checkin='${this.checkInDate}'&checkout='${this.checkOutDate}'&adults=${this.adults}&children=${this.children}`)
+            axios.get(`http://localhost:9000/reservation/availableSearch?checkin=${this.checkInDate}&checkout=${this.checkOutDate}&adults=${this.adults}&children=${this.children}`)
                 .then((res) => this.getAvailableRoomsCallback(res))
                 .catch(function(err){
                     console.log(err)
@@ -68,8 +69,22 @@ export default {
                 this.$router.push({path: '/reservation'})
                 this.$store.dispatch('nextStep')
                 this.$store.dispatch('setTotalAvailableRooms', totalAvailableRooms)
+                let stayingInformation = this.getStayingInformation()
+                stayingInformation.checkInDate = this.checkInDate
+                stayingInformation.checkOutDate = this.checkOutDate
+                stayingInformation.adults = this.adults
+                stayingInformation.children = this.children
+                this.$store.dispatch('setStayingInformation', stayingInformation)
             }
             $(this.$refs.submitBtn).removeClass('loading')
+        },
+        getStayingInformation(){
+            return this.$store.getters.getStayingInformation
+        }
+    },
+    computed: {
+        currentDate() {
+            return moment().format('YYYY-MM-DD')
         }
     }
 }

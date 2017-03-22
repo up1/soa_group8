@@ -29,37 +29,92 @@ const state = {
 const getters = {
     getCurrentStep: (state) => {
         return state.step
-    }
+    },
+    
+    getAvailableRooms: (state) => state.totalAvailableRooms,
+
+    getStayingInformation: (state) => state.data.stayingInformation
 }
 
 const actions = {
     nextStep({commit, state}) {
         commit('nextStep')
     },
+
     prevStep({commit, state}) {
         commit('prevStep')
     },
-    setStep({commit, state}, val) {
+
+    setStep({commit, state, dispatch}, val) {
         commit('setStep', val)
         if(val < 2){
-            commit('clearStayingInformation')
+            dispatch('clearStayingInformation')
+            dispatch('clearTotalAvailableRooms')
         }
         if(val < 3){
-            commit('clearPersonalInformation')
+            dispatch('clearPersonalInformation')
         }
         if(val < 4){
-            commit('clearPaymentInformation')
+            dispatch('clearPaymentInformation')
         }
     },
+
     clearReservationState({commit, state, dispatch}) {
         dispatch('setStep', 1)
-        commit('setTotalAvailableRooms', [])
+        dispatch('clearTotalAvailableRooms')
+        dispatch('clearStayingInformation')
+        dispatch('clearPersonalInformation')
+        dispatch('clearPaymentInformation')
     },
+
     setTotalAvailableRooms({commit, state}, totalAvailableRooms){
         commit('setTotalAvailableRooms', totalAvailableRooms)
     },
+
+    clearTotalAvailableRooms({commit, state, dispatch}) {
+        dispatch('setTotalAvailableRooms', [])
+    },
+
     setStayingInformation({commit, state}, stayingInformation){
         commit('setStayingInformation', stayingInformation)
+    },
+
+    clearStayingInformation({commit, state, dispatch}){
+        dispatch('setStayingInformation', {
+                checkInDate: '',
+                checkOutDate: '',
+                adults: 0,
+                children: 0,
+                roomType: 0
+        })
+    },
+
+    setPersonalInformation({commit, state}, personalInformation){
+        commit('setPersonalInformation', personalInformation)
+    },
+
+    clearPersonalInformation({commit, state, dispatch}){
+        dispatch('setPersonalInformation', {
+                firstName: '',
+                lastName: '',
+                email: '',
+                tel: '',
+                country: '',
+                nation: ''
+        })
+    },
+
+    setPaymentInformation({commit, state}, paymentInformation){
+        commit('setPaymentInformation', paymentInformation)
+    },
+
+    clearPaymentInformation({commit, state, dispatch}){
+        dispatch('setPaymentInformation', {
+                creditCardId: '',
+                creditCardExp: '',
+                creditCardCvv: '',
+                creditCardType: 0
+        })
     }
 }
 
@@ -88,38 +143,7 @@ const mutations = {
 
     setPaymentInformation(state, paymentInformation){
         state.data.paymentInformation = paymentInformation
-    },
-
-    clearStayingInformation(state){
-        state.data.stayingInformation = {
-                checkInDate: '',
-                checkOutDate: '',
-                adults: 0,
-                children: 0,
-                roomType: 0
-        }
-    },
-
-    clearPersonalInformation(state){
-        state.data.stayingInformation = {
-                firstName: '',
-                lastName: '',
-                email: '',
-                tel: '',
-                country: '',
-                nation: ''
-        }
-    },
-
-    clearPaymentInformation(state) {
-        state.data.paymentInformation = {
-                creditCardId: '',
-                creditCardExp: '',
-                creditCardCvv: '',
-                creditCardType: 0
-        }
     }
-
 }
 
 export default {

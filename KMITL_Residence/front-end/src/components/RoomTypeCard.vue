@@ -1,10 +1,7 @@
 <template>
     <div class="sixteen wide column">
         <div class="ui three column grid">
-
-            <RoomTypeCardItem/>
-            <RoomTypeCardItem/>
-            <RoomTypeCardItem/>
+            <RoomTypeCardItem v-for="item in getTotalAvailableRooms" :key="item.roomType" :id="item.roomType"/>
         </div>
     </div>
 </template>
@@ -16,6 +13,9 @@ import RoomTypeCardItem from './RoomTypeCardItem'
 export default {
     components: {
         RoomTypeCardItem
+    },
+    computed: {
+        getTotalAvailableRooms() {return this.$store.getters.getAvailableRooms}
     }
 }
 </script>
@@ -24,7 +24,7 @@ export default {
 
 div.ui.three.column.grid {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center !important;
 }
 
