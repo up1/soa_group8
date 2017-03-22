@@ -1,5 +1,5 @@
 # Reservation Service
-> GET /reservation/serachAvailable?checkin=2017-01-01&checkout=2017-01-02&adults=1&children=0
+> GET /reservation/availableSearch?checkin=2017-01-01&checkout=2017-01-02&adults=1&children=0
 ```
 Response
 {
