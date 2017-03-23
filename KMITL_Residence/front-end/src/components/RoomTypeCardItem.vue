@@ -74,3 +74,9 @@ export default {
 
 }
 </script>
+
+<style scoped>
+    div.ui.link.card, div.ui.fluid.card {
+        height: 100%;
+    }
+</style>

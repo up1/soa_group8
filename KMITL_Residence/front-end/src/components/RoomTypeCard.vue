@@ -24,7 +24,7 @@ export default {
 
 div.ui.three.column.grid {
     display: flex;
-    align-items: flex-start;
+    align-items: stretch;
     justify-content: center !important;
 }
 
