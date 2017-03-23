@@ -3,8 +3,12 @@
         <div class="ui link card">
             <div class="ui fluid card">
                 <div class="ui slide masked reveal image">
-                    <img src="/images/avatar/large/jenny.jpg" class="visible content">
-                    <img src="/images/avatar/large/elliot.jpg" class="hidden content">
+                    <img src="../assets/images/1_1.jpg" class="visible content" v-if="id == 1">
+                    <img src="../assets/images/1_2.jpg" class="hidden content" v-if="id == 1">
+                    <img src="../assets/images/2_1.jpg" class="visible content" v-if="id == 2">
+                    <img src="../assets/images/2_2.jpg" class="hidden content" v-if="id == 2">
+                    <img src="../assets/images/3_1.jpg" class="visible content" v-if="id == 3">
+                    <img src="../assets/images/3_2.jpg" class="hidden content" v-if="id == 3">
                 </div>
                 <div class="content">
                     <div class="header">{{ data.typeNameEn }}</div>
@@ -16,7 +20,7 @@
                     <span>Price : {{ +data.typePrice | THBformat }}</span>
                     <span class="right floated">Night : {{ +getTotalNights | atLeastOne }}</span>
                 </div>
-                <div class="ui bottom attached button">
+                <div class="ui bottom attached blue button" @click="setRoomType">
                     <i class="add icon"></i>
                         Book for {{ (+data.typePrice * +getTotalNights) | THBformat }}
                 </div>
@@ -48,6 +52,13 @@ export default {
         },
         getRoomTypeDataCallback(res){
             this.data = res.data
+        },
+
+        setRoomType(){
+            let stayingInformation = this.$store.getters.getStayingInformation
+            stayingInformation.roomType = this.id
+            this.$store.dispatch('setStayingInformation', stayingInformation)
+            this.$store.dispatch('nextStep')
         }
     },
     computed: {
@@ -78,5 +89,15 @@ export default {
 <style scoped>
     div.ui.link.card, div.ui.fluid.card {
         height: 100%;
+        width: 100%;
+    }
+
+    div.ui.fluid.card > div.content {
+        padding: 1.3em;
+    }
+
+    div.ui.slide.masked.reveal.image > img.hidden.content {
+        height:100%;
+
     }
 </style>

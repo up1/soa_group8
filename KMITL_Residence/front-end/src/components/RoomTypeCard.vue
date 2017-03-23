@@ -1,6 +1,6 @@
 <template>
     <div class="sixteen wide column">
-        <div class="ui three column grid">
+        <div class="ui " ref="cardContainer">
             <RoomTypeCardItem v-for="item in getTotalAvailableRooms" :key="item.roomType" :id="item.roomType"/>
         </div>
     </div>
@@ -16,6 +16,18 @@ export default {
     },
     computed: {
         getTotalAvailableRooms() {return this.$store.getters.getAvailableRooms}
+    },
+    mounted () {
+        let length = ''
+        switch(this.getTotalAvailableRooms.length){
+            case 1: length = 'one'
+                    break
+            case 2: length = 'two'
+                    break
+            case 3: length = 'three'
+                    break
+        }
+        $(this.$refs.cardContainer).addClass(length+" column grid")
     }
 }
 </script>

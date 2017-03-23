@@ -1,7 +1,9 @@
 <template>
     <div class="ui grid">
         <div class="sixteen wide column">
-            <h1 class="ui center aligned header section-header">Choose Room Type</h1>
+            <h1 class="ui center aligned header section-header">Choose Room Type
+                <div class="sub header">Choose the type of room</div>
+            </h1>
         </div>
         <RoomTypeCards/>
     </div>

@@ -10,6 +10,7 @@ const state = {
             roomType: 0
         },
         personalInformation: {
+            titleName: '',
             firstName: '',
             lastName: '',
             email: '',
@@ -33,7 +34,9 @@ const getters = {
     
     getAvailableRooms: (state) => state.totalAvailableRooms,
 
-    getStayingInformation: (state) => state.data.stayingInformation
+    getStayingInformation: (state) => state.data.stayingInformation,
+
+    getPersonalInformation: (state) => state.data.personalInformation
 }
 
 const actions = {
@@ -95,6 +98,7 @@ const actions = {
 
     clearPersonalInformation({commit, state, dispatch}){
         dispatch('setPersonalInformation', {
+                titleName: '',
                 firstName: '',
                 lastName: '',
                 email: '',
