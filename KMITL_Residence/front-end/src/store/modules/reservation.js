@@ -5,7 +5,7 @@ const state = {
         stayingInformation: {
             checkInDate: '',
             checkOutDate: '',
-            adults: 0,
+            adults: 1,
             children: 0,
             roomType: 0
         },
@@ -86,7 +86,7 @@ const actions = {
         dispatch('setStayingInformation', {
                 checkInDate: '',
                 checkOutDate: '',
-                adults: 0,
+                adults: 1,
                 children: 0,
                 roomType: 0
         })

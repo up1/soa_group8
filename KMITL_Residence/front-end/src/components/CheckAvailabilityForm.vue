@@ -1,40 +1,42 @@
 <template>
-<form class="ui form" @submit.prevent>
-    <div class="fields">
-        <div class="ui large input four wide field">
-            <label>Check-in date</label>
-            <input type="date" placeholder="Choose check-in date" :min="currentDate" v-model="checkInDate">
-        </div>
+<form class="ui large form" @submit.prevent>
+    <div class="field">
+        <div class="fields">
+            <div class="four input wide field">
+                <label>Check-in date</label>
+                <input type="date" placeholder="Choose check-in date" :min="currentDate" v-model="checkInDate">
+            </div>
 
-        <div class="ui large input four wide field">
-            <label>Check-out date</label>
-            <input type="date" placeholder="Choose check-out date" :min="currentDate" v-model="checkOutDate">
-        </div>
+            <div class="four input wide field">
+                <label>Check-out date</label>
+                <input type="date" placeholder="Choose check-out date" :min="currentDate" v-model="checkOutDate">
+            </div>
 
-        <div class="ui large input two wide field">
-            <label>Adults</label>
-            <select class="ui dropdown" v-model="adults">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-            </select>
-        </div>
+            <div class="two wide field">
+                <label>Adults</label>
+                <select class="ui fluid selection dropdown" v-model="adults">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+            </div>
 
-        <div class="ui large input two wide field">
-            <label>Children</label>
-            <select class="ui dropdown" v-model="children">
-                <option value="0">0</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-            </select>
-        </div>
+            <div class="two wide field">
+                <label>Children</label>
+                <select class="ui fluid selection dropdown" v-model="children">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+            </div>
 
-        <div class="ui large input four wide field">
-            <label>​&nbsp;</label>
-            <button class="ui button fluid luxury-primary" @click="checkAvailability" ref="submitBtn">
-                Check Availability
-            </button>
+            <div class="four wide field">
+                <label>​&nbsp;</label>
+                <button class="ui button fluid large luxury-primary" @click="checkAvailability" ref="submitBtn">
+                    Check Availability
+                </button>
+            </div>
         </div>
     </div>
 </form>
@@ -51,6 +53,17 @@ export default {
         adults: 1,
         children: 0
     }),
+    created () {
+        let stayingInformation = this.getStayingInformation()
+        this.checkInDate = stayingInformation.checkInDate
+        this.checkOutDate = stayingInformation.checkOutDate
+        this.adults = stayingInformation.adults
+        this.children = stayingInformation.children
+
+    },
+    mounted () {
+        $('select.dropdown').dropdown()
+    },
     methods: {
         checkAvailability(){
             if(this.checkInDate == '' || this.checkOutDate ==''){

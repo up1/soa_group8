@@ -90,6 +90,8 @@ export default {
     div.ui.link.card, div.ui.fluid.card {
         height: 100%;
         width: 100%;
+        max-width: 563.3px;
+        margin: 0 auto;
     }
 
     div.ui.fluid.card > div.content {

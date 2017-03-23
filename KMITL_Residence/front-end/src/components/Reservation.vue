@@ -12,6 +12,7 @@
                     <CheckAvailabilitySection v-if="getCurrentStep() == 1"/>
                     <ChooseRoomTypeSection v-else-if="getCurrentStep() == 2"/>
                     <BasicInformationSection v-else-if="getCurrentStep() == 3"/>
+                    <PaymentInformationSection v-else-if="getCurrentStep() == 4"/>
                 </div>
             </div>
         </div>
@@ -25,6 +26,7 @@ import ReservationProgress from './ReservationProgress'
 import CheckAvailabilitySection from './CheckAvailabilitySection'
 import ChooseRoomTypeSection from './ChooseRoomTypeSection'
 import BasicInformationSection from './BasicInformationSection'
+import PaymentInformationSection from './PaymentInformationSection'
 
 export default {
     name: 'reservation',
@@ -32,7 +34,8 @@ export default {
         ReservationProgress,
         CheckAvailabilitySection,
         ChooseRoomTypeSection,
-        BasicInformationSection
+        BasicInformationSection,
+        PaymentInformationSection
     },
     beforeRouteLeave(to, from, next){
         this.$store.dispatch('clearReservationState')
