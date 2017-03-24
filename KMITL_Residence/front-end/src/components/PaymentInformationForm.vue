@@ -137,6 +137,6 @@ export default {
 <style scoped>
     button.fluid.ui.blue.large.button {
         padding: 1em !important;
-        margin-top: 19px !important;
+        margin-top: 0px !important;
     }
 </style>>
