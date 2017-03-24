@@ -6,7 +6,28 @@
             </h1>
         </div>
         <div class="sixteen wide column">
-            
+            <PaymentInformationForm v-model="paymentInformation" @next="next"/>
         </div>
     </div>
 </template>
+
+<script>
+import PaymentInformationForm from './PaymentInformationForm'
+
+export default {
+    data: () => ({
+        paymentInformation: {
+
+        }
+    }),
+    components: {
+        PaymentInformationForm
+    },
+    methods: {
+        next(){
+            this.$store.dispatch('setPaymentInformation', this.paymentInformation)
+            this.$store.dispatch('nextStep')
+        }
+    }
+}
+</script>

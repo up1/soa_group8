@@ -21,8 +21,9 @@ const state = {
         paymentInformation: {
             creditCardId: '',
             creditCardExp: '',
-            creditCardCvv: '',
-            creditCardType: 0
+            creditCardCvc: '',
+            creditCardType: '',
+            creditCardHolder: ''
         }
     }
 }
@@ -36,7 +37,9 @@ const getters = {
 
     getStayingInformation: (state) => state.data.stayingInformation,
 
-    getPersonalInformation: (state) => state.data.personalInformation
+    getPersonalInformation: (state) => state.data.personalInformation,
+
+    getPaymentInformation: (state) => state.data.paymentInformation
 }
 
 const actions = {
@@ -116,8 +119,9 @@ const actions = {
         dispatch('setPaymentInformation', {
                 creditCardId: '',
                 creditCardExp: '',
-                creditCardCvv: '',
-                creditCardType: 0
+                creditCardCvc: '',
+                creditCardType: '',
+                creditCardHolder: ''
         })
     }
 }

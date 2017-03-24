@@ -4,6 +4,8 @@ import Vue from 'vue'
 
 import '!script-loader!jquery'
 import '!script-loader!semantic-ui/dist/semantic.min.js'
+import '!script-loader!formatter.js/dist/jquery.formatter.min.js'
+import '!script-loader!lodash/lodash.min.js'
 import '!style-loader!css-loader!semantic-ui/dist/semantic.min.css'
 import '!style-loader!css-loader!./assets/css/custom.css'
 
