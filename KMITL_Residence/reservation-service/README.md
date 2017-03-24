@@ -35,7 +35,6 @@ Request JSON
     "checkOut": "2017-01-12",
     "adults": 1,
     "children": 1,
-    "status": 1,
     "roomType": 2,
     "customer": {
 	  	"titleName": "Mr.",
@@ -47,9 +46,10 @@ Request JSON
 	},
     "creditCard": {
 	  	"number": "1234567890",
+		"holderName": "Adisorn Sripakpaisit"
 		"type": "Visa",
 	  	"expiredDate": "2018-01-01",
-	  	"cvv": "1234"
+	  	"cvc": "1234"
 	}
 }
 ```
