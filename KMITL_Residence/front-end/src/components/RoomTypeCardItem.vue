@@ -13,7 +13,7 @@
                 <div class="content">
                     <div class="header">{{ data.typeNameEn }}</div>
                     <div class="description">
-                        {{ data.typeDetailsTh}}
+                        {{ data.typeDetailsEn}}
                     </div>
                 </div>
                 <div class="extra content">
