@@ -22,7 +22,7 @@
         </a>
         <a class="step disabled" ref="five" @click="setStep(5)">
             <div class="content">
-                <div class="title">Confirmation</div>
+                <div class="title">Validation</div>
             </div>
         </a>
 

@@ -9,11 +9,13 @@
         <div class="content-container">
             <div class="card-padding">
                 <div class="card padding-content">
-                    <CheckAvailabilitySection v-if="getCurrentStep() == 1"/>
-                    <ChooseRoomTypeSection v-else-if="getCurrentStep() == 2"/>
-                    <BasicInformationSection v-else-if="getCurrentStep() == 3"/>
-                    <PaymentInformationSection v-else-if="getCurrentStep() == 4"/>
-                    <ConfirmationSection v-else-if="getCurrentStep() == 5"/>
+                <transition name="fade" mode="out-in">
+                    <CheckAvailabilitySection v-if="getCurrentStep() === 1"/>
+                    <ChooseRoomTypeSection v-else-if="getCurrentStep() === 2"/>
+                    <BasicInformationSection v-else-if="getCurrentStep() === 3"/>
+                    <PaymentInformationSection v-else-if="getCurrentStep() === 4"/>
+                    <ConfirmationSection v-else-if="getCurrentStep() === 5"/>
+                </transition>
                 </div>
             </div>
         </div>
@@ -53,6 +55,14 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
+    .fade-transition {
+    opacity: 1;
+    transition: all .45s linear;
+    }
+
+    .fade-enter, .fade-leave {
+    opacity: 0;
+    }
 
 </style>

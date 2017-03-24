@@ -116,3 +116,13 @@ button.ui.button.luxury-primary:hover{
 label {
     color: #3F3F3F !important;
 }
+
+
+/* Vue Transition Effect */
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0
+}
