@@ -6,19 +6,21 @@ package reservation.model;
 public class CreditCard {
 
     private String number;
+    private String holderName;
     private String type;
     private String expiredDate;
-    private String cvv;
+    private String cvc;
 
     public CreditCard() {
 
     }
 
-    public CreditCard(String number, String type, String expiredDate, String cvv) {
+    public CreditCard(String number, String holderName, String type, String expiredDate, String cvc) {
         this.number = number;
+        this.holderName = holderName;
         this.type = type;
         this.expiredDate = expiredDate;
-        this.cvv = cvv;
+        this.cvc = cvc;
     }
 
     public String getNumber() {
@@ -33,6 +35,14 @@ public class CreditCard {
         return type;
     }
 
+    public String getHolderName() {
+        return holderName;
+    }
+
+    public void setHolderName(String holderName) {
+        this.holderName = holderName;
+    }
+
     public void setType(String type) {
         this.type = type;
     }
@@ -45,11 +55,11 @@ public class CreditCard {
         this.expiredDate = expiredDate;
     }
 
-    public String getCvv() {
-        return cvv;
+    public String getCvc() {
+        return cvc;
     }
 
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
+    public void setCvc(String cvc) {
+        this.cvc = cvc;
     }
 }

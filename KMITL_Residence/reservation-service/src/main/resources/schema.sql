@@ -18,9 +18,10 @@ CREATE TABLE reservation (
   customer_country VARCHAR(50),
   customer_nation VARCHAR(50),
   credit_card_id VARCHAR(20) NOT NULL,
+  credit_card_holder_name VARCHAR(150),
   credit_card_type VARCHAR(20) NOT NULL,
   credit_card_expired_date DATE NOT NULL,
-  credit_card_cvv VARCHAR(4) NOT NULL
+  credit_card_cvc VARCHAR(4) NOT NULL
 
 );
 
@@ -31,4 +32,11 @@ CREATE TABLE reservation_status (
   status_id INTEGER NOT NULL,
   status_description VARCHAR(50) NOT NULL
 
+);
+
+DROP TABLE IF EXISTS credit_card_type;
+
+CREATE TABLE credit_card_type (
+  type_id INTEGER NOT NULL,
+  type_description VARCHAR(50) NOT NULL
 );

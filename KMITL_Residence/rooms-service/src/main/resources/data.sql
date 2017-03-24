@@ -1,10 +1,10 @@
-INSERT INTO Room_Type VALUES
+﻿INSERT INTO Room_Type VALUES
 (
     1,
     'ห้องดีลักซ์',
     'Deluxe Room',
     'เตียงคิงไซส์กว้างขวางนุ่มสบายเป็นพิเศษ ผ้าคลุมเตียง,หมอนขนนก ของใช้ครบชุดในห้องน้ำหินอ่อน ฝักบัวแยกต่างหาก หนังสือพิมพ์ท้องถิ่นฟรี เก้าอี้อ่านหนังสือ พื้นที่ทำงาน ทีวี ไดร์เป่าผม ขอเตียงเสริมได้ 1 เตียง ผู้ใหญ่เข้าพักได้สูงสุด 4 คนและเด็ก 4 คน',
-    '',
+    'Extra spacious king size bed, feather pillows, full set of toiletries in marble bathroom and separate shower, free local newspapers, reading chairs, work area, LED TV, hair dryer. It is suited for 1 family of up to 4 adults and 4 children + 1 extra bed.',
     2800.00,
     4,
     4
@@ -14,7 +14,7 @@ INSERT INTO Room_Type VALUES
     'ห้องพรีเมียร์',
     'Premiere Room',
     'ประสบการณ์ที่ไม่เหมือนใครด้วยการผสานการผ่อนคลายและมีสมาธิ ห้องในชั้นพรีเมียร์จะทำให้คุณรู้สึกเหมือนบุคคลสำคัญ ไม่มีเตียงเสริม เข้าพักได้สูงสุดผู้ใหญ่ 2 และเด็ก 1 ไม่มีเตียงเสริม',
-    '',
+    'A unique experience combining relaxation and meditation. This Premier room will make you feel like a king. Maximum occupancy is 2 adults and 1 child without extra bed.',
     4500.00,
     2,
     1
@@ -24,7 +24,7 @@ INSERT INTO Room_Type VALUES
     'ห้องสวีท',
     'Suite Room',
     'ประสบการณ์ที่ยากจะลืมเลือน! ห้องสวีทขนาดใหญ่ที่ออกแบบอย่างยอดเยี่ยม มีห้องรับรองและห้องน้ำแยกต่างหาก พร้อมด้วยสิ่งอำนวยความสะดวกอันทันสมัย เช่น โซฟาและโซฟา (เรามีโซฟาให้ 2 ตัวน่ะ) พักได้สูงสุดผู้ใหญ่ 2 ไม่มีเตียงเสริม',
-    '',
+    'An unforgettable experience! Large and greatly designed suite room. There is a separate lounge and bathroom. Equipped with modern amenities such as sofa (2 sofas). Maximum occupancy is 2 adults, no extra bed.',
     5600,
     2,
     0

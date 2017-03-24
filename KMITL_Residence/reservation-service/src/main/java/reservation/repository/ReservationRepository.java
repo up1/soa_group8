@@ -4,10 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -61,7 +64,7 @@ public class ReservationRepository {
         String sql = "select reservation_id, reservation_date, reservation_checkout, reservation_adults, " +
                 "reservation_children, reservation_status, reservation_partial, reservation_timestamp, room_type, " +
                 "customer_title_name, customer_full_name, customer_email, customer_tel, customer_country, customer_nation, " +
-                "credit_card_id, credit_card_type, credit_card_expired_date, credit_card_cvv " +
+                "credit_card_id, credit_card_holder_name, credit_card_type, credit_card_expired_date, credit_card_cvc " +
                 "from reservation " +
                 "where reservation_id=?";
         try {
@@ -76,70 +79,74 @@ public class ReservationRepository {
     @Transactional
     public void saveReservation(Reservation reservation) {
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
+        String[] txtStart = reservation.getCheckIn().split("-");
+        String[] txtEnd = reservation.getCheckOut().split("-");
+        //set date in joda datetime
+        DateTime start = new DateTime(Integer.valueOf(txtStart[0]),
+                Integer.valueOf(txtStart[1]),
+                Integer.valueOf(txtStart[2]),
+                0, 0, 0, 0);
+        DateTime end = new DateTime(Integer.valueOf(txtEnd[0]),
+                Integer.valueOf(txtEnd[1]),
+                Integer.valueOf(txtEnd[2]),
+                0, 0, 0, 0);
+        DateTime current = new DateTime();
 
-        String sql = "INSERT INTO reservation (reservation_date, reservation_checkout, " +
-                "reservation_adults, reservation_children, reservation_status, " +
-                "room_type, customer_title_name, customer_full_name, customer_email, " +
-                "customer_tel, customer_country, customer_nation, " +
-                "credit_card_id, credit_card_type, credit_card_expired_date, credit_card_cvv) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        int result = jdbc.update(sql,
-                reservation.getCheckIn(),
-                reservation.getCheckOut(),
-                reservation.getAdults(),
-                reservation.getChildren(),
-                reservation.getStatus(),
-                reservation.getRoomType(),
-                reservation.getCustomer().getTitleName(),
-                reservation.getCustomer().getFullName(),
-                reservation.getCustomer().getEmail(),
-                reservation.getCustomer().getTel(),
-                reservation.getCustomer().getCountry(),
-                reservation.getCustomer().getNation(),
-                reservation.getCreditCard().getNumber(),
-                reservation.getCreditCard().getType(),
-                reservation.getCreditCard().getExpiredDate(),
-                reservation.getCreditCard().getCvv());
-        if (result < 0) {
-            throw new AddReservationFailedException();
+        if(start.getMillis() > end.getMillis() || start.getMillis() < current.getMillis()) {
+            //throw exception when check-in > checkout or check-in < current date
+            throw new DateException(reservation.getCheckIn(), reservation.getCheckOut());
         }
         else {
+            String sql = "INSERT INTO reservation (reservation_date, reservation_checkout, " +
+                    "reservation_adults, reservation_children, " +
+                    "room_type, customer_title_name, customer_full_name, customer_email, " +
+                    "customer_tel, customer_country, customer_nation, " +
+                    "credit_card_id, credit_card_holder_name, credit_card_type, credit_card_expired_date, credit_card_cvc) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            int result = jdbc.update(sql,
+                    reservation.getCheckIn(),
+                    reservation.getCheckOut(),
+                    reservation.getAdults(),
+                    reservation.getChildren(),
+                    reservation.getRoomType(),
+                    reservation.getCustomer().getTitleName(),
+                    reservation.getCustomer().getFullName(),
+                    reservation.getCustomer().getEmail(),
+                    reservation.getCustomer().getTel(),
+                    reservation.getCustomer().getCountry(),
+                    reservation.getCustomer().getNation(),
+                    reservation.getCreditCard().getNumber(),
+                    reservation.getCreditCard().getHolderName(),
+                    reservation.getCreditCard().getType(),
+                    reservation.getCreditCard().getExpiredDate(),
+                    reservation.getCreditCard().getCvc());
+            if (result < 0) {
+                throw new AddReservationFailedException();
+            } else {
 
-            String[] txtStart = reservation.getCheckIn().split("-");
-            String[] txtEnd = reservation.getCheckOut().split("-");
+                Interval interval = new Interval(start, end);
+                int days = daysBetween(interval.getStartMillis(), interval.getEndMillis());
 
-            DateTime start = new DateTime(Integer.valueOf(txtStart[0]),
-                    Integer.valueOf(txtStart[1]),
-                    Integer.valueOf(txtStart[2]),
-                    12, 0, 0, 0);
-            DateTime end = new DateTime(Integer.valueOf(txtEnd[0]),
-                    Integer.valueOf(txtEnd[1]),
-                    Integer.valueOf(txtEnd[2]),
-                    12, 0, 0, 0);
-            Interval interval = new Interval(start, end);
-            int days = daysBetween(interval.getStartMillis(), interval.getEndMillis());
+                RestTemplate template = new RestTemplate();
+                RoomType roomType = template.getForObject("http://localhost:9001/rooms/type/" + reservation.getRoomType(), RoomType.class);
 
-            RestTemplate template = new RestTemplate();
-            RoomType roomType = template.getForObject("http://localhost:9001/rooms/type/" + reservation.getRoomType(), RoomType.class);
+                Email email = new Email();
+                email.setFullName(reservation.getCustomer().getTitleName() + reservation.getCustomer().getFullName());
+                email.setDestination(reservation.getCustomer().getEmail());
+                email.setEmailType(1);
 
-            Email email = new Email();
-            email.setFullName(reservation.getCustomer().getTitleName() + reservation.getCustomer().getFullName());
-            email.setDestination(reservation.getCustomer().getEmail());
-            email.setEmailType(1);
+                Reservation rs = getFullReservation(getLastInsertId());
 
-            Reservation rs = getFullReservation(getLastInsertId());
+                Content content = new Content();
+                content.setRoomType(reservation.getRoomType());
+                content.setReservationId(rs.getId());
+                content.setTotal((int) (days * roomType.getTypePrice()));
+                content.setConfirmationLink("http://localhost:9000/reservation/" + rs.getId() + "/confirm?id=" + getConfirmationId(rs));
 
-            Content content = new Content();
-            content.setRoomType(reservation.getRoomType());
-            content.setReservationId(rs.getId());
-            content.setTotal((int)(days * roomType.getTypePrice()));
-            content.setConfirmationLink("http://localhost:9000/reservation/" + rs.getId() + "/confirm?id=" + getConfirmationId(rs));
+                email.setContent(content);
+                sendEmail(email);
 
-            email.setContent(content);
-            sendEmail(email);
-
+            }
         }
     }
 
@@ -246,6 +253,9 @@ public class ReservationRepository {
     @Transactional(readOnly = true)
     public List<AvailableRoomsType> searchAvailable(String checkin, String checkout, int adults, int children) {
 
+        String checkIn = checkin.replace("'", "");
+        String checkOut = checkout.replace("'", "");
+
         RestTemplate template = new RestTemplate();
 
         ResponseEntity<List<RoomType>> responseEntity = template.exchange(
@@ -261,8 +271,8 @@ public class ReservationRepository {
         String whereIn = tempId.toString().replace("[", "(").replace("]", ")");
 
         String sql = "select room_type, count(reservation_id) as total from reservation " +
-                "where ((reservation_date >= '" + checkin + "' and reservation_date <= '" + checkout + "') or " +
-                "(reservation_checkout <= '" + checkin + "' and reservation_checkout >= '" + checkout + "')) and " +
+                "where ((reservation_date >= '" + checkIn + "' and reservation_date <= '" + checkOut + "') or " +
+                "(reservation_checkout <= '" + checkIn + "' and reservation_checkout >= '" + checkOut + "')) and " +
                 "reservation_status = 2 and room_type in " + whereIn + " and reservation_partial = 0" +
                 " GROUP BY room_type;";
 
