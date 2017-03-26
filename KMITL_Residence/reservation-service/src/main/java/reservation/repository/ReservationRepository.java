@@ -4,14 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
-import org.quartz.*;
-import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -22,8 +18,6 @@ import reservation.mapper.ReservationRowMapper;
 import reservation.model.*;
 
 import java.security.MessageDigest;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -148,13 +142,7 @@ public class ReservationRepository {
                 content.setConfirmationLink("http://localhost:9000/reservation/" + rs.getId() + "/confirm?id=" + getConfirmationId(rs));
 
                 email.setContent(content);
-
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        sendEmail(email);
-                    }
-                }).start();
+                sendEmail(email);
 
             }
         }
@@ -363,19 +351,24 @@ public class ReservationRepository {
     }
 
     private void sendEmail(Email email) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            RestTemplate template = new RestTemplate();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    RestTemplate template = new RestTemplate();
 
-            String json = mapper.writeValueAsString(email);
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<String> entity = new HttpEntity<String>(json, headers);
-            template.exchange("http://localhost:9003/sendmail", HttpMethod.POST, entity, String.class);
+                    String json = mapper.writeValueAsString(email);
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentType(MediaType.APPLICATION_JSON);
+                    HttpEntity<String> entity = new HttpEntity<String>(json, headers);
+                    template.exchange("http://localhost:9003/sendmail", HttpMethod.POST, entity, String.class);
 
-        } catch (JsonProcessingException ex) {
-            ex.printStackTrace();
-        }
+                } catch (JsonProcessingException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }).start();
     }
 
 }
