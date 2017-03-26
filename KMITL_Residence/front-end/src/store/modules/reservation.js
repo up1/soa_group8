@@ -39,7 +39,9 @@ const getters = {
 
     getPersonalInformation: (state) => state.data.personalInformation,
 
-    getPaymentInformation: (state) => state.data.paymentInformation
+    getPaymentInformation: (state) => state.data.paymentInformation,
+
+    getReservationData: (state) => state.data
 }
 
 const actions = {

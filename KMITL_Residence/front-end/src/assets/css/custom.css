@@ -7,7 +7,6 @@
 
 
 body {
-    font-family: 'Montserrat' !important;
     font-weight: 400;
     color: #3F3F3F;
     background-color: #F7F7F7;
@@ -43,8 +42,12 @@ div.content-container > div {
     padding: 0 36px;
 }
 
-.extra-top-menubar-padding {
+.extra-top-menubar-padding:first-child {
     margin-top: 76.69px !important;
+}
+
+.normal-bottom-padding {
+    padding-bottom: 36px !important
 }
 
 
@@ -58,7 +61,28 @@ div.content-container > div {
     background-color: white;
     border: 1px solid #E0E0E0;
     border-radius: 3px;
+    color: #3F3F3F !important;
 }
+
+.card > h1.ui, h2.ui, h3.ui, h4.ui, h5.ui {
+    color: #3F3F3F !important;
+}
+
+
+
+
+/* Header Property */
+
+h1.clear-bottom, h2.clear-bottom, h3.clear-bottom, h4.clear-bottom, h5.clear-bottom {
+    margin-bottom: 1.6em !important;
+
+}
+
+
+
+
+
+
 
 div.background-homepage-container {
     width: 100%;
@@ -121,7 +145,7 @@ label {
 /* Vue Transition Effect */
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s
+  transition: opacity .3s ease;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
   opacity: 0

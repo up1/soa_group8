@@ -72,6 +72,8 @@ export default {
     },
     methods: {
         next() {
+            this.personalInformation.firstName = _.capitalize(this.personalInformation.firstName)
+            this.personalInformation.lastName = _.capitalize(this.personalInformation.lastName)
             this.$emit('input', this.personalInformation)
             this.$emit('next')
         }

@@ -6,20 +6,20 @@
             </h1>
         </div>
         <div class="sixteen wide column">
-            <BasicInformationForm v-model="personalInformation" @next="next"/>
+            <PersonalInformationForm v-model="personalInformation" @next="next"/>
         </div>
     </div>
 </template>
 
 <script>
-import BasicInformationForm from './BasicInformationForm'
+import PersonalInformationForm from './PersonalInformationForm'
 
 export default {
     data: () => ({
         personalInformation: {}
     }),
     components: {
-        BasicInformationForm
+        PersonalInformationForm
     },
     methods: {
         next(){

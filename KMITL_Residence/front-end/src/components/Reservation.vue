@@ -8,13 +8,13 @@
 
         <div class="content-container">
             <div class="card-padding">
-                <div class="card padding-content">
+                <div class="card padding-content normal-bottom-padding">
                 <transition name="fade" mode="out-in">
                     <CheckAvailabilitySection v-if="getCurrentStep() === 1"/>
                     <ChooseRoomTypeSection v-else-if="getCurrentStep() === 2"/>
-                    <BasicInformationSection v-else-if="getCurrentStep() === 3"/>
+                    <PersonalInformationSection v-else-if="getCurrentStep() === 3"/>
                     <PaymentInformationSection v-else-if="getCurrentStep() === 4"/>
-                    <ConfirmationSection v-else-if="getCurrentStep() === 5"/>
+                    <ValidationSection v-else-if="getCurrentStep() === 5"/>
                 </transition>
                 </div>
             </div>
@@ -28,9 +28,9 @@
 import ReservationProgress from './ReservationProgress'
 import CheckAvailabilitySection from './CheckAvailabilitySection'
 import ChooseRoomTypeSection from './ChooseRoomTypeSection'
-import BasicInformationSection from './BasicInformationSection'
+import PersonalInformationSection from './PersonalInformationSection'
 import PaymentInformationSection from './PaymentInformationSection'
-import ConfirmationSection from './ConfirmationSection'
+import ValidationSection from './ValidationSection'
 
 export default {
     name: 'reservation',
@@ -38,9 +38,9 @@ export default {
         ReservationProgress,
         CheckAvailabilitySection,
         ChooseRoomTypeSection,
-        BasicInformationSection,
+        PersonalInformationSection,
         PaymentInformationSection,
-        ConfirmationSection
+        ValidationSection
     },
     beforeRouteLeave(to, from, next){
         this.$store.dispatch('clearReservationState')
@@ -56,13 +56,5 @@ export default {
 </script>
 
 <style scoped>
-    .fade-transition {
-    opacity: 1;
-    transition: all .45s linear;
-    }
-
-    .fade-enter, .fade-leave {
-    opacity: 0;
-    }
 
 </style>

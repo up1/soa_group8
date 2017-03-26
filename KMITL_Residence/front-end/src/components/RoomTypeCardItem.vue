@@ -13,7 +13,7 @@
                 <div class="content">
                     <div class="header">{{ data.typeNameEn }}</div>
                     <div class="description">
-                        {{ data.typeDetailsEn}}
+                        {{ data.typeDetailsEn }}
                     </div>
                 </div>
                 <div class="extra content">
@@ -95,6 +95,10 @@ export default {
     }
 
     div.ui.fluid.card > div.content {
+        padding: 1.3em;
+    }
+
+    div.ui.fluid.card > div.ui.bottom.attached.blue.button {
         padding: 1.3em;
     }
 

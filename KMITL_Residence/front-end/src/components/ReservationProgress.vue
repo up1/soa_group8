@@ -12,7 +12,7 @@
         </a>
         <a class="step disabled" ref="three" @click="setStep(3)">
             <div class="content">
-                <div class="title">Basic Information</div>
+                <div class="title">Personal Information</div>
             </div>
         </a>
         <a class="step disabled" ref="four" @click="setStep(4)">
