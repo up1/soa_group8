@@ -32,10 +32,11 @@ public class ReservationController {
     @RequestMapping(value = "/reservation/add",method = RequestMethod.POST)
     public ResponseEntity<ResultMessage> saveReservation(@RequestBody Reservation reservation) {
 
-        ResultMessage resultMessage = new ResultMessage("Success");
+        ResultMessage resultMessage = null;
 
         if(reservation != null) {
-            reservationRepository.saveReservation(reservation);
+            int id = reservationRepository.saveReservation(reservation);
+            resultMessage = new ResultMessage(id, "Success");
         }
 
         return new ResponseEntity(resultMessage, HttpStatus.CREATED);
@@ -45,7 +46,7 @@ public class ReservationController {
     public ResponseEntity<ResultMessage> confirmReservation(@PathVariable String reservation_id,
                                                             @RequestParam(value = "id", required = true) String id) {
 
-        ResultMessage resultMessage = new ResultMessage("Success");
+        ResultMessage resultMessage = new ResultMessage(Integer.valueOf(reservation_id), "Success");
         reservationRepository.confirmReservation(Integer.valueOf(reservation_id), id);
         return new ResponseEntity(resultMessage, HttpStatus.OK);
 
@@ -54,14 +55,14 @@ public class ReservationController {
     @RequestMapping(value = "/reservation/{reservation_id}/cancel", method = RequestMethod.PUT)
     public ResponseEntity<ResultMessage> cancelReservation(@PathVariable String reservation_id) {
 
-        ResultMessage resultMessage = new ResultMessage("Success");
+        ResultMessage resultMessage = new ResultMessage(Integer.valueOf(reservation_id), "Success");
         reservationRepository.cancelReservation(Integer.valueOf(reservation_id));
         return new ResponseEntity(resultMessage, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/reservation/{reservation_id}/partialCheckout", method = RequestMethod.PUT)
     public ResponseEntity<ResultMessage> updatePartialCheckout(@PathVariable String reservation_id) {
-        ResultMessage resultMessage = new ResultMessage("Success");
+        ResultMessage resultMessage = new ResultMessage(Integer.valueOf(reservation_id), "Success");
         reservationRepository.updatePartialCheckout(Integer.valueOf(reservation_id));
         return new ResponseEntity(resultMessage, HttpStatus.OK);
     }

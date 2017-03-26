@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,7 +78,9 @@ public class ReservationRepository {
     }
 
     @Transactional
-    public void saveReservation(Reservation reservation) {
+    public int saveReservation(Reservation reservation) {
+
+        int id = 0;
 
         String[] txtStart = reservation.getCheckIn().split("-");
         String[] txtEnd = reservation.getCheckOut().split("-");
@@ -135,7 +138,8 @@ public class ReservationRepository {
                 email.setDestination(reservation.getCustomer().getEmail());
                 email.setEmailType(1);
 
-                Reservation rs = getFullReservation(getLastInsertId());
+                id = getLastInsertId();
+                Reservation rs = getFullReservation(id);
 
                 Content content = new Content();
                 content.setRoomType(reservation.getRoomType());
@@ -144,10 +148,17 @@ public class ReservationRepository {
                 content.setConfirmationLink("http://localhost:9000/reservation/" + rs.getId() + "/confirm?id=" + getConfirmationId(rs));
 
                 email.setContent(content);
-                sendEmail(email);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        sendEmail(email);
+                    }
+                }).start();
 
             }
         }
+        return id;
     }
 
     @Transactional
