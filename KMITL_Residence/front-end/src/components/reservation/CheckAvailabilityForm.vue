@@ -4,17 +4,17 @@
         <div class="fields">
             <div class="four input wide field">
                 <label>Check-in date</label>
-                <input type="date" placeholder="Choose check-in date" :min="currentDate" v-model="checkInDate">
+                <input type="date" placeholder="Choose check-in date" :min="currentDate" v-model="checkInDate" id="checkInDate">
             </div>
 
             <div class="four input wide field">
                 <label>Check-out date</label>
-                <input type="date" placeholder="Choose check-out date" :min="currentDate" v-model="checkOutDate">
+                <input type="date" placeholder="Choose check-out date" :min="currentDate" v-model="checkOutDate" id="checkOutDate">
             </div>
 
             <div class="two wide field">
                 <label>Adults</label>
-                <select class="ui fluid selection dropdown" v-model="adults">
+                <select class="ui fluid selection dropdown" v-model="adults" id="adults">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -24,7 +24,7 @@
 
             <div class="two wide field">
                 <label>Children</label>
-                <select class="ui fluid selection dropdown" v-model="children">
+                <select class="ui fluid selection dropdown" v-model="children" id="children">
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -33,7 +33,7 @@
 
             <div class="four wide field">
                 <label>​&nbsp;</label>
-                <button class="ui button fluid large luxury-primary" @click="checkAvailability" ref="submitBtn">
+                <button class="ui button fluid large luxury-primary" @click="checkAvailability" ref="submitBtn" id="checkAvailabilityBtn">
                     Check Availability
                 </button>
             </div>

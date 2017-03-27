@@ -127,7 +127,7 @@ export default {
         getTotalNights(){
             let checkInDate = moment(this.getReservationData.stayingInformation.checkInDate, "YYYY-M-D")
             let checkOutDate = moment(this.getReservationData.stayingInformation.checkOutDate, "yyyy-M-D")
-            return checkOutDate.diff(checkInDate, 'days')
+            return checkOutDate.diff(checkInDate, 'days') || 1
         }
     },
     filters: {
@@ -191,7 +191,6 @@ export default {
         reserveCallback(res){
             console.log(res)
             this.$store.dispatch('nextStep')
-            this.$store.dispatch('clearReservationState')
             $(this.$refs.reserveBtn).removeClass('loading')
         },
         reserveErrorCallback(err){

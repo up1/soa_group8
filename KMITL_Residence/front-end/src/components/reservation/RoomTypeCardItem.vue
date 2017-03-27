@@ -65,7 +65,7 @@ export default {
         getTotalNights(){
             let checkInDate = moment(this.getStayingInformation.checkInDate, "YYYY-M-D")
             let checkOutDate = moment(this.getStayingInformation.checkOutDate, "yyyy-M-D")
-            return checkOutDate.diff(checkInDate, 'days')
+            return checkOutDate.diff(checkInDate, 'days') || 1
         },
         getStayingInformation(){
             return this.$store.getters.getStayingInformation

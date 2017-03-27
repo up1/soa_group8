@@ -9,11 +9,11 @@
                         <div class="default text">Type</div>
                         <i class="dropdown icon"></i>
                         <div class="menu">
-                            <div class="item" data-value="visa">
+                            <div class="item" data-value="Visa">
                                 <i class="visa icon"></i>
                                 Visa
                             </div>
-                            <div class="item" data-value="mastercard">
+                            <div class="item" data-value="Mastercard">
                                 <i class="mastercard icon"></i>
                                 Mastercard
                             </div>
