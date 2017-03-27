@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import CheckAvailabilitySection from './CheckAvailabilitySection'
+import CheckAvailabilitySection from './reservation/CheckAvailabilitySection'
 
 export default {
     name: 'home',

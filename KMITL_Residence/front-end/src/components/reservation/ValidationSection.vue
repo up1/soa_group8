@@ -103,7 +103,7 @@
             </table>
         </div>
         <div class="sixteen wide column">
-                <button class="fluid ui blue big button" id="nextbtn" @click="next">Reserve</button>
+                <button class="fluid ui blue big button" id="nextbtn" @click="next" ref="reserveBtn">Reserve</button>
         </div>
     </div>
 </template>
@@ -159,7 +159,44 @@ export default {
             this.roomData = res.data
         },
         next(){
-            alert("รอกีล่าแก้ API นิดนึงก่อน ตรง Format ของ Credit Card EXP. อ่ะ format ต้องเป็นงี้ 1/2016 (month/year)")
+            $(this.$refs.reserveBtn).addClass('loading')
+            let data = this.getReservationData
+            let json = {
+                 "checkIn": data.stayingInformation.checkInDate,
+                "checkOut": data.stayingInformation.checkOutDate,
+                "adults": data.stayingInformation.adults,
+                "children": data.stayingInformation.children,
+                "roomType": data.stayingInformation.roomType,
+                "customer": {
+                    "titleName": data.personalInformation.titleName,
+                    "fullName": `${data.personalInformation.firstName} ${data.personalInformation.lastName}`,
+                    "email": data.personalInformation.email,
+                    "tel": data.personalInformation.tel,
+                    "country": data.personalInformation.country,
+                    "nation": data.personalInformation.nation
+                },
+                "creditCard": {
+                    "number": data.paymentInformation.creditCardId,
+                    "holderName": data.paymentInformation.creditCardHolder,
+                    "type": data.paymentInformation.creditCardType,
+                    "expiredDate": data.paymentInformation.creditCardExp,
+                    "cvc": data.paymentInformation.creditCardCvc
+                }
+            }
+            axios.post('http://localhost:9000/reservation/add', json)
+                .then((res) => this.reserveCallback(res))
+                .catch((err) => this.reserveErrorCallback(err))
+            
+        },
+        reserveCallback(res){
+            console.log(res)
+            this.$store.dispatch('nextStep')
+            this.$store.dispatch('clearReservationState')
+            $(this.$refs.reserveBtn).removeClass('loading')
+        },
+        reserveErrorCallback(err){
+            console.log(err)
+            $(this.$refs.reserveBtn).removeClass('loading')
         }
     }
 }

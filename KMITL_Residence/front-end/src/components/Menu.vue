@@ -1,5 +1,5 @@
 <template>
-    <div class="content-container side-padding-content" ref="menucontainer">
+    <div class="content-container side-padding-content" ref="menucontainer" id="menuBar">
         <div class="ui secondary menu inverted">
             <a class="item logo">
                 <div>KMITL</div>RESIDENCE
@@ -63,8 +63,12 @@ export default {
 
 <style scoped>
 
-div.content-container {
+#menuBar {
     position: absolute;
+    z-index: 9999
+}
+
+div.content-container {;
     left:0;
     right:0;
     height: 86.69px;

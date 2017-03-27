@@ -3,12 +3,12 @@
         <div class="ui link card">
             <div class="ui fluid card">
                 <div class="ui slide masked reveal image">
-                    <img src="../assets/images/1_1.jpg" class="visible content" v-if="id == 1">
-                    <img src="../assets/images/1_2.jpg" class="hidden content" v-if="id == 1">
-                    <img src="../assets/images/2_1.jpg" class="visible content" v-if="id == 2">
-                    <img src="../assets/images/2_2.jpg" class="hidden content" v-if="id == 2">
-                    <img src="../assets/images/3_1.jpg" class="visible content" v-if="id == 3">
-                    <img src="../assets/images/3_2.jpg" class="hidden content" v-if="id == 3">
+                    <img src="../../assets/images/1_1.jpg" class="visible content" v-if="id == 1">
+                    <img src="../../assets/images/1_2.jpg" class="hidden content" v-if="id == 1">
+                    <img src="../../assets/images/2_1.jpg" class="visible content" v-if="id == 2">
+                    <img src="../../assets/images/2_2.jpg" class="hidden content" v-if="id == 2">
+                    <img src="../../assets/images/3_1.jpg" class="visible content" v-if="id == 3">
+                    <img src="../../assets/images/3_2.jpg" class="hidden content" v-if="id == 3">
                 </div>
                 <div class="content">
                     <div class="header">{{ data.typeNameEn }}</div>

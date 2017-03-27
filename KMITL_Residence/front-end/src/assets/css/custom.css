@@ -133,8 +133,11 @@ button.ui.button.luxury-primary:hover{
     color: #3F3F3F !important;
 }
 
+
 .ui.header.section-header > div.sub.header {
-    margin-top:8px !important;
+    margin: 0 auto !important;
+    margin-top: 8px !important;
+    max-width: 500px;
 }
 
 label {
