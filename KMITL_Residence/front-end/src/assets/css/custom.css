@@ -50,6 +50,9 @@ div.content-container > div {
     padding-bottom: 36px !important
 }
 
+form.ui.form .fields:last-child {
+    margin-bottom: 0px !important;
+}
 
 /* Card property */
 
@@ -152,4 +155,10 @@ label {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
   opacity: 0
+}
+
+
+a.link.large {
+
+    font-size: 1.14285714rem;
 }
