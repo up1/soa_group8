@@ -7,6 +7,7 @@ public class Email {
 
     private int emailType;
     private String destination;
+    private String titleName;
     private String fullName;
     private Content content;
 
@@ -14,9 +15,10 @@ public class Email {
 
     }
 
-    public void Email(int emailType, String destination, String fullName, Content content) {
+    public void Email(int emailType, String destination, String titleName, String fullName, Content content) {
         this.emailType = emailType;
         this.destination = destination;
+        this.titleName = titleName;
         this.fullName = fullName;
         this.content = content;
     }
@@ -35,6 +37,14 @@ public class Email {
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    public String getTitleName() {
+        return titleName;
+    }
+
+    public void setTitleName(String titleName) {
+        this.titleName = titleName;
     }
 
     public String getFullName() {

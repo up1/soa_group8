@@ -1,7 +1,6 @@
 package email.repository;
 
 import com.google.common.collect.Lists;
-import email.model.Content;
 import it.ozimov.springboot.mail.model.Email;
 import it.ozimov.springboot.mail.model.defaultimpl.DefaultEmail;
 import it.ozimov.springboot.mail.service.EmailService;
@@ -36,26 +35,33 @@ public class EmailRepository {
     }
 
     public String fillSubject(int emailType) {
-        if(emailType == 1) {
-            return "Reservation Confirmation";
-        } else if(emailType == 2) {
-            return "Your Reservation has been Confirmed";
-        } else if(emailType == 3) {
-            return "Your Reservation has been Cancelled";
-        } else {
-            return null;
+        switch(emailType) {
+            case 1:
+                return "Reservation Confirmation";
+            case 2:
+                return "Your Reservation has been Confirmed";
+            case 3:
+                return "Your Reservation has been Cancelled";
+            default:
+                return null;
         }
     }
 
     public String fillBody(email.model.Email email_info) {
-        if(email_info.getEmailType() == 1) { // Request confirm from customer
-            return "Thanks "+email_info.getFullName()+" for making a reservation. To complete a reservation, please click this link " + email_info.getContent().getConfirmationLink(); // TODO add more detail
-        } else if(email_info.getEmailType() == 2) { // Customer did confirm
-            return "Thanks a lot for choosing our service. Our staff will provide you the best customer service you only deserve. Enjoy your day!"; // TODO add more detail
-        } else if(email_info.getEmailType() == 3) { // Cancel reservation
-            return "Your reservation has been cancelled, anyway, We’d love to see you again next time. Have a nice day!";
-        } else {
-            return null;
+        switch (email_info.getEmailType()) {
+            case 1:
+                return "Thanks "+email_info.getTitleName()+email_info.getFullName()+" for making a reservation. " +
+                        "To confirm and complete a reservation, please click this link " +
+                        email_info.getContent().getConfirmationLink() + ", to cancel, please click this link " +
+                        email_info.getContent().getCancelLink(); // TODO -> add more details
+            case 2:
+                return "Thanks a lot for choosing our service. " +
+                        "Our staff will provide you the best customer service you only deserve. Enjoy your day!";
+            case 3:
+                return "Your reservation has been cancelled, " +
+                        "anyway, We’d love to see you again next time. Have a nice day!";
+            default:
+                return null;
         }
     }
 
