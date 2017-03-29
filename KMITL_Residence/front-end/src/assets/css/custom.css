@@ -143,8 +143,12 @@ button.ui.button.luxury-primary:hover{
     max-width: 500px;
 }
 
-label {
-    color: #3F3F3F !important;
+.ui.form .field>label  {
+    color: #3F3F3F;
+}
+
+label .error {
+    color: #9f3a38;
 }
 
 
