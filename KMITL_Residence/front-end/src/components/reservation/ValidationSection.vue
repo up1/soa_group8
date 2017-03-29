@@ -103,7 +103,7 @@
             </table>
         </div>
         <div class="sixteen wide column">
-                <button class="fluid ui blue big button" id="nextbtn" @click="next" ref="reserveBtn">Reserve</button>
+                <button class="fluid ui blue big button" id="nextbtn" @click="next" ref="reserveBtn">Book room!</button>
         </div>
     </div>
 </template>

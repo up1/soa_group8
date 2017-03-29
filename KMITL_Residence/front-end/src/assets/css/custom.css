@@ -12,6 +12,10 @@ body {
     background-color: #F7F7F7;
 }
 
+div#app {
+    margin-bottom: 25px;
+}
+
 div.content-container {
     width: 100%;
     margin: 0px auto;
@@ -165,4 +169,24 @@ label .error {
 a.link.large {
 
     font-size: 1.14285714rem;
+}
+
+input[type=date], input[type=date]:focus, input[type=date]:active {
+    color: transparent !important;
+    position: relative;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    height: 43.42px;
+}
+
+input::-webkit-datetime-edit, input::-webkit-inner-spin-button, input::-webkit-clear-button {
+    display: none;
+}
+
+input::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: 10px;
+    color: black !important;
+    opacity: 1;
 }

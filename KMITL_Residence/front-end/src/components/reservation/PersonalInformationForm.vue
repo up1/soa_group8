@@ -1,16 +1,6 @@
 <template>
 <div>
-    <div class="ui grid" v-if="errors.any()">
-        <div class="sixteen wide column">
-            <div class="ui error message">
-                <div class="header">Got error!</div>
-                <ul class="list" v-for="error in errors.all()">
-                    <li>{{ error }}</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="ui hidden divider" v-if="errors.any()"></div>
+    <FormErrorMsg :errors="errors.all()"/>
     <form class="ui large form" @submit.prevent>
         <div class="field">
             <label>Name </label>
@@ -23,30 +13,30 @@
                     </select>
                 </div>
                 <div class="seven wide field" :class="{'error': errors.has('firstname')}">
-                    <input v-validate="'required|alpha'" type="text" name="firstname" placeholder="Firstname" v-model="personalInformation.firstName">
+                    <input v-validate="'required|alpha'" data-vv-validate-on="none" type="text" data-vv-name="firstname" placeholder="Firstname" v-model="personalInformation.firstName">
                 </div>
                 <div class="seven wide field" :class="{'error': errors.has('lastname')}">
-                    <input v-validate="'required|alpha'" type="text" name="lastname" placeholder="Lastname" v-model="personalInformation.lastName">
+                    <input v-validate="'required|alpha'" data-vv-validate-on="none" type="text" data-vv-name="lastname" placeholder="Lastname" v-model="personalInformation.lastName">
                 </div>
             </div>
             <div class="two fields">
-                <div class="field">
+                <div class="field" :class="{'error': errors.has('nationality')}">
                     <label>Nationality</label>
-                    <Nationality v-model="personalInformation.nation"/>
+                    <Nationality v-model="personalInformation.nation" v-validate="'required'" data-vv-name="nationality"/>
                 </div>
-                <div class="field">
+                <div class="field" :class="{'error': errors.has('country')}">
                     <label>Country</label>
-                    <Country v-model="personalInformation.country"/>
+                    <Country v-model="personalInformation.country" v-validate="'required'" data-vv-name="country"/>
                 </div>
             </div>
             <div class="two fields">
                 <div :class="{'field': true, 'error':errors.has('email')}">
                     <label>E-mail</label>
-                    <input v-validate="'required|email'" type="text" name="email" placeholder="Your e-mail" v-model="personalInformation.email">
+                    <input  data-vv-name="email" v-validate="'required|email'" data-vv-validate-on="none" type="text" placeholder="Your e-mail" v-model="personalInformation.email">
                 </div>
-                <div class="field">
+                <div class="field" :class="{'error': errors.has('phone number')}">
                     <label>Phone Number</label>
-                    <input type="text" name="tel" placeholder="Your Phone Number" v-model="personalInformation.tel">
+                    <input type="text" data-vv-name="phone number" placeholder="Your Phone Number" data-vv-validate-on="none" v-validate="'required|numeric|min:8|max:10'" v-model="personalInformation.tel" maxlength="10">
                 </div>
             </div>
             <div class="fields">
@@ -62,6 +52,7 @@
 <script>
 import Nationality from './NationalitySelectBox'
 import Country from './CountrySelectBox'
+import FormErrorMsg from './FormErrorMsg'
 
 export default {
     data: () => ({
@@ -78,7 +69,11 @@ export default {
 
     components: {
         Nationality,
-        Country
+        Country,
+        FormErrorMsg
+    },
+    created () {
+        
     },
     mounted () {
         $('select.dropdown').dropdown()
@@ -88,6 +83,7 @@ export default {
             this.personalInformation.firstName = _.capitalize(this.personalInformation.firstName)
             this.personalInformation.lastName = _.capitalize(this.personalInformation.lastName)
             this.$emit('input', this.personalInformation)
+            this.$validator.validateAll()
             if(!this.errors.any()){
                 this.$emit('next')
             }
