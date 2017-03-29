@@ -6,6 +6,7 @@ import org.joda.time.DateTime;
 import org.joda.time.Interval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -28,6 +29,9 @@ public class ReservationRepository {
 
     @Autowired
     private JdbcTemplate jdbc;
+
+    @Autowired
+    private Environment env;
 
     public ReservationRepository(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
@@ -125,7 +129,8 @@ public class ReservationRepository {
                 int days = daysBetween(interval.getStartMillis(), interval.getEndMillis());
 
                 RestTemplate template = new RestTemplate();
-                RoomType roomType = template.getForObject("http://localhost:9001/rooms/type/" + reservation.getRoomType(), RoomType.class);
+                String url = env.getProperty("url.rooms.type") + reservation.getRoomType();
+                RoomType roomType = template.getForObject(url, RoomType.class);
 
                 Email email = new Email();
                 email.setFullName(reservation.getCustomer().getTitleName() + reservation.getCustomer().getFullName());
@@ -256,10 +261,12 @@ public class ReservationRepository {
         String checkOut = checkout.replace("'", "");
 
         RestTemplate template = new RestTemplate();
-
+        String url = env.getProperty("url.rooms.types") + "adults=" + adults + "&children=" + children;
         ResponseEntity<List<RoomType>> responseEntity = template.exchange(
-                "http://localhost:9001/rooms/types?adults=" + adults + "&children=" + children,
-                HttpMethod.GET, null, new ParameterizedTypeReference<List<RoomType>>() { });
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<RoomType>>() { });
 
         List<RoomType> roomTypes = responseEntity.getBody();
 
@@ -357,12 +364,12 @@ public class ReservationRepository {
                 ObjectMapper mapper = new ObjectMapper();
                 try {
                     RestTemplate template = new RestTemplate();
-
+                    String url = env.getProperty("url.sendmail");
                     String json = mapper.writeValueAsString(email);
                     HttpHeaders headers = new HttpHeaders();
                     headers.setContentType(MediaType.APPLICATION_JSON);
                     HttpEntity<String> entity = new HttpEntity<String>(json, headers);
-                    template.exchange("http://localhost:9003/sendmail", HttpMethod.POST, entity, String.class);
+                    template.exchange(url, HttpMethod.POST, entity, String.class);
 
                 } catch (JsonProcessingException ex) {
                     ex.printStackTrace();

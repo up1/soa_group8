@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 /**
  * Created by Adisorn on 17/3/2560.
  */
-@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+@ResponseStatus(HttpStatus.FORBIDDEN)
 public class RoomTypeNotAvailableException extends RuntimeException {
 
     public RoomTypeNotAvailableException() {
