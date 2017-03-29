@@ -5,12 +5,17 @@ Request JSON
 {
     "emailType": 1,
     "destination": "example@example.com",
-    "fullName": "Mr.Bug",
+    "titleName": "Mr.",
+    "fullName": "Software Mebug",
     "content": {
         "reservationId": 1,
         "roomType": 1,
-        "total": 10000,
-        "confirmationLink": "exmaple link"
+        "checkinTime": "2017-03-30",
+        "checkoutTime": "2017-03-31",
+        "totalNight": 1,
+        "totalPrice": 2000,
+        "confirmationLink": "confirm link",
+        "cancelLink": "cancel link";
     }
 }
 ```
