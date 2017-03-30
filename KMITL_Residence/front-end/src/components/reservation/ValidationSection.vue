@@ -162,7 +162,7 @@ export default {
             $(this.$refs.reserveBtn).addClass('loading')
             let data = this.getReservationData
             let json = {
-                 "checkIn": data.stayingInformation.checkInDate,
+                "checkIn": data.stayingInformation.checkInDate,
                 "checkOut": data.stayingInformation.checkOutDate,
                 "adults": data.stayingInformation.adults,
                 "children": data.stayingInformation.children,
