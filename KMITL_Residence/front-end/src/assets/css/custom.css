@@ -171,13 +171,37 @@ a.link.large {
     font-size: 1.14285714rem;
 }
 
+div.custom.date-container {
+    position: relative;
+}
+
+
 input[type=date], input[type=date]:focus, input[type=date]:active {
-    color: transparent !important;
     position: relative;
     bottom: 0;
     top: 0;
     right: 0;
     height: 43.42px;
+}
+
+input[type=date]:before {
+    position: absolute;
+    top: 10px; left: 15px;
+    content: attr(data-date);
+    display: inline-block;
+    color: #C7C7C7;
+}
+
+.custom.date-container  input[type=date].selected:before{
+    color: #3F3F3F;
+}
+
+.custom.date-container.error input[type=date]:before{
+    color: #E7BDBC;
+}
+
+.custom.date-container.error input[type=date].selected:before {
+    color: #9F3A38;
 }
 
 input::-webkit-datetime-edit, input::-webkit-inner-spin-button, input::-webkit-clear-button {
@@ -188,5 +212,9 @@ input::-webkit-calendar-picker-indicator {
     position: absolute;
     right: 10px;
     color: black !important;
+    opacity: 0;
+}
+
+input:hover::-webkit-calendar-picker-indicator {
     opacity: 1;
 }

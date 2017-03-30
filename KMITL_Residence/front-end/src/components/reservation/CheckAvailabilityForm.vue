@@ -4,14 +4,12 @@
         <div class="fields">
             <div class="four input wide field custom date-container">
                 <label>Check-in date</label>
-                <div class="custom date" ref="checkindate">Choose check-in date</div>
-                <input type="date" placeholder="Choose check-in date" :min="currentDate" v-model="checkInDate" id="checkInDate">
+                <input type="date" data-date="Choose check-in date" :min="currentDate" v-model="checkInDate" id="checkInDate" ref="checkindate">
             </div>
 
             <div class="four input wide field custom date-container">
                 <label>Check-out date</label>
-                <div class="custom date" ref="checkoutdate">Choose check-out date</div>
-                <input type="date" placeholder="Choose check-out date" :min="currentDate" v-model="checkOutDate" id="checkOutDate">
+                <input type="date" data-date="Choose check-out date" :min="currentDate" v-model="checkOutDate" id="checkOutDate" ref="checkoutdate">
             </div>
 
             <div class="two wide field">
@@ -68,11 +66,11 @@ export default {
     },
     watch: {
       checkInDate(){
-          $(this.$refs.checkindate).html(moment(this.checkInDate, "YYYY-M-D").format("DD-MM-YYYY"))
+          $(this.$refs.checkindate).attr('data-date', moment(this.checkInDate, "YYYY-M-D").format("DD-MM-YYYY"))
           $(this.$refs.checkindate).addClass("selected")
       },
       checkOutDate(){
-          $(this.$refs.checkoutdate).html(moment(this.checkOutDate, "YYYY-M-D").format("DD-MM-YYYY"))
+          $(this.$refs.checkoutdate).attr('data-date', moment(this.checkOutDate, "YYYY-M-D").format("DD-MM-YYYY"))
           $(this.$refs.checkoutdate).addClass("selected")
       }
     },
@@ -122,29 +120,5 @@ div.input {
 
 div.large.input.field > select, div.large.input.field > button{
   height: 43.11px;
-}
-
-div.custom.date-container {
-    position: relative;
-}
-
-.custom.date-container > div.custom.date {
-    position:absolute;
-    color: #C7C7C7;
-    top:35px;
-    left:20px;
-    z-index:99;
-}
-
-.custom.date-container > div.custom.date.selected {
-    color: #3F3F3F;
-}
-
-.custom.date-container.error > div.custom.date {
-    color: #E7BDBC;
-}
-
-.custom.date-container.error > div.custom.date.selected {
-    color: #9F3A38;
 }
 </style>

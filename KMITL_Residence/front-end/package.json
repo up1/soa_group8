@@ -37,6 +37,7 @@
     "html-webpack-plugin": "^2.28.0",
     "http-proxy-middleware": "^0.17.3",
     "jquery": "^3.2.0",
+    "modernizr": "^3.4.0",
     "moment": "^2.18.1",
     "numeral": "^2.0.4",
     "opn": "^4.0.2",
