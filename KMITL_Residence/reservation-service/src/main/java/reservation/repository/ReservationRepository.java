@@ -140,13 +140,16 @@ public class ReservationRepository {
                 id = getLastInsertId();
                 Reservation rs = getFullReservation(id);
 
-                String confirmLink = env.getProperty("url.confirm.link") + rs.getId() + "/confirm?id=" + getConfirmationId(rs);
+                String confirmLink = env.getProperty("url.link") + rs.getId() + "/confirm?id=" + getGenerateId(rs);
+                String cancelLink = env.getProperty("url.link") + rs.getId() + "/cancel?id=" + getGenerateId(rs);
 
                 Content content = new Content();
                 content.setRoomType(reservation.getRoomType());
                 content.setReservationId(rs.getId());
-                content.setTotal((int) (days * roomType.getTypePrice()));
+                content.setTotalPrice((int) (days * roomType.getTypePrice()));
+                content.setTotalNight(days);
                 content.setConfirmationLink(confirmLink);
+                content.setCancelLink(cancelLink);
 
                 email.setContent(content);
                 sendEmail(email);
@@ -157,34 +160,39 @@ public class ReservationRepository {
     }
 
     @Transactional
-    public void cancelReservation(int reservationId) {
-        ReservationDetail rs = getReservation(reservationId);
-        if(rs.getStatus().equals("completed")) {
-            String sql = "update reservation set reservation_status=3 where reservation_id=?;";
-            int result = this.jdbc.update(sql, reservationId);
-            if (result < 0) {
-                throw new CancelFailedException(reservationId);
-            }
-            else {
-                Reservation reservation = getFullReservation(reservationId);
+    public void cancelReservation(int reservationId, String cancelId) {
 
-                Email email = new Email();
-                email.setFullName(reservation.getCustomer().getTitleName() + reservation.getCustomer().getFullName());
-                email.setDestination(reservation.getCustomer().getEmail());
-                email.setEmailType(3);
+        Reservation rs = getFullReservation(reservationId);
 
-                Content content = new Content();
-                content.setRoomType(reservation.getRoomType());
-                content.setReservationId(reservation.getId());
-                content.setTotal((int)(0));
-                content.setConfirmationLink(getConfirmationId(reservation));
+        if(cancelId.equals(getGenerateId(rs))) {
 
-                email.setContent(content);
-                sendEmail(email);
+            if (rs.getStatus() != 3) {
+                String sql = "update reservation set reservation_status=3 where reservation_id=?;";
+                int result = this.jdbc.update(sql, reservationId);
+                if (result < 0) {
+                    throw new CancelFailedException(reservationId);
+                } else {
+                    Reservation reservation = getFullReservation(reservationId);
+
+                    Email email = new Email();
+                    email.setFullName(reservation.getCustomer().getTitleName() + reservation.getCustomer().getFullName());
+                    email.setDestination(reservation.getCustomer().getEmail());
+                    email.setEmailType(3);
+
+                    Content content = new Content();
+                    content.setRoomType(reservation.getRoomType());
+                    content.setReservationId(reservation.getId());
+                    content.setConfirmationLink(getGenerateId(reservation));
+
+                    email.setContent(content);
+                    sendEmail(email);
+                }
+            } else {
+                throw new CancelDeniedException(reservationId);
             }
         }
         else {
-            throw new CancelDeniedException(reservationId);
+            throw new CancelIdNotMatchException(reservationId);
         }
 
     }
@@ -192,7 +200,7 @@ public class ReservationRepository {
     @Transactional
     public void confirmReservation(int reservationId, String confirmId) {
         Reservation rs = getFullReservation(reservationId);
-        if(confirmId.equals(getConfirmationId(rs))) {
+        if(confirmId.equals(getGenerateId(rs))) {
 
             List<AvailableRoomsType> roomsTypes = searchAvailable(rs.getCheckIn(), rs.getCheckOut(), rs.getAdults(), rs.getChildren());
             boolean checkRoomType = false;
@@ -334,7 +342,7 @@ public class ReservationRepository {
 
     }
 
-    private String getConfirmationId(Reservation reservation) {
+    private String getGenerateId(Reservation reservation) {
         String id = "";
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");

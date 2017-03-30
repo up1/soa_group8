@@ -53,10 +53,11 @@ public class ReservationController {
     }
 
     @RequestMapping(value = "/reservation/{reservation_id}/cancel", method = RequestMethod.PUT)
-    public ResponseEntity<ResultMessage> cancelReservation(@PathVariable String reservation_id) {
+    public ResponseEntity<ResultMessage> cancelReservation(@PathVariable String reservation_id,
+                                                           @RequestParam(value = "id", required = true) String id) {
 
         ResultMessage resultMessage = new ResultMessage(Integer.valueOf(reservation_id), "Success");
-        reservationRepository.cancelReservation(Integer.valueOf(reservation_id));
+        reservationRepository.cancelReservation(Integer.valueOf(reservation_id), id);
         return new ResponseEntity(resultMessage, HttpStatus.OK);
     }
 

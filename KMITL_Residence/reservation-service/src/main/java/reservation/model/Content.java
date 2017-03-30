@@ -7,18 +7,27 @@ public class Content {
 
     private int reservationId;
     private int roomType;
-    private int total;
+    private String checkinTime;
+    private String checkoutTime;
+    private int totalNight;
+    private int totalPrice;
     private String confirmationLink;
+    private String cancelLink;
 
     public void Content() {
 
     }
 
-    public void Content(int reservationId, int roomType, int total, String confirmationLink) {
+    public void Content(int reservationId, int roomType, String checkinTime, String checkoutTime,
+                        int totalNight, int totalPrice, String confirmationLink, String cancelLink) {
         this.reservationId = reservationId;
         this.roomType = roomType;
-        this.total = total;
+        this.checkinTime = checkinTime;
+        this.checkoutTime = checkoutTime;
+        this.totalNight = totalNight;
+        this.totalPrice = totalPrice;
         this.confirmationLink = confirmationLink;
+        this.cancelLink = cancelLink;
     }
 
     public int getReservationId() {
@@ -37,12 +46,36 @@ public class Content {
         this.roomType = roomType;
     }
 
-    public int getTotal() {
-        return total;
+    public String getCheckinTime() {
+        return checkinTime;
     }
 
-    public void setTotal(int total) {
-        this.total = total;
+    public void setCheckinTime(String checkinTime) {
+        this.checkinTime = checkinTime;
+    }
+
+    public String getCheckoutTime() {
+        return checkoutTime;
+    }
+
+    public void setCheckoutTime(String checkoutTime) {
+        this.checkoutTime = checkoutTime;
+    }
+
+    public int getTotalNight() {
+        return totalNight;
+    }
+
+    public void setTotalNight(int totalNight) {
+        this.totalNight = totalNight;
+    }
+
+    public int getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public String getConfirmationLink() {
@@ -51,5 +84,13 @@ public class Content {
 
     public void setConfirmationLink(String confirmationLink) {
         this.confirmationLink = confirmationLink;
+    }
+
+    public String getCancelLink() {
+        return cancelLink;
+    }
+
+    public void setCancelLink(String cancelLink) {
+        this.cancelLink = cancelLink;
     }
 }

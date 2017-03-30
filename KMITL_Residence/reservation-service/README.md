@@ -68,7 +68,7 @@ Response
     "message": "Success"
 }
 ```
-> PUT /reservation/{reservationId}/cancel
+> PUT /reservation/{reservationId}/cancel?id=123wwdw22dsfsea
 ```
 Response
 {
