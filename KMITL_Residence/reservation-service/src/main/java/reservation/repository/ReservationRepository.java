@@ -140,11 +140,13 @@ public class ReservationRepository {
                 id = getLastInsertId();
                 Reservation rs = getFullReservation(id);
 
+                String confirmLink = env.getProperty("url.confirm.link") + rs.getId() + "/confirm?id=" + getConfirmationId(rs);
+
                 Content content = new Content();
                 content.setRoomType(reservation.getRoomType());
                 content.setReservationId(rs.getId());
                 content.setTotal((int) (days * roomType.getTypePrice()));
-                content.setConfirmationLink("http://localhost:9000/reservation/" + rs.getId() + "/confirm?id=" + getConfirmationId(rs));
+                content.setConfirmationLink(confirmLink);
 
                 email.setContent(content);
                 sendEmail(email);
