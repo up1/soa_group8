@@ -4,12 +4,12 @@
         <div class="fields">
             <div class="four input wide field custom date-container">
                 <label>Check-in date</label>
-                <input type="date" data-date="Choose check-in date" :min="currentDate" v-model="checkInDate" id="checkInDate" ref="checkindate">
+                
             </div>
 
             <div class="four input wide field custom date-container">
                 <label>Check-out date</label>
-                <input type="date" data-date="Choose check-out date" :min="currentDate" v-model="checkOutDate" id="checkOutDate" ref="checkoutdate">
+                <input type="date" data-date="Choose check-out date" placeholder="Choose check-out date" :min="currentDate" v-model="checkOutDate" id="checkOutDate" ref="checkoutdate">
             </div>
 
             <div class="two wide field">
