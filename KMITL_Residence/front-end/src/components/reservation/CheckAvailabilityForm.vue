@@ -1,52 +1,69 @@
 <template>
-<form class="ui large form" @submit.prevent>
-    <div class="field">
-        <div class="fields">
-            <div class="four input wide field custom date-container">
-                <label>Check-in date</label>
-                
-            </div>
+<div>
+    <FormErrorMsg :errors="errors.all()" />
+    <form class="ui large form" @submit.prevent>
+        <div class="field">
+            <div class="fields">
+                <div class="four input wide field">
+                    <label>Check-in date</label>
+                    <div class="ui calendar" ref="checkInDate">
+                        <div class="ui input left icon">
+                            <i class="calendar icon"></i>
+                            <input type="text" placeholder="Choose check-in date" v-validate="'required|date_format:DD-MM-YYYY'" name="Check-in date" data-vv-name="Check-in date">
+                        </div>
+                    </div>
+                </div>
 
-            <div class="four input wide field custom date-container">
-                <label>Check-out date</label>
-                <input type="date" data-date="Choose check-out date" placeholder="Choose check-out date" :min="currentDate" v-model="checkOutDate" id="checkOutDate" ref="checkoutdate">
-            </div>
+                <div class="four input wide field">
+                    <label>Check-out date</label>
+                    <div class="ui calendar" ref="checkOutDate">
+                        <div class="ui input left icon">
+                            <i class="calendar icon"></i>
+                            <input type="text" placeholder="Choose check-in date" v-validate="'required|date_format:DD-MM-YYYY|after:Check-in date'" name="checkOutDate" data-vv-name="Check-out date">
+                        </div>
+                    </div>
+                </div>
 
-            <div class="two wide field">
-                <label>Adults</label>
-                <select class="ui fluid selection dropdown" v-model="adults" id="adults">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                </select>
-            </div>
+                <div class="two wide field">
+                    <label>Adults</label>
+                    <select class="ui fluid selection dropdown" v-model="adults" id="adults">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
 
-            <div class="two wide field">
-                <label>Children</label>
-                <select class="ui fluid selection dropdown" v-model="children" id="children">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                </select>
-            </div>
+                <div class="two wide field">
+                    <label>Children</label>
+                    <select class="ui fluid selection dropdown" v-model="children" id="children">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
 
-            <div class="four wide field">
-                <label>​&nbsp;</label>
-                <button class="ui button fluid large luxury-primary" @click="checkAvailability" ref="submitBtn" id="checkAvailabilityBtn">
-                    Check Availability
-                </button>
+                <div class="four wide field">
+                    <label>​&nbsp;</label>
+                    <button class="ui button fluid large luxury-primary" @click="checkAvailability" ref="submitBtn" id="checkAvailabilityBtn">
+                        Check Availability
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
+</div>
 </template>
 
 <script>
 import axios from 'axios'
 import moment from 'moment'
+import FormErrorMsg from './FormErrorMsg'
 
 export default {
+    components: {
+        FormErrorMsg
+    },
     data: () => ({
         checkInDate: '',
         checkOutDate: '',
@@ -63,20 +80,18 @@ export default {
     },
     mounted () {
         $('select.dropdown').dropdown()
+        this.initialCalendarInput()
     },
     watch: {
       checkInDate(){
-          $(this.$refs.checkindate).attr('data-date', moment(this.checkInDate, "YYYY-M-D").format("DD-MM-YYYY"))
-          $(this.$refs.checkindate).addClass("selected")
       },
       checkOutDate(){
-          $(this.$refs.checkoutdate).attr('data-date', moment(this.checkOutDate, "YYYY-M-D").format("DD-MM-YYYY"))
-          $(this.$refs.checkoutdate).addClass("selected")
       }
     },
     methods: {
         checkAvailability(){
-            if(this.checkInDate == '' || this.checkOutDate ==''){
+            this.$validator.validateAll()
+            if(this.errors.any()){
                 return
             }
             $(this.$refs.submitBtn).addClass('loading')
@@ -103,6 +118,41 @@ export default {
         },
         getStayingInformation(){
             return this.$store.getters.getStayingInformation
+        },
+        initialCalendarInput(){
+            let today = new Date()
+            $(this.$refs.checkInDate).calendar({
+                type: 'date',
+                minDate: new Date(today.getFullYear(), today.getMonth(), today.getDate()),
+                formatter: {
+                    date: function (date, settings) {
+                        if (!date) return ''
+                        let day = date.getDate()
+                        let month = date.getMonth() + 1
+                        let year = date.getFullYear()
+                        return moment(`${day}/${month}/${year}`, 'D/M/YYYY').format('DD-MM-YYYY')
+                    }
+                },
+                onChange: (date, text, mode) => {
+                    this.checkInDate = moment(text, 'DD-MM-YYYY').format('YYYY-MM-DD')
+                }
+            })
+            $(this.$refs.checkOutDate).calendar({
+                type: 'date',
+                minDate: new Date(today.getFullYear(), today.getMonth(), today.getDate()+1),
+                formatter: {
+                    date: function (date, settings) {
+                        if (!date) return ''
+                        let day = date.getDate()
+                        let month = date.getMonth() + 1
+                        let year = date.getFullYear()
+                        return moment(`${day}/${month}/${year}`, 'D/M/YYYY').format('DD-MM-YYYY')
+                    }
+                },
+                onChange: (date, text, mode) => {
+                    this.checkOutDate = moment(text, 'DD-MM-YYYY').format('YYYY-MM-DD')
+                }
+            })
         }
     },
     computed: {

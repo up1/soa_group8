@@ -170,3 +170,10 @@ a.link.large {
 
     font-size: 1.14285714rem;
 }
+
+
+/* Customize semantic-ui calendar */
+
+div.ui.calendar input[type=text] {
+    width: 100% !important;
+}

@@ -15,9 +15,12 @@ import store from './store'
 import App from './App'
 import router from './router'
 
-import VeeValidate from 'vee-validate'
+import moment from 'moment'
+import VeeValidate, {Validator} from 'vee-validate'
 
 Vue.config.productionTip = false
+
+Validator.installDateTimeValidators(moment);
 Vue.use(VeeValidate)
 
 /* eslint-disable no-new */
