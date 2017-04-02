@@ -20,7 +20,11 @@ Response
     "message": "Successfully created"
 }
 ```
-> GET /users/{username}
+> GET /user/{username}
+```
+HEADER
+authenticate-token: token
+```
 ```
 Response
 {
