@@ -11,6 +11,10 @@ public class UserInformation {
     private String fullNameEn;
     private String email;
 
+    public void UserInformation() {
+
+    }
+
     public UserInformation(String username, String role, String fullNameTh, String fullNameEn, String email) {
         this.username = username;
         this.role = role;
