@@ -27,7 +27,7 @@ public class User {
         this.email = email;
     }
 
-    public void User() {
+    public User() {
 
     }
 

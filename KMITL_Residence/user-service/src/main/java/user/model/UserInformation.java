@@ -11,7 +11,7 @@ public class UserInformation {
     private String fullNameEn;
     private String email;
 
-    public void UserInformation() {
+    public UserInformation() {
 
     }
 
