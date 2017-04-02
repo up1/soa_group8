@@ -18,6 +18,7 @@ public class UserInformationRowMapper implements RowMapper<UserInformation> {
         UserInformation userInfo = new UserInformation();
 
         userInfo.setUsername(rs.getString("username"));
+        userInfo.setHashPassword(rs.getString("hash_password"));
         userInfo.setRole(rs.getString("en_role"));
         userInfo.setFullNameTh(rs.getString("th_prename") + rs.getString("th_name"));
         userInfo.setFullNameEn(rs.getString("en_prename") + rs.getString("en_name"));

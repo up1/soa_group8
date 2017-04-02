@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import user.exception.AuthenticationFailedException;
 import user.exception.UserNotFoundException;
+import user.jwt.JwtService;
 import user.mapper.UserInformationRowMapper;
 import user.model.*;
 import user.utils.UserUtils;
@@ -20,6 +22,9 @@ public class UserRepository {
 
     @Autowired
     private JdbcTemplate jdbc;
+
+    @Autowired
+    private JwtService jwtService;
 
     public UserRepository(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
@@ -53,12 +58,6 @@ public class UserRepository {
     }
 
     @Transactional
-    public void changePassword(UserLogin userLogin) {
-        String sql = "update user_account set hash_password = ? where username = ?";
-        jdbc.update(sql, UserUtils.hash(userLogin.getPassword()), userLogin.getUsername());
-    }
-
-    @Transactional
     public void deleteUser(String username) {
         String sql = "delete from user_account where username = ?";
         String sql2 = "delete from staff where username = ?";
@@ -71,7 +70,7 @@ public class UserRepository {
     public UserInformation getUser(String username) {
         UserInformation user = null;
 
-        String sql = "select a.username, r.en_role, s.th_prename, s.th_name, s.en_prename, s.en_name, s.email " +
+        String sql = "select a.username, a.hash_password, r.en_role, s.th_prename, s.th_name, s.en_prename, s.en_name, s.email " +
                 "from user_account a " +
                 "join staff s " +
                 "on a.username = s.username " +
@@ -98,8 +97,18 @@ public class UserRepository {
     }
 
     @Transactional
-    public Token login(UserLogin login) {
-        Token token = null;
+    public String authenticate(UserLogin login) {
+        String token = "";
+        UserInformation userInformation = getUser(login.getUsername());
+        if(userInformation != null) {
+            if(userInformation.getHashPassword().equals(UserUtils.hash(login.getPassword()))) {
+                JwtUser jwtUser = new JwtUser(userInformation.getUsername(), userInformation.getRole());
+                token = jwtService.getToken(jwtUser);
+            }
+            else {
+                throw new AuthenticationFailedException();
+            }
+        }
         return token;
     }
 

@@ -14,7 +14,7 @@ public class UserUtils {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(textToHash.getBytes("UTF-8"));
             byte[] digest = md.digest();
-            hash = String.format("%064x", new java.math.BigInteger(1, digest)).substring(0, 30);
+            hash = String.format("%064x", new java.math.BigInteger(1, digest));
         } catch (Exception ex) {
             ex.printStackTrace();
         }

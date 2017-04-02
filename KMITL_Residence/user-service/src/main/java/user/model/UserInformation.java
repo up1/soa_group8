@@ -1,11 +1,15 @@
 package user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Created by Adisorn on 2/4/2560.
  */
 public class UserInformation {
 
     private String username;
+    @JsonIgnore
+    private String hashPassword;
     private String role;
     private String fullNameTh;
     private String fullNameEn;
@@ -15,8 +19,9 @@ public class UserInformation {
 
     }
 
-    public UserInformation(String username, String role, String fullNameTh, String fullNameEn, String email) {
+    public UserInformation(String username, String hashPassword, String role, String fullNameTh, String fullNameEn, String email) {
         this.username = username;
+        this.hashPassword = hashPassword;
         this.role = role;
         this.fullNameTh = fullNameTh;
         this.fullNameEn = fullNameEn;
@@ -29,6 +34,14 @@ public class UserInformation {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getHashPassword() {
+        return hashPassword;
+    }
+
+    public void setHashPassword(String hashPassword) {
+        this.hashPassword = hashPassword;
     }
 
     public String getRole() {
