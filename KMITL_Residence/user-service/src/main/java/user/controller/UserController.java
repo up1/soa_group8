@@ -31,7 +31,7 @@ public class UserController {
         return new ResponseEntity(resultMessage, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/users/{username}", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
     public UserInformation getUser(@PathVariable String username) {
         return this.userRepository.getUser(username);
     }
