@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import user.exception.UserNotFoundException;
 import user.mapper.UserInformationRowMapper;
 import user.model.*;
 
@@ -64,7 +65,7 @@ public class UserRepository {
                 "join staff s " +
                 "on a.username = s.username " +
                 "join user_role r " +
-                "on r.role_id = a.role_id" +
+                "on r.role_id = a.role_id " +
                 "where a.username = ?;";
 
         try {
@@ -73,6 +74,7 @@ public class UserRepository {
                     new UserInformationRowMapper());
         }catch (Exception ex) {
             ex.printStackTrace();
+            throw new UserNotFoundException(username);
         }
 
         return user;

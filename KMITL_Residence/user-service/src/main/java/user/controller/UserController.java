@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import user.model.ResultMessage;
 import user.model.User;
+import user.model.UserInformation;
 import user.repository.UserRepository;
 
 /**
@@ -27,6 +28,11 @@ public class UserController {
         ResultMessage resultMessage = new ResultMessage(user.getUsername(), "Create Success");
         this.userRepository.createUser(user);
         return new ResponseEntity(resultMessage, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/users/{username}", method = RequestMethod.GET)
+    public UserInformation getUser(@PathVariable String username) {
+        return this.userRepository.getUser(username);
     }
 
 }
