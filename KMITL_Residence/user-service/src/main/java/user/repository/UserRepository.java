@@ -3,7 +3,9 @@ package user.repository;
 import org.h2.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import user.mapper.UserInformationRowMapper;
 import user.model.*;
 
 import java.util.List;
@@ -11,12 +13,13 @@ import java.util.List;
 /**
  * Created by Adisorn on 2/4/2560.
  */
-public class UserServiceRepository {
+@Repository
+public class UserRepository {
 
     @Autowired
     private JdbcTemplate jdbc;
 
-    public UserServiceRepository(JdbcTemplate jdbc) {
+    public UserRepository(JdbcTemplate jdbc) {
         this.jdbc = jdbc;
     }
 
@@ -62,10 +65,12 @@ public class UserServiceRepository {
                 "on a.username = s.username " +
                 "join user_role r " +
                 "on r.role_id = a.role_id" +
-                "where a.username = " + username + ";";
+                "where a.username = ?;";
 
         try {
-
+            user = jdbc.queryForObject(sql,
+                    new Object[] {username},
+                    new UserInformationRowMapper());
         }catch (Exception ex) {
             ex.printStackTrace();
         }
