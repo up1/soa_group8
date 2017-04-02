@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import user.exception.UserNotFoundException;
 import user.mapper.UserInformationRowMapper;
 import user.model.*;
+import user.utils.UserUtils;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class UserRepository {
 
         jdbc.update(sql_insert_account,
                 user.getUsername(),
-                Utils.hashCode(user.getPassword()),
+                UserUtils.hash(user.getPassword()),
                 user.getRole());
         jdbc.update(sql_insert_staff,
                 user.getTitleNameTh(),
@@ -52,8 +53,18 @@ public class UserRepository {
     }
 
     @Transactional
-    public void deleteUser(String username) {
+    public void changePassword(UserLogin userLogin) {
+        String sql = "update user_account set hash_password = ? where username = ?";
+        jdbc.update(sql, UserUtils.hash(userLogin.getPassword()), userLogin.getUsername());
+    }
 
+    @Transactional
+    public void deleteUser(String username) {
+        String sql = "delete from user_account where username = ?";
+        String sql2 = "delete from staff where username = ?";
+
+        jdbc.update(sql, username);
+        jdbc.update(sql2, username);
     }
 
     @Transactional(readOnly = true)

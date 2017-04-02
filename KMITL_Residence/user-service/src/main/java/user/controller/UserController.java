@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import user.model.ResultMessage;
 import user.model.User;
 import user.model.UserInformation;
+import user.model.UserLogin;
 import user.repository.UserRepository;
 
 /**
@@ -33,6 +34,20 @@ public class UserController {
     @RequestMapping(value = "/users/{username}", method = RequestMethod.GET)
     public UserInformation getUser(@PathVariable String username) {
         return this.userRepository.getUser(username);
+    }
+
+    @RequestMapping(value = "/users/{username}/password", method = RequestMethod.PUT)
+    public ResponseEntity changePassword(@PathVariable String username, @RequestBody String psw) {
+        ResultMessage resultMessage = new ResultMessage(username, "Success");
+        this.userRepository.changePassword(new UserLogin(username, psw));
+        return new ResponseEntity(resultMessage, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/users/{username}/delete", method = RequestMethod.DELETE)
+    public ResponseEntity deleteUser(@PathVariable String username) {
+        ResultMessage resultMessage = new ResultMessage(username, "Success");
+        this.userRepository.deleteUser(username);
+        return new ResponseEntity(resultMessage, HttpStatus.OK);
     }
 
 }
