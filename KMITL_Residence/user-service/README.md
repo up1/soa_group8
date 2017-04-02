@@ -39,10 +39,15 @@ Response
     "message": "Successfully Deleted"
 }
 ```
-> PUT /users/{username}/password
+> POST /users/authentication
 ```
+Request 
 {
     "username": "staff001",
-    "message": "Successfully changed"
+    "password": "123456"
 }
+```
+```
+Response
+token-generate
 ```
