@@ -26,7 +26,7 @@ public class UserController {
 
     @RequestMapping(value = "/users/create", method = RequestMethod.POST)
     public ResponseEntity createUser(@RequestBody User user) {
-        ResultMessage resultMessage = new ResultMessage(user.getUsername(), "Create Success");
+        ResultMessage resultMessage = new ResultMessage(user.getUsername(), "Successfully created");
         this.userRepository.createUser(user);
         return new ResponseEntity(resultMessage, HttpStatus.CREATED);
     }
@@ -38,14 +38,14 @@ public class UserController {
 
     @RequestMapping(value = "/users/{username}/password", method = RequestMethod.PUT)
     public ResponseEntity changePassword(@PathVariable String username, @RequestBody String psw) {
-        ResultMessage resultMessage = new ResultMessage(username, "Success");
+        ResultMessage resultMessage = new ResultMessage(username, "Successfully changed");
         this.userRepository.changePassword(new UserLogin(username, psw));
         return new ResponseEntity(resultMessage, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users/{username}/delete", method = RequestMethod.DELETE)
     public ResponseEntity deleteUser(@PathVariable String username) {
-        ResultMessage resultMessage = new ResultMessage(username, "Success");
+        ResultMessage resultMessage = new ResultMessage(username, "Successfully Deleted");
         this.userRepository.deleteUser(username);
         return new ResponseEntity(resultMessage, HttpStatus.OK);
     }
