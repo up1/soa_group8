@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
 public class ReservationNotConfirmException extends RuntimeException {
 
-    public ReservationNotConfirmException(String msg) {
-        super(msg);
+    public ReservationNotConfirmException(int reservationId) {
+        super("This reservation id not yet confirmed The reservation: " + reservationId);
     }
 
 }

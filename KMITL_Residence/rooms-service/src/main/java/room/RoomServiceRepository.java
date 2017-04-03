@@ -28,7 +28,12 @@ public class RoomServiceRepository {
     public RoomType getTotalOfSpecificRoomType(int room_type_id){
         RoomType roomType;
         try {
-            roomType = this.jdbcTemplate.queryForObject("select Room_Type.*, count(Rooms.room_id) as total from Room_Type inner join rooms on room_type.type_id = rooms.room_type_id where room_type.type_id = ? group by rooms.room_type_id;", new Object[]{room_type_id}, new RoomTypeRowMapper());
+            roomType = this.jdbcTemplate.queryForObject(
+                    "select Room_Type.*, count(Rooms.room_id) as total from Room_Type " +
+                            "inner join rooms on room_type.type_id = rooms.room_type_id " +
+                            "where room_type.type_id = ? group by rooms.room_type_id;",
+                    new Object[]{room_type_id},
+                    new RoomTypeRowMapper());
         } catch (Exception e){
             throw new RoomTypeNotFound(room_type_id);
         }
@@ -37,7 +42,13 @@ public class RoomServiceRepository {
 
     @Transactional(readOnly = true)
     public List<RoomType> getListOfRoomType(int adults, int children){
-        List<RoomType> roomTypeList = this.jdbcTemplate.query("select Room_Type.*, count(Rooms.room_id) as total from Room_Type inner join rooms on room_type.type_id = rooms.room_type_id where room_type.type_adult_limit >= ? and room_type.type_children_limit >= ? group by rooms.room_type_id;", new Object[]{adults, children}, new RoomTypeRowMapper());
+        List<RoomType> roomTypeList = this.jdbcTemplate.query(
+                "select Room_Type.*, count(Rooms.room_id) as total from Room_Type " +
+                        "inner join rooms on room_type.type_id = rooms.room_type_id " +
+                        "where room_type.type_adult_limit >= ? and room_type.type_children_limit >= ? " +
+                        "group by rooms.room_type_id;",
+                new Object[]{adults, children},
+                new RoomTypeRowMapper());
         if(roomTypeList.size() == 0){
             throw  new RoomTypeNotFound(adults, children);
         }
@@ -48,7 +59,10 @@ public class RoomServiceRepository {
     public Room getRoomInformationByRoomId(int roomId){
         Room room;
         try {
-            room = this.jdbcTemplate.queryForObject("SELECT * FROM Rooms WHERE room_id = ?", new Object[]{roomId}, new RoomRowMapper());
+            room = this.jdbcTemplate.queryForObject(
+                    "SELECT room_id, room_details, room_type_id, room_availability FROM Rooms WHERE room_id = ?",
+                    new Object[]{roomId},
+                    new RoomRowMapper());
         }catch (Exception e){
             throw new RoomNotFound(roomId);
         }
@@ -57,7 +71,11 @@ public class RoomServiceRepository {
 
     @Transactional(readOnly = true)
     public List<Room> getAvailableRoomsByRoomTypeId(int roomTypeId){
-        List<Room> rooms = this.jdbcTemplate.query("SELECT * FROM Rooms WHERE room_type_id = ? and room_availability = 1", new Object[]{roomTypeId}, new RoomRowMapper());
+        List<Room> rooms = this.jdbcTemplate.query(
+                "SELECT room_id, room_details, room_type_id, room_availability FROM Rooms " +
+                        "WHERE room_type_id = ? and room_availability = 1",
+                new Object[]{roomTypeId},
+                new RoomRowMapper());
         if(rooms.size() == 0){
             throw new RoomNotFound("There are no available rooms type : " + roomTypeId);
         }
@@ -72,7 +90,7 @@ public class RoomServiceRepository {
         try {
             reservation = template.getForObject("http://localhost:9000/reservation/" + reservationId + "/", Reservation.class);
         }catch(Exception e) {
-            throw new ReservationNotFoundException("Reservation not found: " + reservationId);
+            throw new ReservationNotFoundException(reservationId);
         }
 
         Room room = getRoomInformationByRoomId(roomId);
@@ -82,12 +100,15 @@ public class RoomServiceRepository {
             if (room.getRoomAvailability() == 0) {
                 throw new RoomIsUnavailable(roomId);
             }
-            List<Checker> checkers = this.jdbcTemplate.query("SELECT * FROM ROOMSCHECKER WHERE reservation_id = ?", new Object[]{reservationId}, new CheckerRowMapper());
+            List<Checker> checkers = this.jdbcTemplate.query(
+                    "SELECT reservation_id, checkin, checkout, room_id FROM ROOMSCHECKER WHERE reservation_id = ?",
+                    new Object[]{reservationId},
+                    new CheckerRowMapper());
             if (checkers.size() > 0) {
                 throw new ReceptionException("This reservation id has already checked-in, Reservation id : " + reservationId);
             }
             if(reservation.getStatus().equals("waiting")) {
-                throw new ReservationNotConfirmException("This reservation id not yet confirmed The reservation: " + reservationId);
+                throw new ReservationNotConfirmException(reservationId);
             }
             String sql = "UPDATE Rooms SET room_availability = 0 WHERE room_id = ?";
             this.jdbcTemplate.update(sql, roomId);
@@ -95,14 +116,17 @@ public class RoomServiceRepository {
             this.jdbcTemplate.update(sql, reservationId, roomId);
         }
         else {
-            throw new ReservationNotMatchException("Reservation id not match with room: " + reservationId);
+            throw new ReservationNotMatchException(reservationId);
         }
 
     }
 
     @Transactional
     public void roomCheckOutByReservationId(int roomId, int reservationId){
-        List<Checker> checkers = this.jdbcTemplate.query("SELECT * FROM ROOMSCHECKER WHERE reservation_id = ?", new Object[]{reservationId}, new CheckerRowMapper());
+        List<Checker> checkers = this.jdbcTemplate.query(
+                "SELECT reservation_id, checkin, checkout, room_id FROM ROOMSCHECKER WHERE reservation_id = ?",
+                new Object[]{reservationId},
+                new CheckerRowMapper());
         if(checkers.size() == 0){
             throw new ReceptionException("This reservation id has not checked-in or invalid, Reservation id : " + reservationId);
         }else if(checkers.get(0).getCheckout() != null){
