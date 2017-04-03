@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import user.exception.AuthenticationFailedException;
+import user.exception.InvalidTokenException;
 import user.exception.UserNotFoundException;
 import user.jwt.JwtService;
 import user.mapper.UserInformationRowMapper;
@@ -113,9 +114,12 @@ public class UserRepository {
     }
 
     @Transactional
-    public ResultMessage validateToken(String token) {
-        ResultMessage message = null;
-        return message;
+    public JwtUser validateToken(String token) {
+        JwtUser jwtUser = jwtService.getUser(token);
+        if(jwtUser == null) {
+            throw new InvalidTokenException(token);
+        }
+        return jwtUser;
     }
 
 

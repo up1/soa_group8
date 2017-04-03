@@ -1,13 +1,12 @@
 package user.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import user.model.ResultMessage;
-import user.model.User;
-import user.model.UserInformation;
-import user.model.UserLogin;
+import user.jwt.JwtService;
+import user.model.*;
 import user.repository.UserRepository;
 
 /**
@@ -18,6 +17,12 @@ import user.repository.UserRepository;
 public class UserController {
 
     private final UserRepository userRepository;
+
+    @Value("${authentication.token.header}")
+    String tokenHeader;
+
+    @Autowired
+    private JwtService jwtService;
 
     @Autowired
     public UserController(UserRepository userRepository) {
@@ -47,6 +52,12 @@ public class UserController {
     public ResponseEntity authenticateUser(@RequestBody UserLogin login) {
         String token = userRepository.authenticate(login);
         return new ResponseEntity(token, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "users/validate", method = RequestMethod.GET)
+    public ResponseEntity validateToken(@RequestHeader(value = "authenticate-token") String token) {
+        JwtUser jwtUser = userRepository.validateToken(token);
+        return new ResponseEntity(jwtUser, HttpStatus.OK);
     }
 
 }
