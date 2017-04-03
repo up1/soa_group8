@@ -4,6 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import room.exception.UnauthorizedException;
+import room.jwt.JwtService;
+import room.model.JwtUser;
+import room.model.ResultMessage;
 import room.model.Room;
 import room.model.RoomType;
 
@@ -13,6 +17,9 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class RoomServiceController {
 	private final RoomServiceRepository roomServiceRepository;
+
+	@Autowired
+    private JwtService service;
 
 	@Autowired
 	public RoomServiceController(RoomServiceRepository roomServiceRepository){
@@ -41,14 +48,34 @@ public class RoomServiceController {
     }
 
     @RequestMapping(value = "/rooms/{room_id:.*}/checkin/{reservation_id:.*}", method = RequestMethod.POST)
-    public ResponseEntity roomCheckInByReservationId(@PathVariable int room_id, @PathVariable int reservation_id){
+    public ResponseEntity roomCheckInByReservationId(@PathVariable int room_id,
+                                                     @PathVariable int reservation_id,
+                                                     @RequestHeader(value = "authenticate-token") String token){
+        if(token == null) {
+            throw new UnauthorizedException();
+        }
+        try {
+            JwtUser user = service.getUser(token);
+        } catch (Exception ex) {
+            throw new UnauthorizedException();
+        }
         this.roomServiceRepository.roomCheckInByReservationId(room_id, reservation_id);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity(new ResultMessage("Success"), HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/rooms/{room_id:.*}/checkout/{reservation_id:.*}", method = RequestMethod.PUT)
-    public ResponseEntity roomCheckOutByReservationId(@PathVariable int room_id, @PathVariable int reservation_id){
+    public ResponseEntity roomCheckOutByReservationId(@PathVariable int room_id,
+                                                      @PathVariable int reservation_id,
+                                                      @RequestHeader(value = "authenticate-token") String token){
+        if(token == null) {
+            throw new UnauthorizedException();
+        }
+        try {
+            JwtUser user = service.getUser(token);
+        } catch (Exception ex) {
+            throw new UnauthorizedException();
+        }
         this.roomServiceRepository.roomCheckOutByReservationId(room_id, reservation_id);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(new ResultMessage("Success"),HttpStatus.OK);
     }
 }
