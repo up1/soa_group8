@@ -3,25 +3,30 @@ package room;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.web.client.RestTemplate;
 import room.exception.*;
+import room.jwt.JwtService;
 import room.mapper.CheckerRowMapper;
 import room.mapper.RoomRowMapper;
 import room.mapper.RoomTypeRowMapper;
-import room.model.Checker;
-import room.model.Reservation;
-import room.model.Room;
-import room.model.RoomType;
+import room.model.*;
 
 @Repository
 public class RoomServiceRepository {
 	
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Value("${url.reservation.service}")
+    String reservationURL;
 
 
     @Transactional(readOnly = true)
@@ -88,7 +93,7 @@ public class RoomServiceRepository {
         RestTemplate template = new RestTemplate();
         Reservation reservation = new Reservation();
         try {
-            reservation = template.getForObject("http://localhost:9000/reservation/" + reservationId + "/", Reservation.class);
+            reservation = template.getForObject(reservationURL + reservationId + "/", Reservation.class);
         }catch(Exception e) {
             throw new ReservationNotFoundException(reservationId);
         }
