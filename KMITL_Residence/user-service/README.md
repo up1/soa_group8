@@ -35,7 +35,7 @@ Response
     "email": "example@example.com"
 }
 ```
-> DELETE /users/{username}/delete
+> DELETE /user/{username}/delete
 ```
 Response
 {
