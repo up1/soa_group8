@@ -100,11 +100,23 @@ Response
 ```
 > /rooms/{room_id}/checkin/{reservation_id}
 ```
+HEADER
+authenticate-token: some generate token
+```
+```
 Response
-200 Ok
+{
+    "message": "Success"
+}
 ```
 > /rooms/{room_id}/checkout/{reservation_id}
 ```
+HEADER
+authenticate-token: some generate token
+```
+```
 Response
-200 Ok
+{
+    "message": "Success"
+}
 ```
