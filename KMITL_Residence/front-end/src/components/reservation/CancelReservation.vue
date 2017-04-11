@@ -1,13 +1,16 @@
 <template>
     <div class="ui grid">
         <div class="sixteen wide column">
-            <h1 class="ui center aligned header section-header" v-if="success">
+            <h1 class="ui center aligned header section-header" v-if="success == 0">
+                Loading..
+            </h1>
+            <h1 class="ui center aligned header section-header" v-else-if="success == 1">
                 The Reservation has been cancelled!
                 <div class="sub header">
                     Your reservation has been cancelled, anyway, We’d love to see you again next time. Have a nice day!
                 </div>
             </h1>
-            <h1 class="ui center aligned header section-header" v-else-if="!success" >
+            <h1 class="ui center aligned header section-header" v-else-if="sucess == 2" >
                 Error !
                 <div class="sub header">
                     {{ errMsg }}
@@ -34,7 +37,7 @@ export default {
             .then(() => {
                 this.success = 1
             }).catch((err) => {
-                this.success = 0
+                this.success = 2
                 this.errMsg = err.response.data.message
             })
     }

@@ -109,8 +109,10 @@
 </template>
 
 <script>
-import moment from 'moment'
+
+import { Reservation } from '@/services'
 import axios from 'axios'
+import moment from 'moment'
 import numeral from 'numeral'
 
 export default {
@@ -183,13 +185,12 @@ export default {
                     "cvc": data.paymentInformation.creditCardCvc
                 }
             }
-            axios.post('http://localhost:9000/reservation/add', json)
+            Reservation.add(json)
                 .then((res) => this.reserveCallback(res))
                 .catch((err) => this.reserveErrorCallback(err))
             
         },
         reserveCallback(res){
-            console.log(res)
             this.$store.dispatch('nextStep')
             $(this.$refs.reserveBtn).removeClass('loading')
         },
