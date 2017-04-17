@@ -5,6 +5,8 @@ import Reservation from '@/components/Reservation'
 import BlankComponent from '@/components/BlankComponent'
 import ConfirmReservation from '@/components/reservation/ConfirmReservation'
 import CancelReservation from '@/components/reservation/CancelReservation'
+import Administrator from '@/components/Administrator'
+import LoginPanel from '@/components/administrator/LoginPanel'
 
 Vue.use(Router)
 
@@ -46,6 +48,20 @@ const router = new Router({
           })
         }
       ]
+    },
+    {
+      path: '/administrator',
+      component: Administrator,
+      children: [
+        {
+          path: '',
+          meta: { requiredAuth: true }
+        },
+        {
+          path: 'login',
+          component: LoginPanel
+        }
+      ]
     }
   ]
 })
@@ -58,6 +74,9 @@ router.beforeEach((to, from, next) => {
     if(!to.query.id){
       next({path: '/'})
     }
+  }
+  if(to.matched.some((x) => x.meta.requiredAuth)){
+    next({path: '/administrator/login'})
   }
   next()
 })

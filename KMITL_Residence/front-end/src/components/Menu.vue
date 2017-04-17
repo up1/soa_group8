@@ -6,11 +6,8 @@
             </a>
             <div class="right menu">
                 <router-link to="/" class="item" active-class="active" exact>HOME</router-link>
-
                 <router-link to="/reservation" class="item" active-class="active">RESERVATION</router-link>
-                <a class="item">
-                    ADMINISTRATOR
-                </a>
+                <router-link to="/administrator" class="item" active-class="active">ADMINISTRATOR</router-link>
             </div>
         </div>
     </div>
