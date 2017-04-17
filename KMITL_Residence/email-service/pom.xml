@@ -3,17 +3,24 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-    	<groupId>org.springframework.boot</groupId>
-    	<artifactId>spring-boot-starter-parent</artifactId>
-    	<version>1.3.5.RELEASE</version>
-    </parent>
-    <groupId>KMITLResidence</groupId>
-    <artifactId>email-service</artifactId>
-    <properties>
-    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    	<java.version>1.8</java.version>
-    </properties>
+
+	<groupId>KMITLResidence</groupId>
+	<artifactId>email-service</artifactId>
+	<packaging>jar</packaging>
+	<name>email-service</name>
+	<version>1.0-SNAPSHOT</version>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.4.2.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+	</properties>
 
     <build>
 		<finalName>email-service</finalName>
@@ -64,6 +71,15 @@
 			<groupId>it.ozimov</groupId>
 			<artifactId>spring-boot-email-core</artifactId>
 			<version>0.5.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.moelholm</groupId>
+			<artifactId>prometheus-spring-boot-starter</artifactId>
+			<version>1.0.1</version>
 		</dependency>
     </dependencies>
 
