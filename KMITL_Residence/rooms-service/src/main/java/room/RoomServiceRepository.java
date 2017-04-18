@@ -30,17 +30,17 @@ public class RoomServiceRepository {
 
 
     @Transactional(readOnly = true)
-    public RoomType getTotalOfSpecificRoomType(int room_type_id){
+    public RoomType getTotalOfSpecificRoomType(int Room_Type_id){
         RoomType roomType;
         try {
             roomType = this.jdbcTemplate.queryForObject(
                     "select Room_Type.*, count(Rooms.room_id) as total from Room_Type " +
-                            "inner join rooms on room_type.type_id = rooms.room_type_id " +
-                            "where room_type.type_id = ? group by rooms.room_type_id;",
-                    new Object[]{room_type_id},
+                            "inner join Rooms on Room_Type.type_id = Rooms.Room_Type_id " +
+                            "where Room_Type.type_id = ? group by Rooms.Room_Type_id;",
+                    new Object[]{Room_Type_id},
                     new RoomTypeRowMapper());
         } catch (Exception e){
-            throw new RoomTypeNotFound(room_type_id);
+            throw new RoomTypeNotFound(Room_Type_id);
         }
         return roomType;
     }
@@ -49,9 +49,9 @@ public class RoomServiceRepository {
     public List<RoomType> getListOfRoomType(int adults, int children){
         List<RoomType> roomTypeList = this.jdbcTemplate.query(
                 "select Room_Type.*, count(Rooms.room_id) as total from Room_Type " +
-                        "inner join rooms on room_type.type_id = rooms.room_type_id " +
-                        "where room_type.type_adult_limit >= ? and room_type.type_children_limit >= ? " +
-                        "group by rooms.room_type_id;",
+                        "inner join Rooms on Room_Type.type_id = Rooms.Room_Type_id " +
+                        "where Room_Type.type_adult_limit >= ? and Room_Type.type_children_limit >= ? " +
+                        "group by Rooms.Room_Type_id;",
                 new Object[]{adults, children},
                 new RoomTypeRowMapper());
         if(roomTypeList.size() == 0){
@@ -65,7 +65,7 @@ public class RoomServiceRepository {
         Room room;
         try {
             room = this.jdbcTemplate.queryForObject(
-                    "SELECT room_id, room_details, room_type_id, room_availability FROM Rooms WHERE room_id = ?",
+                    "SELECT room_id, room_details, Room_Type_id, room_availability FROM Rooms WHERE room_id = ?",
                     new Object[]{roomId},
                     new RoomRowMapper());
         }catch (Exception e){
@@ -77,8 +77,8 @@ public class RoomServiceRepository {
     @Transactional(readOnly = true)
     public List<Room> getAvailableRoomsByRoomTypeId(int roomTypeId){
         List<Room> rooms = this.jdbcTemplate.query(
-                "SELECT room_id, room_details, room_type_id, room_availability FROM Rooms " +
-                        "WHERE room_type_id = ? and room_availability = 1",
+                "SELECT room_id, room_details, Room_Type_id, room_availability FROM Rooms " +
+                        "WHERE Room_Type_id = ? and room_availability = 1",
                 new Object[]{roomTypeId},
                 new RoomRowMapper());
         if(rooms.size() == 0){

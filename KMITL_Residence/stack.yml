@@ -1,0 +1,71 @@
+version: '3'
+
+services:
+  database:
+    image: mariadb:10.1
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    networks:
+      - soa
+    volumes:
+      - "./init.sql:/docker-entrypoint-initdb.d/init.sql"
+
+  email-service:
+    image: openjdk:alpine
+    working_dir: /data/target
+    volumes:
+      - "./email-service:/data"
+    ports:
+      - 9003:9003
+    networks:
+      - soa
+    entrypoint:
+      - java
+      - -jar
+      - email-service.jar
+
+  rooms-service:
+    image: openjdk:alpine
+    working_dir: /data/target
+    volumes:
+      - "./rooms-service:/data"
+    ports:
+      - 9001:9001
+    networks:
+      - soa
+    entrypoint:
+      - java
+      - -jar
+      - rooms-service.jar
+
+  reservation-service:
+    image: openjdk:alpine
+    working_dir: /data/target
+    volumes:
+      - "./reservation-service:/data"
+    ports:
+      - 9000:9000
+    networks:
+      - soa
+    entrypoint:
+      - java
+      - -jar
+      - reservation-service.jar
+
+  user-service:
+    image: openjdk:alpine
+    working_dir: /data/target
+    volumes:
+      - "./user-service:/data"
+    ports:
+      - 9004:9004
+    networks:
+      - soa
+    entrypoint:
+      - java
+      - -jar
+      - user-service.jar
+
+networks:
+  soa:
+    external: true
