@@ -6,7 +6,13 @@ $ cd service-directory
 $ mvn clean package
 ```
 
-2. The most comfortable part has already arrived. move your current path to /KMITL_Residence and finally, You have to type the last one command in your dumb terminal.
+2. Then, create docker network named "soa".
+
+```
+$ docker network create -d overlay soa
+```
+
+3. The easiest part has already arrived. move your current path to /KMITL_Residence and finally, You have to type the last one command in your dumb terminal.
 
 ```
 $ docker stack deploy -c stack.yml stack
