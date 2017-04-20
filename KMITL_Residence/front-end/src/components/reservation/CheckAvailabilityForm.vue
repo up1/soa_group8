@@ -56,9 +56,9 @@
 </template>
 
 <script>
-import axios from 'axios'
 import moment from 'moment'
 import FormErrorMsg from './FormErrorMsg'
+import { Reservation } from '@/services'
 
 export default {
     components: {
@@ -95,7 +95,7 @@ export default {
                 return
             }
             $(this.$refs.submitBtn).addClass('loading')
-            axios.get(`http://localhost:9000/reservation/availableSearch?checkin=${this.checkInDate}&checkout=${this.checkOutDate}&adults=${this.adults}&children=${this.children}`)
+            Reservation.availableSearch(this.checkInDate, this.checkOutDate, this.adults, this.children)
                 .then((res) => this.getAvailableRoomsCallback(res))
                 .catch(function(err){
                     console.log(err)
