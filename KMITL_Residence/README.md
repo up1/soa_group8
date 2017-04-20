@@ -6,13 +6,19 @@ $ cd service-directory
 $ mvn clean package
 ```
 
-2. Then, create docker network named "soa".
+3. Initialize swarm
+
+```
+$ docker swarm init
+```
+
+3. Then, create docker network named "soa".
 
 ```
 $ docker network create -d overlay soa
 ```
 
-3. The easiest part has already arrived. move your current path to /KMITL_Residence and finally, You have to type the last one command in your dumb terminal.
+4. The easiest part has already arrived. move your current path to /KMITL_Residence and finally, You have to type the last one command in your dumb terminal.
 
 ```
 $ docker stack deploy -c stack.yml stack
