@@ -6,7 +6,7 @@ $ cd service-directory
 $ mvn clean package
 ```
 
-3. Initialize swarm
+3. Initialize swarm.
 
 ```
 $ docker swarm init
