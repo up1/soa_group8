@@ -1,6 +1,8 @@
 import Reservation from './reservation'
+import Rooms from './rooms'
 
 export {
-    Reservation
+    Reservation,
+    Rooms
 }
 

@@ -30,9 +30,9 @@
 </template>
 
 <script>
-import axios from 'axios'
 import moment from 'moment'
 import numeral from 'numeral'
+import { Rooms } from '@/services'
 
 export default {
     props: ['id'],
@@ -44,7 +44,7 @@ export default {
     },
     methods: {
         getRoomTypeData(){
-            axios.get(`http://localhost:9001/rooms/type/${this.id}`)
+            Rooms.getRoomTypeData(this.id)
                 .then((res) => this.getRoomTypeDataCallback(res))
                 .catch((err) => {
                     console.log(err)
