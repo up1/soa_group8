@@ -3,7 +3,7 @@
     <form class="ui large form" @submit.prevent>
       <div class="field">
         <label>Username</label>
-        <input type="text" name="username" placeholder="Username or Email">
+        <input type="text" name="username" placeholder="Username">
       </div>
       <div class="field">
         <label>Password</label>

@@ -37,6 +37,15 @@ div.content-container > div {
     transition: padding-top .2s ease-in 0s;
 }
 
+div.login-container {
+    width: 100%;
+    margin: 0px auto;
+}
+
+div.login-container > div {
+    max-width: 384px !important;
+    margin: 0 auto !important;
+}
 
 .padding-content {
     padding: 63.857px 36px;
