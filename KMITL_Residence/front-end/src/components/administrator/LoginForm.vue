@@ -1,6 +1,6 @@
 <template>
   <div>
-    <FormErrorMsg :errors="errors.all()" />
+    <FormErrorMsg :err="errors.all()" />
     <form class="ui large form" name="loginForm" @submit.prevent>
       <div class="field" :class="{'error':errors.has('Password')}">
         <label>Username</label>
@@ -20,7 +20,7 @@
 <script>
 
 import { Validator } from 'vee-validate'
-import FormErrorMsg from "@/components/reservation/FormErrorMsg"
+import FormErrorMsg from "../reservation/FormErrorMsg"
 import { User } from "@/services"
 
 export default {
@@ -41,7 +41,6 @@ export default {
                 this.$validator.validate('authen_data', this.authenData)
                     .then(res => {
                         $(this.$refs.loginBtn).removeClass("loading")
-                        console.log(res)
                     })
             }
         }
@@ -61,7 +60,7 @@ export default {
                         })
                     })
                     .catch((err) => {
-                        reject({ valid : false })
+                        resolve({ valid : false })
                     })
             }) 
         })
