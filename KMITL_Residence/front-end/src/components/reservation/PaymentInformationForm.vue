@@ -108,6 +108,9 @@ export default {
             if(!this.errors.any()){
                 this.$emit('next')
             }
+        },
+        cardTypeChanged(){
+            alert('card type changed')
         }
     }
 }

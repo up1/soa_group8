@@ -24,6 +24,9 @@ import LoginForm from './LoginForm'
 export default {
     components: {
         LoginForm
+    },
+    methods: {
+
     }
 }
 </script>
