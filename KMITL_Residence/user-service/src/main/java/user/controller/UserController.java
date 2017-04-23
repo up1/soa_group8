@@ -54,4 +54,10 @@ public class UserController {
         return new ResponseEntity(token, HttpStatus.CREATED);
     }
 
+    @RequestMapping(value = "/users/validate", method = RequestMethod.GET)
+    public ResponseEntity validateToken(@RequestParam(value = "token", required = true) String token) {
+        JwtUser user = userRepository.validateToken(token);
+        return new ResponseEntity(user, HttpStatus.OK);
+    }
+
 }

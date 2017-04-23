@@ -113,5 +113,17 @@ public class UserRepository {
         return token;
     }
 
+    @Transactional
+    public JwtUser validateToken(String token) {
+        JwtUser jwtUser = null;
+        try {
+            jwtUser = jwtService.getUser(token);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new InvalidTokenException(token);
+        }
+        return jwtUser;
+    }
+
 
 }
