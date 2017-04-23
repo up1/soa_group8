@@ -5,9 +5,35 @@
                 <div>KMITL</div>RESIDENCE
             </a>
             <div class="right menu">
-                <router-link to="/" class="item" active-class="active" exact>HOME</router-link>
-                <router-link to="/reservation" class="item" active-class="active">RESERVATION</router-link>
-                <router-link to="/administrator" class="item" active-class="active">ADMINISTRATOR</router-link>
+                <router-link to="/" class="item" active-class="active" exact v-if="!isAuthenticated">HOME</router-link>
+                <router-link to="/reservation" class="item" active-class="active" v-if="!isAuthenticated">RESERVATION</router-link>
+                <router-link to="/administrator" class="item" active-class="active" v-if="!isAuthenticated">ADMINISTRATOR</router-link>
+                <router-link to="/administrator/dashboard" class="item" active-class="active" exact v-if="isAuthenticated">DASHBOARD</router-link>
+                <div class="ui pointing dropdown item" v-if="isAuthenticated">
+                    MANAGE
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a class="item">
+                            <i class="dropdown icon"></i>
+                            <span class="text">Customer</span>
+                            <div class="menu">
+                                <div class="item">Check-in</div>
+                                <div class="item">Check-out</div>
+                            </div>
+                        </a>
+                        <a class="item">Rooms</a>
+                        <a class="item">Staff</a>
+                    </div>
+                </div>
+                <div class="ui pointing dropdown item" v-if="isAuthenticated" refs="userDropdownBtn">
+                    {{ getUsername }}
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a class="item">Edit Profile</a>
+                        <div class="divider"></div>
+                        <a class="item" @click="logout">Log Out</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -26,7 +52,9 @@ export default {
         this.changeMenuStyle()
         this.setActive()
     },
-
+    updated () {
+      $('.ui.dropdown').dropdown()  
+    },
     watch: {
         $route(){
             this.changeMenuStyle()
@@ -53,6 +81,19 @@ export default {
             }else{
                 $(this.$refs.menucontainer).removeClass('inverted-menu')
             }
+        },
+        logout(){
+            this.$cookie.delete('_token')
+            this.$store.dispatch('authenticationReset')
+            this.$router.push('/')
+        }
+    },
+    computed: {
+        getUsername() {
+            return this.$store.getters.getUserInfo.username.toUpperCase()
+        },
+        isAuthenticated() {
+            return this.$store.getters.getAuthenState
         }
     }
 }
@@ -91,18 +132,31 @@ div.ui.secondary.menu * {
 div.ui.secondary.menu .item {
     border-radius: 0px;
     margin: 0px 20px;
+    padding-left: 16.381px;
+    padding-right: 16.381px; 
     transition: color .1s ease-in 0s, padding .15s ease-in .12s;
     font-weight: 500 !important;
 }
 
 div.ui.secondary.menu .item:first-child {
-    margin-left: 0px;
+    margin-left: 0px !important;
 }
 
 div.ui.secondary.menu .item:last-child {
-    margin-right: 1.619px;
+    margin-right: 1.619px !important;
 }
 
+div.ui.dropdown.item .menu {
+    margin: 20px 20px;
+}
+
+div.menu.transition.hidden {
+    margin: 4px 0px !important;
+}
+
+div.menu.transition {
+    margin: 12px 0px !important;
+}
 
 div.ui.secondary.menu .active.item {
     border-radius: 0px;

@@ -6,6 +6,7 @@ import BlankComponent from '@/components/BlankComponent'
 import ConfirmReservation from '@/components/reservation/ConfirmReservation'
 import CancelReservation from '@/components/reservation/CancelReservation'
 import Administrator from '@/components/Administrator'
+import Dashboard from '@/components/administrator/Dashboard'
 import LoginPanel from '@/components/administrator/LoginPanel'
 
 import { User } from '@/services'
@@ -58,8 +59,9 @@ const router = new Router({
       component: Administrator,
       children: [
         {
-          path: '',
-          meta: { requiredAuth: true }
+          path: 'dashboard',
+          meta: { requiredAuth: true},
+          component: Dashboard
         },
         {
           path: 'login',
@@ -79,6 +81,11 @@ router.beforeEach((to, from, next) => {
       next({path: '/'})
     }
   }
+
+  if(to.matched[0].path === "/administrator" && to.matched.length == 1){
+    next({path: '/administrator/dashboard'})
+  }
+
   if(to.matched.some((x) => x.meta.requiredAuth)){
     const _token = VueCookie.get('_token')
     store.dispatch('setUnauthenticated')

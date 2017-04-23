@@ -9,7 +9,7 @@ const state = {
 
 const getters = {
     getAuthenState: (state) => state.isAuthen,
-    getUserInfo: (state) => state.getUserInfo
+    getUserInfo: (state) => state.userInfo
 }
 
 const actions = {
@@ -29,7 +29,7 @@ const actions = {
         commit('setUserInfo', val)
     },
 
-    reset({dispatch}){
+    authenticationReset({dispatch}){
         dispatch('setUnauthenticated')
         dispatch('setUserInfo', {
             username: '',
