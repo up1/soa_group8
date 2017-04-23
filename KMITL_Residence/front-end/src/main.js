@@ -17,11 +17,13 @@ import router from './router'
 
 import moment from 'moment'
 import VeeValidate, {Validator} from 'vee-validate'
+import VueCookie from 'vue-cookie'
 
 Vue.config.productionTip = false
 
 Validator.installDateTimeValidators(moment);
 Vue.use(VeeValidate)
+Vue.use(VueCookie)
 
 /* eslint-disable no-new */
 

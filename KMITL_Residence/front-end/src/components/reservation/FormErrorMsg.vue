@@ -16,13 +16,10 @@
 
 <script>
 export default {
-    data:() => ({
-        err: []
-    }),
     props: ['err'],
     computed:{
         hasError(){
-            return this.err.length > 0
+            return !this.err || this.err.length > 0
         }
     }
 }

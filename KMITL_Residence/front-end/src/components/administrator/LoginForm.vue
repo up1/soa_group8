@@ -2,7 +2,7 @@
   <div>
     <FormErrorMsg :err="errors.all()" />
     <form class="ui large form" name="loginForm" @submit.prevent>
-      <div class="field" :class="{'error':errors.has('Password')}">
+      <div class="field" :class="{'error':errors.has('Username')}">
         <label>Username</label>
         <input type="text" name="username" placeholder="Username" v-model="authenData.username" v-validate="'required'" data-vv-name="Username" data-vv-validate-on="none" >
       </div>
