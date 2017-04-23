@@ -55,3 +55,12 @@ Request
 Response
 token-generate
 ```
+
+> GET /users/validate?token=wksdjqio3eu
+```
+Response
+{
+    "username": "admin",
+    "role": "admin"
+}
+```
