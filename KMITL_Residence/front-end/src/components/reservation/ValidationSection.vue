@@ -110,7 +110,7 @@
 
 <script>
 
-import { Reservation } from '@/services'
+import { Reservation, Rooms } from '@/services'
 import axios from 'axios'
 import moment from 'moment'
 import numeral from 'numeral'
@@ -153,7 +153,7 @@ export default {
     },
     methods: {
         getRoomTypeData(){
-            let data = axios.get(`http://localhost:9001/rooms/type/${this.getReservationData.stayingInformation.roomType}`)
+            Rooms.getRoomTypeData(this.getReservationData.stayingInformation.roomType)
                 .then((res) => this.setRoomData(res))
             return data
         },

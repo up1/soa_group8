@@ -4,7 +4,7 @@
             <div class="sixteen wide column">
                 <div class="ui error message">
                     <div class="header">Got error!</div>
-                    <ul class="list" v-for="error in errors">
+                    <ul class="list" v-for="error in err">
                         <li>{{ error }}</li>
                     </ul>
                 </div>
@@ -16,10 +16,10 @@
 
 <script>
 export default {
-    props: ['errors'],
+    props: ['err'],
     computed:{
         hasError(){
-            return this.errors.length > 0
+            return !this.err || this.err.length > 0
         }
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <FormErrorMsg :errors="errors.all()" />
+        <FormErrorMsg :err="errors.all()" />
         <form class="ui large form" @submit.prevent>
             <div class="field">
                 <div class="fields">
@@ -108,6 +108,9 @@ export default {
             if(!this.errors.any()){
                 this.$emit('next')
             }
+        },
+        cardTypeChanged(){
+            alert('card type changed')
         }
     }
 }
