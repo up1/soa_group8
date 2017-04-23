@@ -41,6 +41,14 @@ export default {
                 this.$validator.validate('authen_data', this.authenData)
                     .then(res => {
                         $(this.$refs.loginBtn).removeClass("loading")
+                        if(res){
+                            this.$router.push(this.$route.query.redirect || '/')
+                            User.isAuthenticated(this.$cookie.get("_token"))
+                                .then(res => {
+                                    this.$store.dispatch('setAuthenticated')
+                                    this.$store.dispatch('setUserInfo', res.data)
+                                })
+                        }
                     })
             }
         }
@@ -53,6 +61,7 @@ export default {
             validate: (value) => new Promise(resolve => {
                 User.authen(value)
                     .then((res) => {
+                        this.$cookie.set('_token', res.data, 1)
                         resolve({ 
                             valid : {
                                 result: true

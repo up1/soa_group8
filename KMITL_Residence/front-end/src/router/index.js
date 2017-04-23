@@ -8,6 +8,10 @@ import CancelReservation from '@/components/reservation/CancelReservation'
 import Administrator from '@/components/Administrator'
 import LoginPanel from '@/components/administrator/LoginPanel'
 
+import { User } from '@/services'
+import store from '../store'
+import VueCookie from 'vue-cookie'
+
 Vue.use(Router)
 
 const router = new Router({
@@ -76,7 +80,21 @@ router.beforeEach((to, from, next) => {
     }
   }
   if(to.matched.some((x) => x.meta.requiredAuth)){
-    next({path: '/administrator/login'})
+    const _token = VueCookie.get('_token')
+    store.dispatch('setUnauthenticated')
+    if(_token){
+          User.isAuthenticated(_token)
+              .then(res => {
+                next()
+                store.dispatch('setAuthenticated')
+                store.dispatch('setUserInfo', res.data)
+              })
+              .catch(() => {
+                next({path: `/administrator/login?redirect=${to.fullPath}`})          
+              })
+    }else{
+      next({path: `/administrator/login?redirect=${to.fullPath}`})
+    }
   }
   next()
 })
