@@ -25,3 +25,13 @@ $ docker network create -d overlay soa
 ```
 $ docker stack deploy -c stack.yml stack
 ```
+
+# How to stop services
+
+1. Type the following command.
+
+```
+$ docker stack rm stack
+```
+
+2. It has only one step.
