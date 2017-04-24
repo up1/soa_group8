@@ -72,38 +72,47 @@ const router = new Router({
   ]
 })
 
+const match = (to, from, next) => {
+    if (to.matched.some((x) => x.meta.isBlankComponent)) {
+        next({path: '/'})
+    }
+    if(to.matched.some((x) => x.meta.requiredHashId)){
+        if(!to.query.id){
+        next({path: '/'})
+        }
+    }
+
+    if(to.matched[0].path === "/administrator" && to.matched.length == 1){
+        next({path: '/administrator/dashboard'})
+    }
+
+    if(to.matched.some((x) => x.meta.requiredAuth)){
+        if(store.getters.getAuthenState){
+            next()
+        }else{
+        next({path: `/administrator/login?redirect=${to.fullPath}`})
+        }
+    }
+    next()
+}
+
 router.beforeEach((to, from, next) => {
-  if (to.matched.some((x) => x.meta.isBlankComponent)) {
-      next({path: '/'})
+  const _token = VueCookie.get('_token')
+  if(_token){
+    User.isAuthenticated(_token)
+        .then(res => {
+            store.dispatch('setAuthenticated')
+            store.dispatch('setUserInfo', res.data)
+            match(to, from, next)
+        })
+        .catch(() => {
+            store.dispatch('authenticationReset')
+            match(to, from, next)
+        })
+  }else{
+      store.dispatch('authenticationReset')
+      match(to, from, next)
   }
-  if(to.matched.some((x) => x.meta.requiredHashId)){
-    if(!to.query.id){
-      next({path: '/'})
-    }
-  }
-
-  if(to.matched[0].path === "/administrator" && to.matched.length == 1){
-    next({path: '/administrator/dashboard'})
-  }
-
-  if(to.matched.some((x) => x.meta.requiredAuth)){
-    const _token = VueCookie.get('_token')
-    store.dispatch('setUnauthenticated')
-    if(_token){
-          User.isAuthenticated(_token)
-              .then(res => {
-                next()
-                store.dispatch('setAuthenticated')
-                store.dispatch('setUserInfo', res.data)
-              })
-              .catch(() => {
-                next({path: `/administrator/login?redirect=${to.fullPath}`})          
-              })
-    }else{
-      next({path: `/administrator/login?redirect=${to.fullPath}`})
-    }
-  }
-  next()
 })
 
 export default router
