@@ -10,7 +10,7 @@
                     Your reservation has been cancelled, anyway, We’d love to see you again next time. Have a nice day!
                 </div>
             </h1>
-            <h1 class="ui center aligned header section-header" v-else-if="sucess == 2" >
+            <h1 class="ui center aligned header section-header" v-else-if="success == 2" >
                 Error !
                 <div class="sub header">
                     {{ errMsg }}

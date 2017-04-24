@@ -155,7 +155,6 @@ export default {
         getRoomTypeData(){
             Rooms.getRoomTypeData(this.getReservationData.stayingInformation.roomType)
                 .then((res) => this.setRoomData(res))
-            return data
         },
         setRoomData(res){
             this.roomData = res.data

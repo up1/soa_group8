@@ -59,6 +59,11 @@ div.login-container > div {
     margin-top: 76.69px !important;
 }
 
+.normal-padding {
+    padding-top: 36px !important;
+    padding-bottom: 36px !important;
+}
+
 .normal-bottom-padding {
     padding-bottom: 36px !important
 }

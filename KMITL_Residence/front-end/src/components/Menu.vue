@@ -17,8 +17,8 @@
                             <i class="dropdown icon"></i>
                             <span class="text">Customer</span>
                             <div class="menu">
-                                <div class="item">Check-in</div>
-                                <div class="item">Check-out</div>
+                                <router-link to="/administrator/customer/checkin" class="item">Check-in</router-link>
+                                <router-link to="/administrator/customer/checkout" class="item">Check-out</router-link>
                             </div>
                         </a>
                         <a class="item">Rooms</a>
