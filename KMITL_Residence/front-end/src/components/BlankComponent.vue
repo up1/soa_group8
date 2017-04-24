@@ -2,7 +2,7 @@
     <div>
         <div class="content-container extra-top-menubar-padding">
             <div class="card-padding">
-                <div class="card padding-content normal-bottom-padding">
+                <div class="card padding-content">
                     <router-view></router-view>
                 </div>
             </div>

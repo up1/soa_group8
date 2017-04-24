@@ -8,6 +8,7 @@ import CancelReservation from '@/components/reservation/CancelReservation'
 import Administrator from '@/components/Administrator'
 import Dashboard from '@/components/administrator/Dashboard'
 import LoginPanel from '@/components/administrator/LoginPanel'
+import NotFound from '@/components/errors/NotFound'
 
 import { User } from '@/services'
 import store from '../store'
@@ -66,6 +67,16 @@ const router = new Router({
         {
           path: 'login',
           component: LoginPanel
+        }
+      ]
+    },
+    {
+      path: '*',
+      component: BlankComponent,
+      children: [
+        {
+          path: '',
+          component: NotFound
         }
       ]
     }
