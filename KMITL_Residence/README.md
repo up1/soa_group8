@@ -4,6 +4,8 @@
 ```
 $ cd service-directory
 $ mvn clean package
+
+$ sh -x batch.sh #If you are lazy, This command will build every services at one time :-)
 ```
 
 2. Initialize swarm.
@@ -23,3 +25,13 @@ $ docker network create -d overlay soa
 ```
 $ docker stack deploy -c stack.yml stack
 ```
+
+# How to stop services
+
+1. Type the following command.
+
+```
+$ docker stack rm stack
+```
+
+2. It has only one step.
