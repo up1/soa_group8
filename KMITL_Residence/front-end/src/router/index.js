@@ -66,7 +66,8 @@ const router = new Router({
         },
         {
           path: 'login',
-          component: LoginPanel
+          component: LoginPanel,
+          meta: { loginPage: true}
         }
       ]
     },
@@ -103,6 +104,12 @@ const match = (to, from, next) => {
         }else{
         next({path: `/administrator/login?redirect=${to.fullPath}`})
         }
+    }
+
+    if(to.matched.some(x => x.meta.loginPage)){
+      if(store.getters.getAuthenState){
+        next({ path: '/administrator/dashboard' })
+      }
     }
     next()
 }

@@ -26,7 +26,9 @@ export default {
         LoginForm
     },
     methods: {
-
+        getAuthenState(){
+            return this.$store.getters.getAuthenState
+        }
     }
 }
 </script>

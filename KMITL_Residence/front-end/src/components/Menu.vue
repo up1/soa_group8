@@ -53,7 +53,9 @@ export default {
         this.setActive()
     },
     updated () {
-      $('.ui.dropdown').dropdown()  
+        if(this.$store.getters.getAuthenState){
+            $('.ui.dropdown').dropdown()
+        }
     },
     watch: {
         $route(){
