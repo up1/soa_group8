@@ -4,6 +4,8 @@
 ```
 $ cd service-directory
 $ mvn clean package
+
+$ sh -x batch.sh #If you are lazy, This command will build every services at one time :-)
 ```
 
 2. Initialize swarm.
