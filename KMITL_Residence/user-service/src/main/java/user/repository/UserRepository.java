@@ -1,6 +1,5 @@
 package user.repository;
 
-import org.h2.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

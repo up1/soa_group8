@@ -7,7 +7,6 @@ import user.exception.UnauthorizedException;
 import user.jwt.JwtService;
 import user.model.JwtUser;
 import user.model.User;
-import user.model.UserInformation;
 import user.repository.UserRepository;
 
 import javax.servlet.*;

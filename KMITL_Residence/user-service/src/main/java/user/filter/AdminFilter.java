@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import user.exception.UnauthorizedException;
 import user.jwt.JwtService;
 import user.model.JwtUser;
-import user.model.UserInformation;
-import user.utils.UserUtils;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -37,7 +35,6 @@ public class AdminFilter implements Filter {
         final HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
         final HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         final String authHeaderVal = httpRequest.getHeader(authHeader);
-        System.out.println(UserUtils.hash("password1234"));
         if(authHeaderVal == null) {
             throw new UnauthorizedException();
         }

@@ -2,7 +2,6 @@ package user.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
 import user.model.User;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
