@@ -8,8 +8,8 @@ import CancelReservation from '@/components/reservation/CancelReservation'
 import Administrator from '@/components/Administrator'
 import Dashboard from '@/components/administrator/Dashboard'
 import LoginPanel from '@/components/administrator/LoginPanel'
-import CheckIn from '@/components/administrator/customer/CheckIn'
-import CheckOut from '@/components/administrator/customer/CheckOut'
+import Customer from '@/components/administrator/customer/CustomerPage'
+import CheckInOut from '@/components/administrator/customer/CheckInOut'
 import NotFound from '@/components/errors/NotFound'
 
 import { User } from '@/services'
@@ -67,14 +67,19 @@ const router = new Router({
           component: Dashboard
         },
         {
-          path: 'customer/checkin',
+          path: 'customer',
           meta: { requiredAuth: true },
-          component: CheckIn
-        },
-        {
-          path: 'customer/checkout',
-          meta: { requiredAuth: true },
-          component: CheckOut
+          component: Customer,
+          children: [
+            {
+              path: 'checkin',
+              component: CheckInOut
+            },
+            {
+              path: 'checkout',
+              component: CheckInOut
+            }
+          ]
         },
         {
           path: 'login',

@@ -11,22 +11,12 @@
                         </div>
                         <div class="sixteen wide column">
                             <div class="ui secondary pointing menu">
-                                <a class="active item">
-                                    Check-In
-                                </a>
-                                <a class="item">
-                                    Check-Out
-                                </a>
-                                <a class="item">
-                                    Edit
-                                </a>
+                                <router-link to="/administrator/customer/checkin" class="item" active-class="active">Check-In</router-link>
+                                <router-link to="/administrator/customer/checkout" class="item" active-class="active">Check-Out</router-link>
+                                <router-link to="/administrator/customer/edit" class="item" active-class="active">Edit</router-link>
                             </div>
                         </div>
-                        <div class="sixteen wide column ">
-                            <div class="card card-padding normal-padding">
-                                d
-                            </div>
-                        </div>
+                        <router-view/> 
                     </div>
                 </div>
             </div>
