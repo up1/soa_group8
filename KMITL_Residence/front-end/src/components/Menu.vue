@@ -13,14 +13,15 @@
                     MANAGE
                     <i class="dropdown icon"></i>
                     <div class="ui vertical menu">
-                        <div class="ui dropdown item">
+                        <a class="ui left pointing dropdown item">
                             <i class="dropdown icon"></i>
-                            <span class="text">Customer</span>
+                                Customer
                             <div class="menu">
                                 <router-link to="/administrator/customer/checkin" class="item">Check-in</router-link>
                                 <router-link to="/administrator/customer/checkout" class="item">Check-out</router-link>
+                                <router-link to="/administrator/customer/edit" class="item">Edit</router-link>
                             </div>
-                        </div>
+                        </a>
                         <a class="item">Rooms</a>
                         <a class="item">Staff</a>
                     </div>
@@ -28,7 +29,7 @@
                 <div class="ui dropdown item" v-if="isAuthenticated" refs="userDropdownBtn">
                     {{ getUsername }}
                     <i class="dropdown icon"></i>
-                    <div class="ui vertical pointing menu">
+                    <div class="ui vertical menu">
                         <a class="item">Edit Profile</a>
                         <div class="divider"></div>
                         <a class="item" @click="logout">Log Out</a>
@@ -173,6 +174,14 @@ div.ui.secondary.menu.inverted .active.item {
     background-color: #FFFFFF;
     color: #000000 !important;
 
+}
+
+.ui.inverted.menu .item{
+    color: #C3C3C3 !important;
+}
+
+.ui.secondary.menu.inverted .ui.pointing.dropdown.item:hover {
+    color: rgba(0, 0, 0, .95) !important;
 }
 
 div.content-container.inverted-menu > div.ui.secondary.menu .item.active {
