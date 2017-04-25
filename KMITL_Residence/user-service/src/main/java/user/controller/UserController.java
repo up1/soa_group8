@@ -41,7 +41,7 @@ public class UserController {
         return this.userRepository.getUser(username);
     }
 
-    @RequestMapping(value = "/user/{username}/delete", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/user/{username}", method = RequestMethod.DELETE)
     public ResponseEntity deleteUser(@PathVariable String username) {
         ResultMessage resultMessage = new ResultMessage(username, "Successfully Deleted");
         this.userRepository.deleteUser(username);
