@@ -5,7 +5,7 @@ Request JSON
 {
     "username": "staff001",
     "password": "passwordstaff001",
-    "role": 1,
+    "role": 2,
     "titleNameEn": "Mr.",
     "fullNameEn": "Adisorn Sripakpaisit",
     "titleNameTh": "นาย",
@@ -29,9 +29,11 @@ authenticate-token: token
 Response
 {
     "username": "staff001",
-    "role": "Staff",
-    "fullNameTh": "นายอดิศร ศรีภัคไพสิฐ",
-    "fullNameEn": "Mr.Adisorn Sripakpaisit",
+    "role": 2,
+    "titleNameEn": "Mr.",
+    "fullNameEn": "Adisorn Sripakpaisit",
+    "titleNameTh": "นาย",
+    "fullNameTh": "อดิศร ศรีภัคไพสิฐ",
     "email": "example@example.com"
 }
 ```

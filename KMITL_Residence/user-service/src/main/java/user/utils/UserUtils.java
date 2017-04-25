@@ -22,4 +22,13 @@ public class UserUtils {
         return hash;
     }
 
+    public static String getRole(int role_id) {
+        switch (role_id) {
+            case 1: return "Admin";
+            case 2: return "Staff";
+            default: break;
+        }
+        return null;
+    }
+
 }
