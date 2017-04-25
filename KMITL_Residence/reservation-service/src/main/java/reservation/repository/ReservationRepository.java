@@ -51,7 +51,6 @@ public class ReservationRepository {
         try {
             reservation = jdbc.queryForObject(sql, new Object[]{reservation_id}, new ReservationDetailRowMapper());
         } catch(Exception ex) {
-            ex.printStackTrace();
             throw new NotFoundException(reservation_id);
         }
 
@@ -59,7 +58,7 @@ public class ReservationRepository {
     }
 
     private Reservation getFullReservation(int reservation_id) {
-        Reservation reservation = new Reservation();
+        Reservation reservation = null;
         String sql = "select reservation_id, reservation_date, reservation_checkout, reservation_adults, " +
                 "reservation_children, reservation_status, reservation_partial, reservation_timestamp, room_type, " +
                 "customer_title_name, customer_full_name, customer_email, customer_tel, customer_country, customer_nation, " +
@@ -69,9 +68,10 @@ public class ReservationRepository {
         try {
             reservation = jdbc.queryForObject(sql, new Object[]{reservation_id}, new ReservationRowMapper());
         } catch(Exception ex) {
-            ex.printStackTrace();
+
             throw new NotFoundException(reservation_id);
         }
+
         return reservation;
     }
 
@@ -356,9 +356,8 @@ public class ReservationRepository {
             byte[] digest = md.digest();
             String confirmation_id = String.format("%064x", new java.math.BigInteger(1, digest)).substring(0, 30); // slice string from 64 to 32 chars (reduce)
             id = confirmation_id;
-            System.out.println(id);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
         return id;
     }
@@ -387,8 +386,9 @@ public class ReservationRepository {
                     template.exchange(url, HttpMethod.POST, entity, String.class);
 
                 } catch (JsonProcessingException ex) {
-                    ex.printStackTrace();
+                    throw new EmailSendingFailedException(email.getDestination());
                 }
+                return;
             }
         }).start();
     }
