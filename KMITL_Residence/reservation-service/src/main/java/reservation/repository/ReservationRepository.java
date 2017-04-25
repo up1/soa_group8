@@ -356,9 +356,8 @@ public class ReservationRepository {
             byte[] digest = md.digest();
             String confirmation_id = String.format("%064x", new java.math.BigInteger(1, digest)).substring(0, 30); // slice string from 64 to 32 chars (reduce)
             id = confirmation_id;
-            System.out.println(id);
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
         return id;
     }
@@ -387,7 +386,7 @@ public class ReservationRepository {
                     template.exchange(url, HttpMethod.POST, entity, String.class);
 
                 } catch (JsonProcessingException ex) {
-                    ex.printStackTrace();
+
                 }
                 return;
             }
