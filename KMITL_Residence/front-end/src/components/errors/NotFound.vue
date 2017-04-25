@@ -8,9 +8,6 @@
                 </div>
             </h1>
         </div>
-        <div class="sixteen wide column" style="text-align:center;">
-            <router-link to="/" class="ui center aligned link large">Go to Homepage</router-link>
-        </div>
     </div>
 </template>
 

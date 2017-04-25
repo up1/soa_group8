@@ -72,6 +72,20 @@ form.ui.form .fields:last-child {
     margin-bottom: 0px !important;
 }
 
+
+
+/* Secondary Menu */
+
+.ui.secondary.pointing.menu > .item {
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-right: 1.45rem;
+}
+
+.ui.secondary.pointing.menu > .item:last-child {
+    margin-right: 0px;
+}
+
 /* Card property */
 
 .card-padding {

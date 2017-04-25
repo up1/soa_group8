@@ -9,26 +9,26 @@
                 <router-link to="/reservation" class="item" active-class="active" v-if="!isAuthenticated">RESERVATION</router-link>
                 <router-link to="/administrator" class="item" active-class="active" v-if="!isAuthenticated">ADMINISTRATOR</router-link>
                 <router-link to="/administrator/dashboard" class="item" active-class="active" exact v-if="isAuthenticated">DASHBOARD</router-link>
-                <div class="ui pointing dropdown item" v-if="isAuthenticated">
+                <div class="ui dropdown item" v-if="isAuthenticated">
                     MANAGE
                     <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <a class="item">
+                    <div class="ui vertical menu">
+                        <div class="ui dropdown item">
                             <i class="dropdown icon"></i>
                             <span class="text">Customer</span>
                             <div class="menu">
                                 <router-link to="/administrator/customer/checkin" class="item">Check-in</router-link>
                                 <router-link to="/administrator/customer/checkout" class="item">Check-out</router-link>
                             </div>
-                        </a>
+                        </div>
                         <a class="item">Rooms</a>
                         <a class="item">Staff</a>
                     </div>
                 </div>
-                <div class="ui pointing dropdown item" v-if="isAuthenticated" refs="userDropdownBtn">
+                <div class="ui dropdown item" v-if="isAuthenticated" refs="userDropdownBtn">
                     {{ getUsername }}
                     <i class="dropdown icon"></i>
-                    <div class="menu">
+                    <div class="ui vertical pointing menu">
                         <a class="item">Edit Profile</a>
                         <div class="divider"></div>
                         <a class="item" @click="logout">Log Out</a>
