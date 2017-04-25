@@ -92,8 +92,8 @@ public class UserRepository {
     }
 
     @Transactional(readOnly = true)
-    public List<UserInformation> getUsers() {
-        List<UserInformation> users = null;
+    public List<User> getUsers() {
+        List<User> users = null;
         return users;
     }
 
