@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import user.exception.UnauthorizedException;
 import user.jwt.JwtService;
 import user.model.JwtUser;
+import user.model.User;
 import user.model.UserInformation;
 import user.repository.UserRepository;
 
@@ -49,7 +50,7 @@ public class UserViewFilter implements Filter {
                 JwtUser user = jwtTokenService.getUser(authHeaderVal);
                 String[] url = httpRequest.getRequestURL().toString().split("/");
                 String username = url[url.length-1];
-                UserInformation userInformation = userRepository.getUser(username);
+                User userInformation = userRepository.getUser(username);
                 if(!user.getUsername().equals(userInformation.getUsername()) && !user.getRole().equals("Admin")) {
                     throw new UnauthorizedException();
                 }

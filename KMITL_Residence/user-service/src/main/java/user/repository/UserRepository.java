@@ -9,7 +9,7 @@ import user.exception.AuthenticationFailedException;
 import user.exception.InvalidTokenException;
 import user.exception.UserNotFoundException;
 import user.jwt.JwtService;
-import user.mapper.UserInformationRowMapper;
+import user.mapper.UserRowMapper;
 import user.model.*;
 import user.utils.UserUtils;
 
@@ -68,10 +68,10 @@ public class UserRepository {
     }
 
     @Transactional(readOnly = true)
-    public UserInformation getUser(String username) {
-        UserInformation user = null;
+    public User getUser(String username) {
+        User user = null;
 
-        String sql = "select a.username, a.hash_password, r.en_role, s.th_prename, s.th_name, s.en_prename, s.en_name, s.email " +
+        String sql = "select a.username, a.hash_password, a.role_id, s.th_prename, s.th_name, s.en_prename, s.en_name, s.email " +
                 "from user_account a " +
                 "join staff s " +
                 "on a.username = s.username " +
@@ -82,7 +82,7 @@ public class UserRepository {
         try {
             user = jdbc.queryForObject(sql,
                     new Object[] {username},
-                    new UserInformationRowMapper());
+                    new UserRowMapper());
         }catch (Exception ex) {
             ex.printStackTrace();
             throw new UserNotFoundException(username);
@@ -100,10 +100,10 @@ public class UserRepository {
     @Transactional
     public String authenticate(UserLogin login) {
         String token = "";
-        UserInformation userInformation = getUser(login.getUsername());
-        if(userInformation != null) {
-            if(userInformation.getHashPassword().equals(UserUtils.hash(login.getPassword()))) {
-                JwtUser jwtUser = new JwtUser(userInformation.getUsername(), userInformation.getRole());
+        User user = getUser(login.getUsername());
+        if(user != null) {
+            if(user.getPassword().equals(UserUtils.hash(login.getPassword()))) {
+                JwtUser jwtUser = new JwtUser(user.getUsername(), UserUtils.getRole(user.getRole()));
                 token = jwtService.getToken(jwtUser);
             }
             else {

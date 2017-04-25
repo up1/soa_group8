@@ -8,13 +8,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class User {
 
     private String username;
-    private String password;
     private int role;
     private String titleNameTh;
     private String fullNameTh;
     private String titleNameEn;
     private String fullNameEn;
     private String email;
+
+    @JsonIgnore
+    private String password;
 
     public User(String username, String password, int role, String titleNameTh, String fullNameTh, String titleNameEn, String fullNameEn, String email) {
         this.username = username;
@@ -39,6 +41,7 @@ public class User {
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }

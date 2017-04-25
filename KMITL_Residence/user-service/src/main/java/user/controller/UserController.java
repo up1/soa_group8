@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
-    public UserInformation getUser(@PathVariable String username) {
+    public User getUser(@PathVariable String username) {
         return this.userRepository.getUser(username);
     }
 
