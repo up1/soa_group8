@@ -389,6 +389,7 @@ public class ReservationRepository {
                 } catch (JsonProcessingException ex) {
                     ex.printStackTrace();
                 }
+                return;
             }
         }).start();
     }
