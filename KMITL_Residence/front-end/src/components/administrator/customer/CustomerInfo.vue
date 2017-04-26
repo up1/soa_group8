@@ -1,0 +1,46 @@
+<template>
+    <div class="sixteen wide column">
+        <div class="card card-padding normal-padding">
+            <h3 class="ui center aligned header" v-if="err.length || !reservationId">
+                {{ headerText }}
+                <div class="sub header">
+                    {{ statusText }}
+                </div>
+            </h3>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    props: ['mode', 'err', 'reservationId'],
+    data: () => ({
+        headerText: 'Please enter the reservation ID',
+        statusText: 'To check the customer in, the reservation ID is required.'
+    }),
+    watch: {
+        mode(){
+            this.setStatusText()
+        },
+        err(){ 
+            if(this.err.length > 0) {
+                this.headerText = 'Unfortunately, We\'ve got an error!'
+                this.statusText = this.err[0]
+            } else {
+                this.setStatusText()
+            }
+        }
+    },
+    methods: {
+        setStatusText() {
+            let modes = ['checkin', 'checkout', 'edit']
+            let statusText = ['To check the customer in, the reservation ID is required.',
+                'To check the customer out, the reservation ID is required.',
+                'To edit the customer information, the reservation ID is required.'
+            ]
+            this.headerText = "Please enter the reservation ID"
+            this.statusText = statusText[modes.indexOf(this.mode)]
+        }
+    }
+}
+</script>

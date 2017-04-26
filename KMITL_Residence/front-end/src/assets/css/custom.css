@@ -94,7 +94,7 @@ form.ui.form .fields:last-child {
 .card {
     background-color: white;
     border: 1px solid #E0E0E0;
-    border-radius: 3px;
+    border-radius: .28571429rem;
     color: #3F3F3F !important;
 }
 
