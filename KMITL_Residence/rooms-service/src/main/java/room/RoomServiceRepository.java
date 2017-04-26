@@ -144,15 +144,15 @@ public class RoomServiceRepository {
         this.jdbcTemplate.update(sql, reservationId);
     }
 
-    public Reservation getInfoReservationCheckin(int reservationId) {
+    public ReservationInfo getInfoReservationCheckin(int reservationId) {
         String sql = "select reservation_id from RoomsChecker where reservation_id = ?;";
-        Reservation reservation;
+        ReservationInfo reservation;
         List<Map<String, Object>> id = this.jdbcTemplate.queryForList(sql, new String[] { Integer.toString(reservationId) });
         if(id.size() < 1) {
-            reservation = getReservation(reservationId);
+            reservation = getReservationInfo(getReservation(reservationId), "no");
         }
         else {
-            throw new ReceptionException("This reservation id has already checked-in, Reservation id : " + reservationId);
+            reservation = getReservationInfo(getReservation(reservationId), "yes");
         }
         return reservation;
     }
@@ -166,6 +166,19 @@ public class RoomServiceRepository {
             throw new ReservationNotFoundException(reservationId);
         }
         return reservation;
+    }
+
+    private ReservationInfo getReservationInfo(Reservation reservation, String status) {
+        ReservationInfo reservationInfo = new ReservationInfo(reservation.getId(),
+                reservation.getCheckIn(),
+                reservation.getCheckOut(),
+                reservation.getTotal(),
+                reservation.getRoomType(),
+                reservation.getStatus(),
+                reservation.getPaymentType(),
+                reservation.getCustomer(),
+                status);
+        return reservationInfo;
     }
 
 }
