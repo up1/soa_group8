@@ -6,10 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import room.exception.UnauthorizedException;
 import room.jwt.JwtService;
-import room.model.JwtUser;
-import room.model.ResultMessage;
-import room.model.Room;
-import room.model.RoomType;
+import room.model.*;
 
 import java.util.List;
 
@@ -77,5 +74,11 @@ public class RoomServiceController {
         }
         this.roomServiceRepository.roomCheckOutByReservationId(room_id, reservation_id);
         return new ResponseEntity(new ResultMessage("Success"),HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/checkinfo", method = RequestMethod.GET)
+    public ResponseEntity infoCheckin(@RequestParam(value = "id", required = true) int reservationId) {
+        Reservation reservation = this.roomServiceRepository.getInfoReservationCheckin(reservationId);
+        return new ResponseEntity(reservation, HttpStatus.OK);
     }
 }

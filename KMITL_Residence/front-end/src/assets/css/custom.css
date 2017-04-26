@@ -73,7 +73,6 @@ form.ui.form .fields:last-child {
 }
 
 
-
 /* Secondary Menu */
 
 .ui.secondary.pointing.menu > .item {
@@ -181,6 +180,13 @@ button.ui.button.luxury-primary:hover{
 
 label .error {
     color: #9f3a38;
+}
+
+
+/* Semantic Grid Override */
+
+div.ui.grid > div.row {
+    padding-bottom: 0px !important;
 }
 
 

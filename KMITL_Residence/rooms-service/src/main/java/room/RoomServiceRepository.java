@@ -1,6 +1,7 @@
 package room;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -142,4 +143,29 @@ public class RoomServiceRepository {
         sql = "UPDATE RoomsChecker SET checkout = CURRENT_TIMESTAMP WHERE reservation_id = ?";
         this.jdbcTemplate.update(sql, reservationId);
     }
+
+    public Reservation getInfoReservationCheckin(int reservationId) {
+        String sql = "select reservation_id from RoomsChecker where reservation_id = ?;";
+        Reservation reservation;
+        List<Map<String, Object>> id = this.jdbcTemplate.queryForList(sql, new String[] { Integer.toString(reservationId) });
+        if(id.size() < 1) {
+            reservation = getReservation(reservationId);
+        }
+        else {
+            throw new ReceptionException("This reservation id has already checked-in, Reservation id : " + reservationId);
+        }
+        return reservation;
+    }
+
+    private Reservation getReservation(int reservationId) {
+        RestTemplate template = new RestTemplate();
+        Reservation reservation;
+        try {
+            reservation = template.getForObject(reservationURL + reservationId + "/", Reservation.class);
+        }catch(Exception e) {
+            throw new ReservationNotFoundException(reservationId);
+        }
+        return reservation;
+    }
+
 }
