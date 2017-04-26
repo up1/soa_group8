@@ -1,6 +1,10 @@
 # User Service
 > POST /users/create
 ```
+HEADER
+authenticate-token: token
+```
+```
 Request JSON
 {
     "username": "staff001",
@@ -38,6 +42,10 @@ Response
 }
 ```
 > DELETE /user/{username}/delete
+```
+HEADER
+authenticate-token: token
+```
 ```
 Response
 {
