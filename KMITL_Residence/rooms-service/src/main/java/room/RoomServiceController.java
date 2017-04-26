@@ -78,7 +78,7 @@ public class RoomServiceController {
 
     @RequestMapping(value = "/checkinfo", method = RequestMethod.GET)
     public ResponseEntity infoCheckin(@RequestParam(value = "id", required = true) int reservationId) {
-        Reservation reservation = this.roomServiceRepository.getInfoReservationCheckin(reservationId);
+        ReservationInfo reservation = this.roomServiceRepository.getInfoReservationCheckin(reservationId);
         return new ResponseEntity(reservation, HttpStatus.OK);
     }
 }
