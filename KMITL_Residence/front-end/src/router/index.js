@@ -9,7 +9,6 @@ import Administrator from '@/components/Administrator'
 import Dashboard from '@/components/administrator/Dashboard'
 import LoginPanel from '@/components/administrator/LoginPanel'
 import Customer from '@/components/administrator/customer/CustomerPage'
-import CheckInOut from '@/components/administrator/customer/CheckInOut'
 import NotFound from '@/components/errors/NotFound'
 
 import { User } from '@/services'
@@ -72,12 +71,10 @@ const router = new Router({
           component: Customer,
           children: [
             {
-              path: 'checkin',
-              component: CheckInOut
+              path: 'checkin'
             },
             {
-              path: 'checkout',
-              component: CheckInOut
+              path: 'checkout'
             }
           ]
         },

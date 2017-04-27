@@ -53,8 +53,24 @@ public class UserRepository {
     }
 
     @Transactional
-    public void updateUser(User user) {
-
+    public void updateUser(String username, User user) {
+        String sql_update_user = "UPDATE staff, user_account " +
+                "SET staff.th_prename = ?," +
+                "staff.th_name = ?," +
+                "staff.en_prename = ?," +
+                "staff.en_name = ?," +
+                "staff.email = ?," +
+                "user_account.hash_password = ?," +
+                "user_account.role_id = ? " +
+                "WHERE staff.username = ?";
+        jdbc.update(sql_update_user,
+                user.getTitleNameTh(),
+                user.getFullNameTh(),
+                user.getTitleNameEn(),
+                user.getFullNameEn(),
+                user.getEmail(),
+                UserUtils.hash(user.getPassword()),
+                user.getRole());
     }
 
     @Transactional
