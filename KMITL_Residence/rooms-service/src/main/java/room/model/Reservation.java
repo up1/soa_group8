@@ -11,17 +11,15 @@ public class Reservation {
     private int total;
     private int roomType;
     private String status;
-    private String paymentType;
     private Customer customer;
 
-    public Reservation(int id, String checkIn, String checkOut, int total, int roomType, String status, String paymentType, Customer customer) {
+    public Reservation(int id, String checkIn, String checkOut, int total, int roomType, String status, Customer customer) {
         this.id = id;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
         this.total = total;
         this.roomType = roomType;
         this.status = status;
-        this.paymentType = paymentType;
         this.customer = customer;
     }
 
@@ -75,14 +73,6 @@ public class Reservation {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getPaymentType() {
-        return paymentType;
-    }
-
-    public void setPaymentType(String paymentType) {
-        this.paymentType = paymentType;
     }
 
     public Customer getCustomer() {

@@ -107,7 +107,7 @@ public class RoomServiceRepository {
                 throw new RoomIsUnavailable(roomId);
             }
             List<Checker> checkers = this.jdbcTemplate.query(
-                    "SELECT reservation_id, checkin, checkout, room_id FROM ROOMSCHECKER WHERE reservation_id = ?",
+                    "SELECT reservation_id, checkin, checkout, room_id FROM RoomsChecker WHERE reservation_id = ?",
                     new Object[]{reservationId},
                     new CheckerRowMapper());
             if (checkers.size() > 0) {
@@ -130,7 +130,7 @@ public class RoomServiceRepository {
     @Transactional
     public void roomCheckOutByReservationId(int roomId, int reservationId){
         List<Checker> checkers = this.jdbcTemplate.query(
-                "SELECT reservation_id, checkin, checkout, room_id FROM ROOMSCHECKER WHERE reservation_id = ?",
+                "SELECT reservation_id, checkin, checkout, room_id FROM RoomsChecker WHERE reservation_id = ?",
                 new Object[]{reservationId},
                 new CheckerRowMapper());
         if(checkers.size() == 0){
@@ -175,7 +175,6 @@ public class RoomServiceRepository {
                 reservation.getTotal(),
                 reservation.getRoomType(),
                 reservation.getStatus(),
-                reservation.getPaymentType(),
                 reservation.getCustomer(),
                 status);
         return reservationInfo;

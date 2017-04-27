@@ -7,8 +7,10 @@ public class ReservationInfo extends Reservation {
 
     private String checkInStatus;
 
-    public ReservationInfo(int id, String checkIn, String checkOut, int total, int roomType, String status, String paymentType, Customer customer, String checkInStatus) {
-        super(id, checkIn, checkOut, total, roomType, status, paymentType, customer);
+    public ReservationInfo(int id, String checkIn, String checkOut,
+                           int total, int roomType, String status,
+                           Customer customer, String checkInStatus) {
+        super(id, checkIn, checkOut, total, roomType, status, customer);
         this.checkInStatus = checkInStatus;
     }
 

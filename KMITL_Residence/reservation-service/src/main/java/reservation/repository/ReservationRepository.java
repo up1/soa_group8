@@ -133,7 +133,8 @@ public class ReservationRepository {
                 RoomType roomType = template.getForObject(url, RoomType.class);
 
                 Email email = new Email();
-                email.setFullName(reservation.getCustomer().getTitleName() + reservation.getCustomer().getFullName());
+                email.setTitleName(reservation.getCustomer().getTitleName());
+                email.setFullName(reservation.getCustomer().getFullName());
                 email.setDestination(reservation.getCustomer().getEmail());
                 email.setEmailType(1);
 
@@ -175,7 +176,8 @@ public class ReservationRepository {
                     Reservation reservation = getFullReservation(reservationId);
 
                     Email email = new Email();
-                    email.setFullName(reservation.getCustomer().getTitleName() + reservation.getCustomer().getFullName());
+                    email.setTitleName(reservation.getCustomer().getTitleName());
+                    email.setFullName(reservation.getCustomer().getFullName());
                     email.setDestination(reservation.getCustomer().getEmail());
                     email.setEmailType(3);
 
@@ -223,7 +225,8 @@ public class ReservationRepository {
                         ReservationDetail reservation = getReservation(reservationId);
 
                         Email email = new Email();
-                        email.setFullName(reservation.getCustomer().getTitleName() + reservation.getCustomer().getFullName());
+                        email.setTitleName(reservation.getCustomer().getTitleName());
+                        email.setFullName(reservation.getCustomer().getFullName());
                         email.setDestination(reservation.getCustomer().getEmail());
                         email.setEmailType(2);
 
@@ -382,7 +385,7 @@ public class ReservationRepository {
                     String json = mapper.writeValueAsString(email);
                     HttpHeaders headers = new HttpHeaders();
                     headers.setContentType(MediaType.APPLICATION_JSON);
-                    HttpEntity<String> entity = new HttpEntity<String>(json, headers);
+                    HttpEntity<String> entity = new HttpEntity<>(json, headers);
                     template.exchange(url, HttpMethod.POST, entity, String.class);
 
                 } catch (JsonProcessingException ex) {
