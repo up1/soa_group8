@@ -7,13 +7,42 @@
                     {{ statusText }}
                 </div>
             </h3>
+            <div v-else-if="reservationData.customer">
+                <h3 class="ui dividing header clear-bottom">
+                    Reservation Information
+                </h3>
+                <table class="ui definition table">
+                    <tbody>
+                        <tr>
+                            <td class="three wide column">Name</td>
+                            <td> {{ `${reservationData.customer.titleName} ${reservationData.customer.fullName}` }}</td>
+                        </tr>
+                        <tr>
+                            <td>E-mail</td>
+                            <td> {{ reservationData.customer.email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Phone Number</td>
+                            <td> {{ reservationData.customer.tel }} </td>
+                        </tr>
+                        <tr>
+                            <td>Nation</td>
+                            <td> {{ reservationData.customer.nation }} </td>
+                        </tr>
+                        <tr>
+                            <td>Country</td>
+                            <td> {{ reservationData.customer.country }} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>                
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    props: ['mode', 'err', 'reservationId'],
+    props: ['mode', 'err', 'reservationId', 'reservationData'],
     data: () => ({
         headerText: 'Please enter the reservation ID',
         statusText: 'To check the customer in, the reservation ID is required.'

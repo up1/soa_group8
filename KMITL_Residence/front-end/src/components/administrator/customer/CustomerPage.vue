@@ -21,12 +21,12 @@
                         <div class="row">
                             <div class="sixteen wide column">
                                 <div class="ui large icon fluid input" ref="searchContainer">
-                                    <input type="text" data-vv-name="Reservation Id" placeholder="Seach by Reservation ID" v-model="reservInput" data-vv-validate-on="none" v-validate="'numeric'">
+                                    <input type="text" data-vv-name="Reservation Id" placeholder="Search by Reservation ID" v-model="reservInput" data-vv-validate-on="none" v-validate="'numeric'">
                                     <i class="search icon"></i>
                                 </div>
                             </div>
                         </div>
-                        <CustomerInfo :mode="mode" :reservationId="reservationId" :err="errors.all()"/>
+                        <CustomerInfo :mode="mode" :reservationData="reservationData" :reservationId="reservationId" :err="errors.all()"/>
                     </div>
                 </div>
             </div>
@@ -36,6 +36,8 @@
 
 <script>
 import CustomerInfo from './CustomerInfo'
+import { Validator } from 'vee-validate'
+import { Rooms } from '@/services'
 
 export default {
     components: {
@@ -44,10 +46,30 @@ export default {
     data: () => ({
         reservInput: '',
         reservationId: '',
+        reservationData: {},
         mode: ''
     }),
     created(){
         this.mode = this.getMode()
+        this.$validator.remove('reservationId_validate')
+        this.$validator.detach('reservationId')
+        Validator.extend('reservationId_validate', {
+            getMessage: (field) => `Reservation ID not found.`,
+            validate: (value) => new Promise(resolve => {
+                Rooms.getCheckInInfo(value, this.$cookie.get('_token'))
+                    .then((res) => {
+                        this.reservationData = res.data
+                        resolve({
+                            valid: true
+                        })
+                    })
+                    .catch(err => {
+                        this.reservationData = {}
+                        resolve({ valid : false })
+                    })
+            })
+        })
+        this.$validator.attach('reservationId', 'reservationId_validate')
     },
     watch: {
         reservInput(){
@@ -60,9 +82,12 @@ export default {
     },
     methods: {
         fetchJSON: _.debounce(function(){
-                $(this.$refs.searchContainer).removeClass('loading')
                 this.$validator.validateAll()
                 this.reservationId = this.reservInput
+                this.$validator.validate('reservationId', this.reservationId)
+                    .then(res => {
+                        $(this.$refs.searchContainer).removeClass('loading')
+                    })
             }, 1000),
         getMode(){
             let splitedPath = this.$route.path.split('/')
