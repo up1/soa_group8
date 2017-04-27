@@ -33,7 +33,35 @@
                             <td>Country</td>
                             <td> {{ reservationData.customer.country }} </td>
                         </tr>
+                        <tr>
+                            <td>Check-in date</td>
+                            <td> {{ reservationData.checkIn }}</td>
+                        </tr>
+                        <tr>
+                            <td>Check-out date</td>
+                            <td> {{ reservationData.checkOut}} </td>
+                        </tr>
+                        <tr>
+                            <td>Room Type</td>
+                            <td>{{ reservationData.roomType | matchRoomType}}</td>
+                        </tr>
+                        <tr>
+                            <td>Occupancy</td>
+                            <td> {{ `${reservationData.total} Persons` }} </td>
+                        </tr>
+                        <tr>
+                            <td>Confirmation Status</td>
+                            <td> {{ reservationData.status | confirmStatusInterpret }} </td>
+                        </tr>
                     </tbody>
+                    <tfoot class="full-width">
+                        <th colspan="2">
+                            <CheckerBtn :mode="mode" :reservationData="reservationData"/>
+                            <div class="ui right floated large button" @click="refresh">
+                                     Refresh
+                            </div>
+                        </th>
+                    </tfoot>
                 </table>
             </div>                
         </div>
@@ -41,7 +69,12 @@
 </template>
 
 <script>
+import CheckerBtn from './CheckerBtn'
+
 export default {
+    components: {
+        CheckerBtn
+    },
     props: ['mode', 'err', 'reservationId', 'reservationData'],
     data: () => ({
         headerText: 'Please enter the reservation ID',
@@ -69,6 +102,9 @@ export default {
             ]
             this.headerText = "Please enter the reservation ID"
             this.statusText = statusText[modes.indexOf(this.mode)]
+        },
+        refresh(){
+            this.$emit('refresh')
         }
     }
 }

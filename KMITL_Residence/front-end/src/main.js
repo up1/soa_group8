@@ -28,6 +28,17 @@ Vue.use(VueCookie)
 /* eslint-disable no-new */
 
 
+Vue.filter('matchRoomType', (val) => {
+    let roomType = ["None", "Deluxe Room", "Premiere Room", "Suite Room"]
+    return roomType[val]
+})
+
+Vue.filter('confirmStatusInterpret', (status) => {
+    let statusType = ['waiting', 'completed', 'cancel']
+    let interpretList = ['Unconfirmed', 'Confirmed', 'Cancelled']
+    return interpretList[statusType.indexOf(status)]
+})
+
 new Vue({
   el: '#app',
   router,

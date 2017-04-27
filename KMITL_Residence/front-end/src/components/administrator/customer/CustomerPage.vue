@@ -26,7 +26,7 @@
                                 </div>
                             </div>
                         </div>
-                        <CustomerInfo :mode="mode" :reservationData="reservationData" :reservationId="reservationId" :err="errors.all()"/>
+                        <CustomerInfo :mode="mode" :reservationData="reservationData" :reservationId="reservationId" @refresh="fetchJSON" :err="errors.all()"/>
                     </div>
                 </div>
             </div>

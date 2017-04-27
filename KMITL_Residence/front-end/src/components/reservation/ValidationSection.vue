@@ -133,10 +133,6 @@ export default {
         }
     },
     filters: {
-        matchRoomType(val){
-            let roomType = ["None", "Deluxe Room", "Premiere Room", "Suite Room"]
-            return roomType[val]
-        },
         THBformat(val){
             return numeral(+val).format('0,0.00') + ' THB'
         },

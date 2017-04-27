@@ -14,7 +14,12 @@ const getCheckInInfo = (reservationId, _token) => {
     })
 }
 
+const getAvailableRoomsByRoomType = (roomTypeId) => {
+    return axios(`${API_URL}:9001/rooms/available/${roomTypeId}`)
+}
+
 export default {
     getRoomTypeData,
-    getCheckInInfo
+    getCheckInInfo,
+    getAvailableRoomsByRoomType
 }
