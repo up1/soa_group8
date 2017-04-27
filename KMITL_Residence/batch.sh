@@ -5,7 +5,7 @@ cd ../user-service
 mvn clean package
 
 cd ../rooms-service
-mvn clean install
+mvn clean package
 
-cd ../reservation
-mvn clean install
+cd ../reservation-service
+mvn clean package
