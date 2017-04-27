@@ -77,7 +77,16 @@ public class RoomServiceController {
     }
 
     @RequestMapping(value = "/checkinfo", method = RequestMethod.GET)
-    public ResponseEntity infoCheckin(@RequestParam(value = "id", required = true) int reservationId) {
+    public ResponseEntity infoCheckin(@RequestParam(value = "id", required = true) int reservationId,
+                                      @RequestHeader(value = "authenticate-token") String token) {
+        if(token == null) {
+            throw new UnauthorizedException();
+        }
+        try {
+            JwtUser user = service.getUser(token);
+        } catch (Exception ex) {
+            throw new UnauthorizedException();
+        }
         ReservationInfo reservation = this.roomServiceRepository.getInfoReservationCheckin(reservationId);
         return new ResponseEntity(reservation, HttpStatus.OK);
     }
