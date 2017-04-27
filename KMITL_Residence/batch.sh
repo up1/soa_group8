@@ -1,8 +1,8 @@
 cd email-service
-mvn clean install
+mvn clean package
 
 cd ../user-service
-mvn clean install
+mvn clean package
 
 cd ../rooms-service
 mvn clean install
