@@ -1,13 +1,14 @@
 <template>
     <div class="sixteen wide column">
         <div class="card card-padding normal-padding">
-            <h3 class="ui center aligned header" v-if="err.length || !reservationId">
+            <div class="ui active loader" v-if="loading"/>
+            <h3 class="ui center aligned header" v-else-if="err.length || !reservationId">
                 {{ headerText }}
                 <div class="sub header">
                     {{ statusText }}
                 </div>
             </h3>
-            <div v-else-if="reservationData.customer">
+            <div v-else-if="reservationData.customer && !err.length">
                 <h3 class="ui dividing header clear-bottom">
                     Reservation Information
                 </h3>
@@ -63,7 +64,7 @@
                         </th>
                     </tfoot>
                 </table>
-            </div>                
+            </div>
         </div>
     </div>
 </template>
@@ -75,7 +76,7 @@ export default {
     components: {
         CheckerBtn
     },
-    props: ['mode', 'err', 'reservationId', 'reservationData'],
+    props: ['mode', 'err', 'reservationId', 'reservationData', 'loading'],
     data: () => ({
         headerText: 'Please enter the reservation ID',
         statusText: 'To check the customer in, the reservation ID is required.'

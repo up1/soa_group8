@@ -2,14 +2,18 @@
     <div class="ui right floated large primary button" ref="btn" @click="showModal">
         {{ btnTxt }}
         <ChooseRoomModal :reservationData="reservationData" @refresh="refresh"/>
+        <CheckOutModal :reservationData="reservationData" @refresh="refresh"/>
     </div>
 </template>
 
 <script>
 import ChooseRoomModal from './ChooseRoomModal'
+import CheckOutModal from './CheckOutModal'
+
 export default {
     components: {
-        ChooseRoomModal
+        ChooseRoomModal,
+        CheckOutModal
     },
     props: ['mode', 'reservationData'],
     data: () => ({
@@ -57,7 +61,11 @@ export default {
             }
         },
         showModal(){
-            $('#chooseRoomModal').modal('show')
+            if(this.mode == 'checkin'){
+                $('#chooseRoomModal').modal('show')
+            }else if(this.mode == 'checkout'){
+                $('#checkoutModal').modal('show')
+            }
         },
         refresh(){
             this.$emit('refresh')
