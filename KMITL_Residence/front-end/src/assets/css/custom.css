@@ -16,6 +16,10 @@ div#app {
     margin-bottom: 25px;
 }
 
+.dimmable:not(.body){
+    position: initial !important;
+}
+
 div.content-container {
     width: 100%;
     margin: 0px auto;

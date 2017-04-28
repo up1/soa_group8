@@ -106,7 +106,7 @@ export default {
 
 #menuBar {
     position: absolute;
-    z-index: 9999
+    z-index: 1;
 }
 
 div.content-container {;
@@ -120,7 +120,6 @@ div.ui.secondary.menu {
     background-color: transparent;
     padding-top: 25px;
 }
-
 
 div.content-container.inverted-menu > div.ui.secondary.menu {
     padding-top:0px;
