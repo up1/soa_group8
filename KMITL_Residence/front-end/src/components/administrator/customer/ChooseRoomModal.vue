@@ -74,14 +74,13 @@ export default {
             $(this.$refs.tableSegment).addClass('loading')
             Rooms.checkIn(this.reservationData.id, roomId, this.$cookie.get('_token'))
                 .then(res => {
-                    console.log(res.data)
                     $(this.$refs.tableSegment).removeClass('loading')
                     $('#chooseRoomModal').modal('hide')
                     this.reservationData.checkInStatus = 'yes'
                     $(this.$emit('refresh'))
                 })
                 .catch(err => {
-                    console.log(err.response)
+                    console.log(err)
                 })
         }
     }
