@@ -14,7 +14,7 @@
                                 <div class="ui large secondary pointing menu">
                                     <router-link to="/administrator/customer/checkin" class="item" active-class="active">Check-In</router-link>
                                     <router-link to="/administrator/customer/checkout" class="item" active-class="active">Check-Out</router-link>
-                                    <router-link to="/administrator/customer/edit" class="item" active-class="active">Edit</router-link>
+                                    <router-link to="/administrator/customer/changeroom" class="item" active-class="active">Change Room</router-link>
                                 </div>
                             </div>
                         </div>

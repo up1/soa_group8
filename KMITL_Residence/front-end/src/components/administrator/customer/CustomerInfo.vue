@@ -87,7 +87,7 @@ export default {
         },
         err(){ 
             if(this.err.length > 0) {
-                this.headerText = 'Unfortunately, We\'ve got an error!'
+                this.headerText = 'Message'
                 this.statusText = this.err[0]
             } else {
                 this.setStatusText()

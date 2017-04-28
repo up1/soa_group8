@@ -19,7 +19,7 @@
                             <div class="menu">
                                 <router-link to="/administrator/customer/checkin" class="item">Check-in</router-link>
                                 <router-link to="/administrator/customer/checkout" class="item">Check-out</router-link>
-                                <router-link to="/administrator/customer/edit" class="item">Edit</router-link>
+                                <router-link to="/administrator/customer/changeroom" class="item">Change Room</router-link>
                             </div>
                         </a>
                         <a class="item">Rooms</a>
