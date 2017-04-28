@@ -1,7 +1,7 @@
 <template>
     <div class="ui right floated large primary button" ref="btn" @click="showModal">
         {{ btnTxt }}
-        <ChooseRoomModal :reservationData="reservationData"/>
+        <ChooseRoomModal :reservationData="reservationData" @refresh="refresh"/>
     </div>
 </template>
 
@@ -50,7 +50,7 @@ export default {
                     this.enable = false
                 }
                 if(this.mode == "checkin" && this.reservationData.checkInStatus == "yes"){
-                    this.enabel = false
+                    this.enable = false
                 }
             }else{
                 this.enable = false
@@ -58,6 +58,9 @@ export default {
         },
         showModal(){
             $('#chooseRoomModal').modal('show')
+        },
+        refresh(){
+            this.$emit('refresh')
         }
     }
 }

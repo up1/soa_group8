@@ -18,8 +18,17 @@ const getAvailableRoomsByRoomType = (roomTypeId) => {
     return axios(`${API_URL}:9001/rooms/available/${roomTypeId}`)
 }
 
+const checkIn = (reservationId, roomId, _token) => {
+    return axios.post(`${API_URL}:9001/rooms/${roomId}/checkin/${reservationId}`, {}, {
+        headers: {
+            'authenticate-token': _token
+        }
+    })
+}
+
 export default {
     getRoomTypeData,
     getCheckInInfo,
-    getAvailableRoomsByRoomType
+    getAvailableRoomsByRoomType,
+    checkIn
 }

@@ -56,8 +56,8 @@
                     </tbody>
                     <tfoot class="full-width">
                         <th colspan="2">
-                            <CheckerBtn :mode="mode" :reservationData="reservationData"/>
-                            <div class="ui right floated large button" @click="refresh">
+                            <CheckerBtn :mode="mode" :reservationData="reservationData" @refresh="refresh"/>
+                            <div class="ui right floated large button" @click="refresh" >
                                      Refresh
                             </div>
                         </th>
