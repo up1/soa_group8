@@ -128,12 +128,8 @@ public class RoomServiceRepository {
     }
 
     @Transactional
-    public void roomCheckOutByReservationId(int roomId){
-        int reservationId = getUnCheckoutReservationIdByRoomID(roomId);
-        if(reservationId == -1) {
-            throw new ReceptionException("Reservation ID not found");
-        }
-        System.out.println(reservationId);
+    public void roomCheckOutByReservationId(int reservationId){
+
         List<Checker> checkers = this.jdbcTemplate.query(
                 "SELECT reservation_id, checkin, checkout, room_id FROM RoomsChecker WHERE reservation_id = ?",
                 new Object[]{reservationId},
@@ -144,7 +140,7 @@ public class RoomServiceRepository {
             throw new ReceptionException("This reservation id has already checked-out, Reservation id : " + reservationId);
         }
         String sql = "UPDATE Rooms SET room_availability = 1 WHERE room_id = ?";
-        this.jdbcTemplate.update(sql, roomId);
+        this.jdbcTemplate.update(sql, checkers.get(0).getRoomId());
         sql = "UPDATE RoomsChecker SET checkout = CURRENT_TIMESTAMP WHERE reservation_id = ?";
         this.jdbcTemplate.update(sql, reservationId);
     }
@@ -192,11 +188,6 @@ public class RoomServiceRepository {
                 reservation.getCustomer(),
                 status);
         return reservationInfo;
-    }
-
-    private int getUnCheckoutReservationIdByRoomID(int roomId) {
-        String sql = "select reservation_id from RoomsChecker where checkout is null and room_id = ?";
-        return this.jdbcTemplate.queryForObject(sql, new String[] { Integer.toString(roomId) }, Integer.class);
     }
 
 }

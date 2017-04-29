@@ -60,8 +60,8 @@ public class RoomServiceController {
         return new ResponseEntity(new ResultMessage("Success"), HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/rooms/{room_id:.*}/checkout", method = RequestMethod.PUT)
-    public ResponseEntity roomCheckOutByReservationId(@PathVariable int room_id,
+    @RequestMapping(value = "/rooms/checkout", method = RequestMethod.PUT)
+    public ResponseEntity roomCheckOutByReservationId(@RequestParam(value = "id") int reservationId,
                                                       @RequestHeader(value = "authenticate-token") String token){
         if(token == null) {
             throw new UnauthorizedException();
@@ -71,7 +71,7 @@ public class RoomServiceController {
         } catch (Exception ex) {
             throw new UnauthorizedException();
         }
-        this.roomServiceRepository.roomCheckOutByReservationId(room_id);
+        this.roomServiceRepository.roomCheckOutByReservationId(reservationId);
         return new ResponseEntity(new ResultMessage("Success"),HttpStatus.OK);
     }
 
