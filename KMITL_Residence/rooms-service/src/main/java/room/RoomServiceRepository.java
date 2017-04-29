@@ -5,6 +5,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +33,8 @@ public class RoomServiceRepository {
     @Value("${url.reservation.service}")
     String reservationURL;
 
+    @Value("${authentication.token.header}")
+    String authTokenHeader;
 
     @Transactional(readOnly = true)
     public RoomType getTotalOfSpecificRoomType(int Room_Type_id){
@@ -89,15 +95,9 @@ public class RoomServiceRepository {
     }
 
     @Transactional
-    public void roomCheckInByReservationId(int roomId, int reservationId){
+    public void roomCheckInByReservationId(int roomId, int reservationId, String token){
 
-        RestTemplate template = new RestTemplate();
-        Reservation reservation = new Reservation();
-        try {
-            reservation = template.getForObject(reservationURL + reservationId + "/", Reservation.class);
-        }catch(Exception e) {
-            throw new ReservationNotFoundException(reservationId);
-        }
+        Reservation reservation = getReservation(reservationId, token);
 
         Room room = getRoomInformationByRoomId(roomId);
 
@@ -128,7 +128,12 @@ public class RoomServiceRepository {
     }
 
     @Transactional
-    public void roomCheckOutByReservationId(int roomId, int reservationId){
+    public void roomCheckOutByReservationId(int roomId){
+        int reservationId = getUnCheckoutReservationIdByRoomID(roomId);
+        if(reservationId == -1) {
+            throw new ReceptionException("Reservation ID not found");
+        }
+        System.out.println(reservationId);
         List<Checker> checkers = this.jdbcTemplate.query(
                 "SELECT reservation_id, checkin, checkout, room_id FROM RoomsChecker WHERE reservation_id = ?",
                 new Object[]{reservationId},
@@ -144,31 +149,40 @@ public class RoomServiceRepository {
         this.jdbcTemplate.update(sql, reservationId);
     }
 
-    public ReservationInfo getInfoReservationCheckin(int reservationId) {
+    public ReservationInfo getInfoReservationCheckin(int reservationId, String token) {
         String sql = "select reservation_id from RoomsChecker where reservation_id = ?;";
         ReservationInfo reservation;
         List<Map<String, Object>> id = this.jdbcTemplate.queryForList(sql, new String[] { Integer.toString(reservationId) });
         if(id.size() < 1) {
-            reservation = getReservationInfo(getReservation(reservationId), "no");
+            reservation = getReservationWithCheckinStatus(getReservation(reservationId, token), "no");
         }
         else {
-            reservation = getReservationInfo(getReservation(reservationId), "yes");
+            reservation = getReservationWithCheckinStatus(getReservation(reservationId, token), "yes");
         }
         return reservation;
     }
 
-    private Reservation getReservation(int reservationId) {
+    private Reservation getReservation(int reservationId, String token) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set(authTokenHeader, token);
+
+        HttpEntity<String> entity = new HttpEntity<String>(headers);
+
         RestTemplate template = new RestTemplate();
         Reservation reservation;
         try {
-            reservation = template.getForObject(reservationURL + reservationId + "/", Reservation.class);
+            //reservation = template.getForObject(reservationURL + reservationId + "/", Reservation.class, entity);
+            ResponseEntity<Reservation> reservationResponseEntity =
+                    template.exchange(reservationURL + reservationId + "/", HttpMethod.GET, entity, Reservation.class);
+            reservation = reservationResponseEntity.getBody();
         }catch(Exception e) {
             throw new ReservationNotFoundException(reservationId);
         }
         return reservation;
     }
 
-    private ReservationInfo getReservationInfo(Reservation reservation, String status) {
+    private ReservationInfo getReservationWithCheckinStatus(Reservation reservation, String status) {
         ReservationInfo reservationInfo = new ReservationInfo(reservation.getId(),
                 reservation.getCheckIn(),
                 reservation.getCheckOut(),
@@ -178,6 +192,11 @@ public class RoomServiceRepository {
                 reservation.getCustomer(),
                 status);
         return reservationInfo;
+    }
+
+    private int getUnCheckoutReservationIdByRoomID(int roomId) {
+        String sql = "select reservation_id from RoomsChecker where checkout is null and room_id = ?";
+        return this.jdbcTemplate.queryForObject(sql, new String[] { Integer.toString(roomId) }, Integer.class);
     }
 
 }

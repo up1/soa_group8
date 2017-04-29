@@ -56,13 +56,12 @@ public class RoomServiceController {
         } catch (Exception ex) {
             throw new UnauthorizedException();
         }
-        this.roomServiceRepository.roomCheckInByReservationId(room_id, reservation_id);
+        this.roomServiceRepository.roomCheckInByReservationId(room_id, reservation_id, token);
         return new ResponseEntity(new ResultMessage("Success"), HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/rooms/{room_id:.*}/checkout/{reservation_id:.*}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/rooms/{room_id:.*}/checkout", method = RequestMethod.PUT)
     public ResponseEntity roomCheckOutByReservationId(@PathVariable int room_id,
-                                                      @PathVariable int reservation_id,
                                                       @RequestHeader(value = "authenticate-token") String token){
         if(token == null) {
             throw new UnauthorizedException();
@@ -72,7 +71,7 @@ public class RoomServiceController {
         } catch (Exception ex) {
             throw new UnauthorizedException();
         }
-        this.roomServiceRepository.roomCheckOutByReservationId(room_id, reservation_id);
+        this.roomServiceRepository.roomCheckOutByReservationId(room_id);
         return new ResponseEntity(new ResultMessage("Success"),HttpStatus.OK);
     }
 
@@ -87,7 +86,7 @@ public class RoomServiceController {
         } catch (Exception ex) {
             throw new UnauthorizedException();
         }
-        ReservationInfo reservation = this.roomServiceRepository.getInfoReservationCheckin(reservationId);
+        ReservationInfo reservation = this.roomServiceRepository.getInfoReservationCheckin(reservationId, token);
         return new ResponseEntity(reservation, HttpStatus.OK);
     }
 }

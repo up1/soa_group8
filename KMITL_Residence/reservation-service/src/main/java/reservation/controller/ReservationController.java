@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reservation.exception.UnauthorizedException;
+import reservation.jwt.JwtService;
 import reservation.model.*;
 import reservation.repository.ReservationRepository;
 
@@ -20,12 +22,24 @@ public class ReservationController {
     private final ReservationRepository reservationRepository;
 
     @Autowired
+    private JwtService service;
+
+    @Autowired
     public ReservationController(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
     }
 
     @RequestMapping("/reservation/{reservation_id}")
-    public ReservationDetail getReservation(@PathVariable String reservation_id) {
+    public ReservationDetail getReservation(@PathVariable String reservation_id,
+                                            @RequestHeader(value = "authenticate-token") String token) {
+        if(token == null) {
+            throw new UnauthorizedException();
+        }
+        try {
+            JwtUser user = service.getUser(token);
+        } catch (Exception ex) {
+            throw new UnauthorizedException();
+        }
         return this.reservationRepository.getReservation(Integer.valueOf(reservation_id));
     }
 

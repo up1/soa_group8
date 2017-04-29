@@ -78,7 +78,7 @@ public class ReservationRepository {
     @Transactional
     public int saveReservation(Reservation reservation) {
 
-        int id = 0;
+        int id;
 
         String[] txtStart = reservation.getCheckIn().split("-");
         String[] txtEnd = reservation.getCheckOut().split("-");
@@ -93,9 +93,15 @@ public class ReservationRepository {
                 0, 0, 0, 0);
         DateTime current = new DateTime();
 
+        List<AvailableRoomsType> availableRoomsTypes = searchAvailable(reservation.getCheckIn(), reservation.getCheckOut(),
+                reservation.getAdults(), reservation.getChildren());
+
         if(start.getMillis() > end.getMillis() || start.getMillis() < current.getMillis()) {
             //throw exception when check-in > checkout or check-in < current date
             throw new DateException(reservation.getCheckIn(), reservation.getCheckOut());
+        }
+        else if(!isAvailable(reservation, availableRoomsTypes)) {
+            throw new RoomTypeNotAvailableException();
         }
         else {
             String sql = "INSERT INTO reservation (reservation_date, reservation_checkout, " +
@@ -394,6 +400,17 @@ public class ReservationRepository {
                 return;
             }
         }).start();
+    }
+
+    private boolean isAvailable(Reservation reservation, List<AvailableRoomsType> availableRoomsTypes) {
+        boolean result = false;
+        for(AvailableRoomsType availableRoomsType: availableRoomsTypes) {
+            if(reservation.getRoomType() == availableRoomsType.getRoomType()) {
+                result = true;
+                break;
+            }
+        }
+        return result;
     }
 
 }
