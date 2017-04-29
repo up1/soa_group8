@@ -1,32 +1,45 @@
 package reservation.repository;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+
+import java.security.MessageDigest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.env.Environment;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import reservation.exception.*;
 import reservation.mapper.AvailableRoomsTypeRowMapper;
 import reservation.mapper.ReservationDetailRowMapper;
 import reservation.mapper.ReservationRowMapper;
 import reservation.model.*;
 
-import java.security.MessageDigest;
-import java.util.*;
-
-/**
- * Created by Adisorn on 1/3/2560.
- */
 @Repository
-public class ReservationRepository {
+public class ReservationRepository implements ReservationDAO {
 
+    /*
+        --------------------------------- Utilities ---------------------------------
+    */
     @Autowired
     private JdbcTemplate jdbc;
 
@@ -37,11 +50,13 @@ public class ReservationRepository {
         this.jdbc = jdbc;
     }
 
+    /*
+        --------------------------------- 1. Get ReservationDetail by reservation_id ---------------------------------
+    */
     @Transactional(readOnly = true)
     public ReservationDetail getReservation(int reservation_id) {
         ReservationDetail reservation = null;
-
-        String sql = "select r.reservation_id, r.reservation_date, r.reservation_checkout, r.reservation_adults, " +
+        final String SELECT_SQL = "select r.reservation_id, r.reservation_date, r.reservation_checkout, r.reservation_adults, " +
                 "r.reservation_children, s.status_description, r.reservation_partial, r.reservation_timestamp,r.room_type, " +
                 "r.customer_title_name, r.customer_full_name, r.customer_email, r.customer_tel, r.customer_country, " +
                 "r.customer_nation " +
@@ -49,37 +64,39 @@ public class ReservationRepository {
                 "join reservation_status s ON r.reservation_status = s.status_id " +
                 "where reservation_id=?;";
         try {
-            reservation = jdbc.queryForObject(sql, new Object[]{reservation_id}, new ReservationDetailRowMapper());
+            reservation = jdbc.queryForObject(SELECT_SQL, new Object[]{reservation_id}, new ReservationDetailRowMapper());
         } catch(Exception ex) {
             throw new NotFoundException(reservation_id);
         }
-
         return reservation;
     }
 
-    private Reservation getFullReservation(int reservation_id) {
+    /*
+        --------------------------------- 2. Get full Reservation object by reservation_id ---------------------------------
+    */
+    @Transactional(readOnly = true)
+    public Reservation getFullReservation(int reservation_id) {
         Reservation reservation = null;
-        String sql = "select reservation_id, reservation_date, reservation_checkout, reservation_adults, " +
+        final String SELECT_SQL = "select reservation_id, reservation_date, reservation_checkout, reservation_adults, " +
                 "reservation_children, reservation_status, reservation_partial, reservation_timestamp, room_type, " +
                 "customer_title_name, customer_full_name, customer_email, customer_tel, customer_country, customer_nation, " +
                 "credit_card_id, credit_card_holder_name, credit_card_type, credit_card_expired_date, credit_card_cvc " +
                 "from reservation " +
                 "where reservation_id=?";
         try {
-            reservation = jdbc.queryForObject(sql, new Object[]{reservation_id}, new ReservationRowMapper());
+            reservation = jdbc.queryForObject(SELECT_SQL, new Object[]{reservation_id}, new ReservationRowMapper());
         } catch(Exception ex) {
-
             throw new NotFoundException(reservation_id);
         }
-
         return reservation;
     }
 
+    /*
+        --------------------------------- 3. Save Reservation object ---------------------------------
+    */
     @Transactional
     public int saveReservation(Reservation reservation) {
-
         int id;
-
         String[] txtStart = reservation.getCheckIn().split("-");
         String[] txtEnd = reservation.getCheckOut().split("-");
         //set date in joda datetime
@@ -104,13 +121,13 @@ public class ReservationRepository {
             throw new RoomTypeNotAvailableException();
         }
         else {
-            String sql = "INSERT INTO reservation (reservation_date, reservation_checkout, " +
+            final String INSERT_SQL = "INSERT INTO reservation (reservation_date, reservation_checkout, " +
                     "reservation_adults, reservation_children, " +
                     "room_type, customer_title_name, customer_full_name, customer_email, " +
                     "customer_tel, customer_country, customer_nation, " +
                     "credit_card_id, credit_card_holder_name, credit_card_type, credit_card_expired_date, credit_card_cvc) " +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-            int result = jdbc.update(sql,
+            int result = jdbc.update(INSERT_SQL,
                     reservation.getCheckIn(),
                     reservation.getCheckOut(),
                     reservation.getAdults(),
@@ -130,7 +147,6 @@ public class ReservationRepository {
             if (result < 0) {
                 throw new AddReservationFailedException();
             } else {
-
                 Interval interval = new Interval(start, end);
                 int days = daysBetween(interval.getStartMillis(), interval.getEndMillis());
 
@@ -160,26 +176,26 @@ public class ReservationRepository {
 
                 email.setContent(content);
                 sendEmail(email);
-
             }
         }
         return id;
     }
 
+    /*
+        --------------------------------- 4. Cancel reservation by reservation_id and cancel_id ---------------------------------
+    */
     @Transactional
-    public void cancelReservation(int reservationId, String cancelId) {
+    public void cancelReservation(int reservation_id, String cancel_id) {
+        Reservation rs = getFullReservation(reservation_id);
 
-        Reservation rs = getFullReservation(reservationId);
-
-        if(cancelId.equals(getGenerateId(rs))) {
-
+        if(cancel_id.equals(getGenerateId(rs))) {
             if (rs.getStatus() != 3) {
-                String sql = "update reservation set reservation_status=3 where reservation_id=?;";
-                int result = this.jdbc.update(sql, reservationId);
+                final String UPDATE_SQL = "update reservation set reservation_status=3 where reservation_id=?;";
+                int result = this.jdbc.update(UPDATE_SQL, reservation_id);
                 if (result < 0) {
-                    throw new CancelFailedException(reservationId);
+                    throw new CancelFailedException(reservation_id);
                 } else {
-                    Reservation reservation = getFullReservation(reservationId);
+                    Reservation reservation = getFullReservation(reservation_id);
 
                     Email email = new Email();
                     email.setTitleName(reservation.getCustomer().getTitleName());
@@ -196,20 +212,21 @@ public class ReservationRepository {
                     sendEmail(email);
                 }
             } else {
-                throw new CancelDeniedException(reservationId);
+                throw new CancelDeniedException(reservation_id);
             }
         }
         else {
-            throw new CancelIdNotMatchException(reservationId);
+            throw new CancelIdNotMatchException(reservation_id);
         }
-
     }
 
+    /*
+        --------------------------------- 5. Confirm reservation by reservation_id and confirm_id ---------------------------------
+    */
     @Transactional
-    public void confirmReservation(int reservationId, String confirmId) {
-        Reservation rs = getFullReservation(reservationId);
-        if(confirmId.equals(getGenerateId(rs))) {
-
+    public void confirmReservation(int reservation_id, String confirm_id) {
+        Reservation rs = getFullReservation(reservation_id);
+        if(confirm_id.equals(getGenerateId(rs))) {
             List<AvailableRoomsType> roomsTypes = searchAvailable(rs.getCheckIn(), rs.getCheckOut(), rs.getAdults(), rs.getChildren());
             boolean checkRoomType = false;
             for(AvailableRoomsType roomsType: roomsTypes) {
@@ -220,15 +237,13 @@ public class ReservationRepository {
             }
 
             if (roomsTypes.size() > 0 && checkRoomType) {
-
                 if (rs.getStatus() == 1) {
-
                     String sql = "update reservation set reservation_status=2 where reservation_id=?;";
-                    int result = this.jdbc.update(sql, reservationId);
+                    int result = this.jdbc.update(sql, reservation_id);
                     if (result < 0) {
-                        throw new ConfirmFailedException(reservationId);
+                        throw new ConfirmFailedException(reservation_id);
                     } else {
-                        ReservationDetail reservation = getReservation(reservationId);
+                        ReservationDetail reservation = getReservation(reservation_id);
 
                         Email email = new Email();
                         email.setTitleName(reservation.getCustomer().getTitleName());
@@ -244,43 +259,49 @@ public class ReservationRepository {
                         sendEmail(email);
                     }
                 } else {
-                    throw new ConfirmDeniedException(reservationId);
+                    throw new ConfirmDeniedException(reservation_id);
                 }
             } else {
                 throw new RoomTypeNotAvailableException();
             }
         }
         else {
-            throw new ConfirmIDNotMatchException(reservationId);
+            throw new ConfirmIDNotMatchException(reservation_id);
         }
-
     }
 
+    /*
+        --------------------------------- 6. Update partial check-out by reservation_id ---------------------------------
+    */
     @Transactional
-    public void updatePartialCheckout(int reservationId) {
-        ReservationDetail rs = getReservation(reservationId);
+    public void updatePartialCheckout(int reservation_id) {
+        ReservationDetail rs = getReservation(reservation_id);
         if(rs.getStatus().equals("completed")) {
-            String sql = "update reservation set reservation_partial = 1 where reservation_id = ?";
-            int result = this.jdbc.update(sql, reservationId);
+            final String UPDATE_SQL = "update reservation set reservation_partial = 1 where reservation_id = ?";
+            int result = this.jdbc.update(UPDATE_SQL, reservation_id);
             if(result < 0) {
-                throw new PartialCheckoutFailedException(reservationId);
+                throw new PartialCheckoutFailedException(reservation_id);
             }
         }
         else {
-            throw new PartialCheckoutDeniedException(reservationId);
+            throw new PartialCheckoutDeniedException(reservation_id);
         }
-
     }
 
+    /*
+        --------------------------------- 7. Cancel reservations ---------------------------------
+    */
     @Transactional
     public void cancelReservations() {
-        String sql = "update reservation set reservation_status=3 where reservation_status=1;";
-        jdbc.update(sql);
+        final String UPDATE_SQL = "update reservation set reservation_status=3 where reservation_status=1;";
+        jdbc.update(UPDATE_SQL);
     }
 
+    /*
+        --------------------------------- 8. Get List of available room by checkin, checkout, adults, and children ---------------------------------
+    */
     @Transactional(readOnly = true)
     public List<AvailableRoomsType> searchAvailable(String checkin, String checkout, int adults, int children) {
-
         String checkIn = checkin.replace("'", "");
         String checkOut = checkout.replace("'", "");
 
@@ -353,34 +374,44 @@ public class ReservationRepository {
         });
 
         return available;
-
     }
 
-    private String getGenerateId(Reservation reservation) {
-        String id = "";
+    /*
+        --------------------------------- 9. Generate ID by Reservation object ---------------------------------
+    */
+    public String getGenerateId(Reservation reservation) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             String textToHash = String.valueOf(reservation.getId())+reservation.getCustomer().getEmail() + reservation.getTimestamp(); // ex. reservation_id = 24 -> "24kmitlresidence@gmail.com"
             md.update(textToHash.getBytes("UTF-8"));
             byte[] digest = md.digest();
             String confirmation_id = String.format("%064x", new java.math.BigInteger(1, digest)).substring(0, 30); // slice string from 64 to 32 chars (reduce)
-            id = confirmation_id;
+            return confirmation_id;
         } catch (Exception e) {
-
+            System.err.println("exception in 'getGenerateId' method");
         }
-        return id;
+        return "";
     }
 
-    private int getLastInsertId() {
-        String sql = "select reservation_id from reservation order by reservation_id desc limit 1;";
-        return jdbc.queryForObject(sql, Integer.class);
+    /*
+        --------------------------------- 10. Get last insertion ID ---------------------------------
+    */
+    public int getLastInsertId() {
+        final String SELECT_SQL = "select reservation_id from reservation order by reservation_id desc limit 1;";
+        return jdbc.queryForObject(SELECT_SQL, Integer.class);
     }
 
-    private int daysBetween(long t1, long t2) {
+    /*
+        --------------------------------- 11. Get day between two arguments ---------------------------------
+    */
+    public int daysBetween(long t1, long t2) {
         return (int) ((t2 - t1) / (1000 * 60 * 60 * 24));
     }
 
-    private void sendEmail(Email email) {
+    /*
+        --------------------------------- 12. Send E-mail ---------------------------------
+    */
+    public void sendEmail(Email email) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -402,7 +433,10 @@ public class ReservationRepository {
         }).start();
     }
 
-    private boolean isAvailable(Reservation reservation, List<AvailableRoomsType> availableRoomsTypes) {
+    /*
+        --------------------------------- 13. Get available status of reservation ---------------------------------
+    */
+    public boolean isAvailable(Reservation reservation, List<AvailableRoomsType> availableRoomsTypes) {
         boolean result = false;
         for(AvailableRoomsType availableRoomsType: availableRoomsTypes) {
             if(reservation.getRoomType() == availableRoomsType.getRoomType()) {
@@ -412,5 +446,4 @@ public class ReservationRepository {
         }
         return result;
     }
-
 }

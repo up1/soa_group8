@@ -9,7 +9,6 @@ import reservation.jwt.JwtService;
 import reservation.model.*;
 import reservation.repository.ReservationRepository;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
