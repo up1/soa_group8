@@ -83,6 +83,10 @@ export default {
                     console.log(err)
                 })
         }
+    },
+    beforeDestroy () {
+        $(this.$el).remove()
+        this.availableRooms = []
     }
 }
 
