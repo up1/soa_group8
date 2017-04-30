@@ -227,42 +227,31 @@ public class ReservationRepository {
     public void confirmReservation(int reservation_id, String confirm_id) {
         Reservation rs = getFullReservation(reservation_id);
         if(confirm_id.equals(getGenerateId(rs))) {
-            List<AvailableRoomsType> roomsTypes = searchAvailable(rs.getCheckIn(), rs.getCheckOut(), rs.getAdults(), rs.getChildren());
-            boolean checkRoomType = false;
-            for(AvailableRoomsType roomsType: roomsTypes) {
-                if(roomsType.getRoomType() == rs.getRoomType()) {
-                    checkRoomType = true;
-                    break;
+
+            if (rs.getStatus() == 1) {
+                String sql = "update reservation set reservation_status=2 where reservation_id=?;";
+                int result = this.jdbc.update(sql, reservation_id);
+                if (result < 0) {
+                    throw new ConfirmFailedException(reservation_id);
+                } else {
+                    ReservationDetail reservation = getReservation(reservation_id);
+
+                    Email email = new Email();
+                    email.setTitleName(reservation.getCustomer().getTitleName());
+                    email.setFullName(reservation.getCustomer().getFullName());
+                    email.setDestination(reservation.getCustomer().getEmail());
+                    email.setEmailType(2);
+
+                    Content content = new Content();
+                    content.setRoomType(reservation.getRoomType());
+                    content.setReservationId(reservation.getId());
+
+                    email.setContent(content);
+                    sendEmail(email);
                 }
             }
-
-            if (roomsTypes.size() > 0 && checkRoomType) {
-                if (rs.getStatus() == 1) {
-                    String sql = "update reservation set reservation_status=2 where reservation_id=?;";
-                    int result = this.jdbc.update(sql, reservation_id);
-                    if (result < 0) {
-                        throw new ConfirmFailedException(reservation_id);
-                    } else {
-                        ReservationDetail reservation = getReservation(reservation_id);
-
-                        Email email = new Email();
-                        email.setTitleName(reservation.getCustomer().getTitleName());
-                        email.setFullName(reservation.getCustomer().getFullName());
-                        email.setDestination(reservation.getCustomer().getEmail());
-                        email.setEmailType(2);
-
-                        Content content = new Content();
-                        content.setRoomType(reservation.getRoomType());
-                        content.setReservationId(reservation.getId());
-
-                        email.setContent(content);
-                        sendEmail(email);
-                    }
-                } else {
-                    throw new ConfirmDeniedException(reservation_id);
-                }
-            } else {
-                throw new RoomTypeNotAvailableException();
+            else {
+                throw new ConfirmDeniedException(reservation_id);
             }
         }
         else {
