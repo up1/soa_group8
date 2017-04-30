@@ -35,7 +35,7 @@ import reservation.mapper.ReservationRowMapper;
 import reservation.model.*;
 
 @Repository
-public class ReservationRepository implements ReservationDAO {
+public class ReservationRepository {
 
     /*
         --------------------------------- Utilities ---------------------------------
