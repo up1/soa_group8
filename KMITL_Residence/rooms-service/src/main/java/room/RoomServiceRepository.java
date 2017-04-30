@@ -199,7 +199,7 @@ public class RoomServiceRepository {
     }
 
     public void closeRoom(int roomId) {
-        String sql = "update Rooms set room_availability = 0 where room_id = ?";
+        String sql = "update Rooms set room_availability = -1 where room_id = ?";
         this.jdbcTemplate.update(sql, new String[] {Integer.toString(roomId)});
     }
 
