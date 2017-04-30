@@ -190,4 +190,35 @@ public class RoomServiceRepository {
         return reservationInfo;
     }
 
+    @Transactional(readOnly = true)
+    public List<Room> getRooms() {
+        List<Room> rooms;
+        String sql = "select room_id, room_details, room_type_id, room_availability from Rooms";
+        rooms = this.jdbcTemplate.query(sql, new RoomRowMapper());
+        return rooms;
+    }
+
+    public void closeRoom(int roomId) {
+        String sql = "update Rooms set room_availability = 0 where room_id = ?";
+        this.jdbcTemplate.update(sql, new String[] {Integer.toString(roomId)});
+    }
+
+    public void openRoom(int roomId) {
+        String sql = "update Rooms set room_availability = 1 where room_id = ?";
+        this.jdbcTemplate.update(sql, new String[] {Integer.toString(roomId)});
+    }
+
+    public void changeRoom(int reservationId, int roomId, String token) {
+        ReservationInfo reservation = getInfoReservationCheckin(reservationId, token);
+        Room room = getRoomInformationByRoomId(roomId);
+        if(reservation.getStatus().equals("no")) {
+            throw new ReservationNotConfirmException(reservationId);
+        }
+        else if(room.getRoomTypeId() != reservation.getRoomType()) {
+            throw new ReservationNotMatchException(reservationId);
+        }
+        String sql = "update RoomsChecker set room_id = ? where reservation_id = ?";
+        this.jdbcTemplate.update(sql, new String[] { Integer.toString(roomId), Integer.toString(reservationId) });
+    }
+
 }

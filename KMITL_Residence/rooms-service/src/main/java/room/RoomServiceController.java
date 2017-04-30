@@ -52,7 +52,7 @@ public class RoomServiceController {
             throw new UnauthorizedException();
         }
         try {
-            JwtUser user = service.getUser(token);
+            service.getUser(token);
         } catch (Exception ex) {
             throw new UnauthorizedException();
         }
@@ -67,7 +67,7 @@ public class RoomServiceController {
             throw new UnauthorizedException();
         }
         try {
-            JwtUser user = service.getUser(token);
+            service.getUser(token);
         } catch (Exception ex) {
             throw new UnauthorizedException();
         }
@@ -82,11 +82,51 @@ public class RoomServiceController {
             throw new UnauthorizedException();
         }
         try {
-            JwtUser user = service.getUser(token);
+            service.getUser(token);
         } catch (Exception ex) {
             throw new UnauthorizedException();
         }
         ReservationInfo reservation = this.roomServiceRepository.getInfoReservationCheckin(reservationId, token);
         return new ResponseEntity(reservation, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/rooms", method = RequestMethod.GET)
+    public List<Room> getRooms() {
+        return this.roomServiceRepository.getRooms();
+    }
+
+    @RequestMapping(value = "/rooms/{roomId}/open", method = RequestMethod.PUT)
+    public ResponseEntity openRoom(@PathVariable int roomId,
+                                   @RequestHeader(value = "authenticate-token") String token) {
+        if(token == null) {
+            throw new UnauthorizedException();
+        }
+        try {
+            service.getUser(token);
+        } catch (Exception ex) {
+            throw new UnauthorizedException();
+        }
+        this.roomServiceRepository.openRoom(roomId);
+        return new ResponseEntity(new ResultMessage("OPEN ROOM: " + roomId ), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/rooms/{roomId}/close", method = RequestMethod.PUT)
+    public ResponseEntity closeRoom(@PathVariable int roomId,
+                                   @RequestHeader(value = "authenticate-token") String token) {
+        if(token == null) {
+            throw new UnauthorizedException();
+        }
+        try {
+            service.getUser(token);
+        } catch (Exception ex) {
+            throw new UnauthorizedException();
+        }
+        this.roomServiceRepository.closeRoom(roomId);
+        return new ResponseEntity(new ResultMessage("CLOSE ROOM: " + roomId ), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/rooms/change")
+    public ResponseEntity changeRoom() {
+        return new ResponseEntity(new ResultMessage(""), HttpStatus.OK);
     }
 }
