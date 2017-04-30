@@ -312,7 +312,8 @@ public class ReservationRepository {
 
         String sql = "select room_type, count(reservation_id) as total from reservation " +
                 "where ((reservation_date >= '" + checkIn + "' and reservation_date <= '" + checkOut + "') or " +
-                "(reservation_checkout <= '" + checkIn + "' and reservation_checkout >= '" + checkOut + "')) and " +
+                "(reservation_checkout >= '" + checkIn + "' and reservation_checkout <= '" + checkOut + "') or " +
+                "(reservation_date <= '" + checkIn + "' and reservation_checkout >= '" + checkOut + "')) and " +
                 "reservation_status != 3 and room_type in " + whereIn + " and reservation_partial = 0" +
                 " GROUP BY room_type;";
 
