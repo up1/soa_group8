@@ -26,9 +26,18 @@ const checkIn = (reservationId, roomId, _token) => {
     })
 }
 
+const checkOut = (reservationId, _token) => {
+    return axios.put(`${API_URL}:9001/rooms/checkout?id=${reservationId}`, {}, {
+        headers:{
+            'authenticate-token': _token
+        }
+    })
+}
+
 export default {
     getRoomTypeData,
     getCheckInInfo,
     getAvailableRoomsByRoomType,
-    checkIn
+    checkIn,
+    checkOut
 }

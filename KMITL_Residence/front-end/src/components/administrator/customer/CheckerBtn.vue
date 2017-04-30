@@ -64,7 +64,7 @@ export default {
             if(this.mode == 'checkin'){
                 $('#chooseRoomModal').modal('show')
             }else if(this.mode == 'checkout'){
-                $('#checkoutModal').modal('show')
+                $('#checkOutModal').modal('show')
             }
         },
         refresh(){

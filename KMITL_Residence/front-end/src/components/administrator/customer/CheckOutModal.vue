@@ -1,29 +1,48 @@
 <template>
-    <div class="ui basic modal" id="checkoutModal">
-        <div class="ui icon header">
-            <i class="remove user icon"></i>
-                Check-out the customer
+    <div class="ui small modal" id="checkOutModal">
+        <i class="close icon"></i>
+        <div class="header">
+            Check the customer out
         </div>
         <div class="content">
-            <p>Are you sure to check-out this reservation ? Are the customer right there ?</p>
+            <div class="description">
+                Are you sure you want to check this customer out ?
+            </div>
         </div>
         <div class="actions">
-            <div class="ui red basic cancel inverted button">
-            <i class="remove icon"></i>
-            No
+            <div class="ui black deny button">
+                No
             </div>
-            <div class="ui green ok inverted button">
-            <i class="checkmark icon"></i>
-            Yes
+            <div class="ui primary positive right labeled icon button" @click="checkOut">
+                Yes
+                <i class="checkmark icon"></i>
             </div>
         </div>
     </div>
-
 </template>
 
 <script>
+import { Rooms } from '@/services'
+
 export default {
-    props: ['reservationData']
+    props: ['reservationData'],
+    beforeDestroy () {
+        $(this.$el).remove()
+    },
+    methods: {
+        checkOut(){
+            Rooms.checkOut(this.reservationData.id, this.$cookie.get('_token'))
+                .then(res => {
+                    alert("Checkout success!")
+                    $('#checkOutModal').modal('hide')
+                })
+                .catch(err => {
+                    alert("Checkout failed")
+                    console.log(err.response)
+                    $('#checkOutModal').modal('hide')
+                })
+        }
+    }
 }
 </script>
 
