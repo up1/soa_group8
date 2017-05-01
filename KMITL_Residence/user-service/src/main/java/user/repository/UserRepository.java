@@ -32,6 +32,7 @@ public class UserRepository {
 
     @Transactional
     public void createUser(User user) {
+        String hash = UserUtils.hash(user.getPassword());
 
         String sql_insert_account = "insert into user_account (username, hash_password, role_id, status) " +
                 "values(?, ?, ?, 'Active');";
@@ -40,7 +41,7 @@ public class UserRepository {
 
         jdbc.update(sql_insert_account,
                 user.getUsername(),
-                UserUtils.hash(user.getPassword()),
+                hash,
                 user.getRole());
         jdbc.update(sql_insert_staff,
                 user.getTitleNameTh(),
