@@ -34,7 +34,9 @@ export default {
             Rooms.checkOut(this.reservationData.id, this.$cookie.get('_token'))
                 .then(res => {
                     alert("Checkout success!")
+                    this.reservationData.checkOutStatus = 'yes'
                     $('#checkOutModal').modal('hide')
+                    this.$emit('refresh')
                 })
                 .catch(err => {
                     alert("Checkout failed")

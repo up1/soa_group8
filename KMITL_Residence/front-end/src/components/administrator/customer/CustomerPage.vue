@@ -68,6 +68,8 @@ export default {
                             errMsg = 'This reservation hasn\'t confirmed by customer yet'
                         } else if(res.data.status == 'cancel'){
                             errMsg = 'This reservation has cancelled by customer'
+                        } else if(res.data.checkOutStatus == 'yes'){
+                            errMsg = 'This reservation has already checked-out'
                         }
                         if(errMsg == ''){
                             this.reservationData = res.data
