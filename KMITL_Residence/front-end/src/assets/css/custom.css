@@ -99,6 +99,7 @@ form.ui.form .fields:last-child {
     border: 1px solid #E0E0E0;
     border-radius: .28571429rem;
     color: #3F3F3F !important;
+    transition: all .5s ease-in;
 }
 
 .card > h1.ui, h2.ui, h3.ui, h4.ui, h5.ui {
@@ -205,7 +206,7 @@ div.ui.grid > div.row {
 }
 
 .row-enter-active, .row-leave-active {
-    transition: all .5s;
+    transition: all .5s ease;
 }
 
 .row-enter, .row-leave-to {

@@ -12,7 +12,8 @@
                             <tr>
                                 <th style="width:35%">Room ID</th>
                                 <th style="width:35%">Room Type</th>
-                                <th style="width:30%">Check In</th>
+                                <th style="width:30%" v-if="reservationData.checkInStatus == 'no'">Check In</th>
+                                <th style="width:30%" v-else>Change Room</th>
                             </tr>
                         </thead>
                         <tbody>
