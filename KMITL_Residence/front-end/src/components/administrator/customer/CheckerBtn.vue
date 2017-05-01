@@ -42,8 +42,8 @@ export default {
     },
     methods: {
         setBtnTxt(){
-            let modes = ["checkin", "checkout", "edit"]
-            let btnTxts = ["Check-In", "Check-Out", "Edit"]
+            let modes = ["checkin", "checkout", "changeroom"]
+            let btnTxts = ["Check-In", "Check-Out", "Change Room"]
             this.btnTxt = btnTxts[modes.indexOf(this.mode)]
         },
         setEnableState(){
@@ -65,6 +65,8 @@ export default {
                 $('#chooseRoomModal').modal('show')
             }else if(this.mode == 'checkout'){
                 $('#checkOutModal').modal('show')
+            }else if(this.mode == 'changeroom'){
+                $('#chooseRoomModal').modal('show')
             }
         },
         refresh(){
