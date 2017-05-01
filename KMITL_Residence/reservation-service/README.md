@@ -9,6 +9,10 @@ Response
 ```
 > GET /reservation/{reservationId}
 ```
+Header
+authenticate-token: 324sdf324jj3kn23kj
+```
+```
 Response
 {
     "id": 1,
@@ -77,6 +81,10 @@ Response
 }
 ```
 > PUT /reservation/{reservationId}/partialCheckout
+```
+Header
+authenticate-token: 214153dsfwef
+```
 ```
 Response
 {

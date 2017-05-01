@@ -45,7 +45,6 @@ public class AdminFilter implements Filter {
                     throw new UnauthorizedException();
                 }
             }catch (JwtException ex) {
-                ex.printStackTrace();
                 throw new UnauthorizedException();
             }
         }

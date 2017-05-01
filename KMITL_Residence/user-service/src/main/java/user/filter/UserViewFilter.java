@@ -54,7 +54,6 @@ public class UserViewFilter implements Filter {
                     throw new UnauthorizedException();
                 }
             }catch (JwtException ex) {
-                ex.printStackTrace();
                 throw new UnauthorizedException();
             }
 

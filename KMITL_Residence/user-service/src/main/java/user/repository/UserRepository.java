@@ -100,7 +100,6 @@ public class UserRepository {
                     new Object[] {username},
                     new UserRowMapper());
         }catch (Exception ex) {
-            ex.printStackTrace();
             throw new UserNotFoundException(username);
         }
 
@@ -155,7 +154,6 @@ public class UserRepository {
         try {
             jwtUser = jwtService.getUser(token);
         } catch (Exception ex) {
-            ex.printStackTrace();
             throw new InvalidTokenException(token);
         }
         return jwtUser;
