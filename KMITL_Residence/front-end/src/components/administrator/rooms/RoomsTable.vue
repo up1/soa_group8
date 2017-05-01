@@ -51,14 +51,6 @@ export default {
                 alert("System can\'t fetch data from server")
             })
     },
-    filters: {
-        matchRoomAvailibility(val){
-            if(val){
-                return '<i class="large green checkmark icon"></i>'
-            }
-            return 'No'
-        }
-    },
     computed: {
         filteredRoomsData(){
             let roomsData = this.roomsData
