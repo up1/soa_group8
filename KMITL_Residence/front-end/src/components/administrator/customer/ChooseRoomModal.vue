@@ -72,16 +72,30 @@ export default {
         },
         chooseRoom(roomId){
             $(this.$refs.tableSegment).addClass('loading')
-            Rooms.checkIn(this.reservationData.id, roomId, this.$cookie.get('_token'))
-                .then(res => {
-                    $(this.$refs.tableSegment).removeClass('loading')
-                    $('#chooseRoomModal').modal('hide')
-                    this.reservationData.checkInStatus = 'yes'
-                    $(this.$emit('refresh'))
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+            if(this.reservationData.checkInStatus == 'no'){
+                Rooms.checkIn(this.reservationData.id, roomId, this.$cookie.get('_token'))
+                    .then(res => {
+                        $(this.$refs.tableSegment).removeClass('loading')
+                        $('#chooseRoomModal').modal('hide')
+                        this.reservationData.checkInStatus = 'yes'
+                        this.$emit('refresh')
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            } else {
+                Rooms.changeRoom(this.reservationData.id, roomId, this.$cookie.get('_token'))
+                    .then(res => {
+                        $(this.$refs.tableSegment).removeClass('loading')
+                        $('#chooseRoomModal').modal('hide')
+                        this.reservationData.roomId = roomId
+                        this.$emit('refresh')
+                        alert('checkout!')
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            }
         }
     },
     beforeDestroy () {
