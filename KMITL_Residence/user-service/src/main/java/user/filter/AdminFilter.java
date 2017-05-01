@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * Created by Adisorn on 2/4/2560.
  */
-@WebFilter(urlPatterns = { "/users/create" })
+@WebFilter(urlPatterns = { "/users/create", "/users", "/users/" })
 public class AdminFilter implements Filter {
 
     @Value("${authentication.token.header}")
