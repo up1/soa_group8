@@ -177,8 +177,9 @@ button.ui.button.luxury-primary:hover{
     max-width: 500px;
 }
 
-.ui.form .field>label  {
+.ui.form .field > label  {
     color: #3F3F3F;
+    margin-bottom: 10px;
 }
 
 label .error {

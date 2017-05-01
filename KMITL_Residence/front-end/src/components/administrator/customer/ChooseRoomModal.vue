@@ -90,7 +90,7 @@ export default {
                         $('#chooseRoomModal').modal('hide')
                         this.reservationData.roomId = roomId
                         this.$emit('refresh')
-                        alert('checkout!')
+                        alert('Room has been changed')
                     })
                     .catch(err => {
                         console.log(err)

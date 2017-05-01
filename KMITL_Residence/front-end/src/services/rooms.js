@@ -42,11 +42,38 @@ const changeRoom = (reservationId, roomId, _token) => {
     })
 }
 
+const getAllRoomsData = (_token) => {
+    return axios(`${API_URL}:9001/rooms`,{
+        headers: {
+            'authenticate-token': _token
+        }
+    })
+}
+
+const openRoom = (roomId, _token) => {
+    return axios.put(`${API_URL}:9001/rooms/${roomId}/open`, {}, {
+        headers: {
+            'authenticate-token': _token
+        }
+    })
+}
+
+const closeRoom = (roomId, _token) => {
+    return axios.put(`${API_URL}:9001/rooms/${roomId}/close`, {}, {
+        headers: {
+            'authenticate-token': _token
+        }
+    })
+}
+
 export default {
     getRoomTypeData,
     getCheckInInfo,
     getAvailableRoomsByRoomType,
     checkIn,
     checkOut,
-    changeRoom
+    changeRoom,
+    getAllRoomsData,
+    openRoom,
+    closeRoom
 }

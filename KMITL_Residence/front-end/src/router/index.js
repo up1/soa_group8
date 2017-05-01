@@ -9,6 +9,7 @@ import Administrator from '@/components/Administrator'
 import Dashboard from '@/components/administrator/Dashboard'
 import LoginPanel from '@/components/administrator/LoginPanel'
 import Customer from '@/components/administrator/customer/CustomerPage'
+import Rooms from '@/components/administrator/Rooms'
 import NotFound from '@/components/errors/NotFound'
 
 import { User } from '@/services'
@@ -83,7 +84,9 @@ const router = new Router({
         },
         {
           path: 'rooms',
-          meta: { requiredAuth: true }
+          meta: { requiredAuth: true },
+          component: Rooms
+
         },
         {
           path: 'login',
