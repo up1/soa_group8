@@ -41,6 +41,34 @@ Response
     "email": "example@example.com"
 }
 ```
+> GET /users?item_per_page=2&page=1
+```
+HEADER
+authenticate-token: token
+```
+```
+Response
+[
+    {
+        "username": "staff001",
+        "role": 2,
+        "titleNameEn": "Mr.",
+        "fullNameEn": "Adisorn Sripakpaisit",
+        "titleNameTh": "นาย",
+        "fullNameTh": "อดิศร ศรีภัคไพสิฐ",
+        "email": "example@example.com"
+    },
+    {
+        "username": "staff002",
+        "role": 2,
+        "titleNameEn": "Mr.",
+        "fullNameEn": "Somsak Rakter",
+        "titleNameTh": "นาย",
+        "fullNameTh": "สมศักดิ์ รักเธอ",
+        "email": "somsak@rakter.com"
+    }
+]
+```
 > DELETE /user/{username}/delete
 ```
 HEADER
