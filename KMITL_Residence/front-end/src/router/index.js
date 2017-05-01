@@ -75,8 +75,15 @@ const router = new Router({
             },
             {
               path: 'checkout'
+            },
+            {
+              path: 'changeroom'
             }
           ]
+        },
+        {
+          path: 'rooms',
+          meta: { requiredAuth: true }
         },
         {
           path: 'login',

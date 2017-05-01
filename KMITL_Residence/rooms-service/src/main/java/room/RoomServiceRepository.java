@@ -108,7 +108,7 @@ public class RoomServiceRepository {
                 throw new ReceptionException("This reservation id has already checked-in, Reservation id : " + reservationId);
             }
             if(reservation.getStatus().equals("waiting")) {
-                throw new ReservationNotConfirmException(reservationId);
+                throw new ReservationNotConfirmOrCancelException(reservationId);
             }
             String sql = "UPDATE Rooms SET room_availability = 0 WHERE room_id = ?";
             this.jdbcTemplate.update(sql, roomId);
@@ -149,20 +149,23 @@ public class RoomServiceRepository {
         ReservationInfo reservation;
         Checker checker = getCheckerFromReservationId(reservationId);
         if(checker == null) {
-            reservation = getReservationWithCheckStatus(reservationService.getReservation(reservationId, token), "no", "no");
+            reservation = getReservationWithCheckStatus(reservationService.getReservation(reservationId, token),
+                    "no", "no", 0);
         }
         else {
             if(checker.getCheckout() == null) {
-                reservation = getReservationWithCheckStatus(reservationService.getReservation(reservationId, token), "yes", "no");
+                reservation = getReservationWithCheckStatus(reservationService.getReservation(reservationId, token),
+                        "yes", "no", checker.getRoomId());
             }
             else {
-                reservation = getReservationWithCheckStatus(reservationService.getReservation(reservationId, token), "yes", "yes");
+                reservation = getReservationWithCheckStatus(reservationService.getReservation(reservationId, token),
+                        "yes", "yes", checker.getRoomId());
             }
         }
         return reservation;
     }
 
-    private ReservationInfo getReservationWithCheckStatus(Reservation reservation, String checkIn, String checkOut) {
+    private ReservationInfo getReservationWithCheckStatus(Reservation reservation, String checkIn, String checkOut, int roomId) {
         ReservationInfo reservationInfo = new ReservationInfo(reservation.getId(),
                 reservation.getCheckIn(),
                 reservation.getCheckOut(),
@@ -171,7 +174,8 @@ public class RoomServiceRepository {
                 reservation.getStatus(),
                 reservation.getCustomer(),
                 checkIn,
-                checkOut);
+                checkOut,
+                roomId);
         return reservationInfo;
     }
 
@@ -202,11 +206,17 @@ public class RoomServiceRepository {
         ReservationInfo reservation = getInfoReservationCheck(reservationId, token);
         Room room = getRoomInformationByRoomId(roomId);
         Checker checker = getCheckerFromReservationId(reservationId);
-        if(reservation.getStatus().equals("no")) {
-            throw new ReservationNotConfirmException(reservationId);
+        if(reservation.getStatus().equals("waiting") || reservation.getStatus().equals("cancel")) {
+            throw new ReservationNotConfirmOrCancelException(reservationId);
+        }
+        else if(reservation.getCheckInStatus().equals("no")) {
+            throw new ReservationNotCheckInException(reservationId);
         }
         else if(room.getRoomTypeId() != reservation.getRoomType()) {
             throw new ReservationNotMatchException(reservationId);
+        }
+        else if(room.getRoomAvailability() == -1 || room.getRoomAvailability() == 0) {
+            throw new RoomIsUnavailable(roomId);
         }
 
         String sql = "update RoomsChecker set room_id = ? where reservation_id = ?";

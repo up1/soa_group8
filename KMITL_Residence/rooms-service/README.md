@@ -14,7 +14,7 @@ Response
   "typeNameEn": "Deluxe"
 }
 ```
-> /rooms/types?adult=1&children=0
+> /rooms/types?adults=1&children=0
 ```
 [
     {

@@ -46,6 +46,10 @@
                             <td>Room Type</td>
                             <td>{{ reservationData.roomType | matchRoomType}}</td>
                         </tr>
+                        <tr v-if="mode != 'checkin'">
+                            <td>Current Room</td>
+                            <td>{{ reservationData.roomId }}</td>
+                        </tr>
                         <tr>
                             <td>Occupancy</td>
                             <td> {{ `${reservationData.total} Persons` }} </td>

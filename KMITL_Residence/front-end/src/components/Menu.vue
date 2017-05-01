@@ -22,7 +22,7 @@
                                 <router-link to="/administrator/customer/changeroom" class="item">Change Room</router-link>
                             </div>
                         </a>
-                        <a class="item">Rooms</a>
+                        <router-link to="/administrator/rooms" class="item">Rooms</router-link>
                         <a class="item">Staff</a>
                     </div>
                 </div>
