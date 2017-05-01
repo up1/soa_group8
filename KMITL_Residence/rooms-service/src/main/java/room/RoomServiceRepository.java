@@ -149,20 +149,23 @@ public class RoomServiceRepository {
         ReservationInfo reservation;
         Checker checker = getCheckerFromReservationId(reservationId);
         if(checker == null) {
-            reservation = getReservationWithCheckStatus(reservationService.getReservation(reservationId, token), "no", "no");
+            reservation = getReservationWithCheckStatus(reservationService.getReservation(reservationId, token),
+                    "no", "no", 0);
         }
         else {
             if(checker.getCheckout() == null) {
-                reservation = getReservationWithCheckStatus(reservationService.getReservation(reservationId, token), "yes", "no");
+                reservation = getReservationWithCheckStatus(reservationService.getReservation(reservationId, token),
+                        "yes", "no", checker.getRoomId());
             }
             else {
-                reservation = getReservationWithCheckStatus(reservationService.getReservation(reservationId, token), "yes", "yes");
+                reservation = getReservationWithCheckStatus(reservationService.getReservation(reservationId, token),
+                        "yes", "yes", checker.getRoomId());
             }
         }
         return reservation;
     }
 
-    private ReservationInfo getReservationWithCheckStatus(Reservation reservation, String checkIn, String checkOut) {
+    private ReservationInfo getReservationWithCheckStatus(Reservation reservation, String checkIn, String checkOut, int roomId) {
         ReservationInfo reservationInfo = new ReservationInfo(reservation.getId(),
                 reservation.getCheckIn(),
                 reservation.getCheckOut(),
@@ -171,7 +174,8 @@ public class RoomServiceRepository {
                 reservation.getStatus(),
                 reservation.getCustomer(),
                 checkIn,
-                checkOut);
+                checkOut,
+                roomId);
         return reservationInfo;
     }
 
