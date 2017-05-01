@@ -126,7 +126,21 @@ public class RoomServiceController {
     }
 
     @RequestMapping(value = "/rooms/change")
-    public ResponseEntity changeRoom() {
-        return new ResponseEntity(new ResultMessage(""), HttpStatus.OK);
+    public ResponseEntity changeRoom(@RequestParam(value = "reservationId") int reservationId,
+                                     @RequestParam(value = "roomId") int roomId,
+                                     @RequestHeader(value = "authenticate-token") String token) {
+
+        if(token == null) {
+            throw new UnauthorizedException();
+        }
+        try {
+            service.getUser(token);
+        } catch (Exception ex) {
+            throw new UnauthorizedException();
+        }
+
+        this.roomServiceRepository.changeRoom(reservationId, roomId, token);
+
+        return new ResponseEntity("Changed room success", HttpStatus.OK);
     }
 }

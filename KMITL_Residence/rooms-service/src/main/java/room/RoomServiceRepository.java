@@ -200,25 +200,43 @@ public class RoomServiceRepository {
 
     public void closeRoom(int roomId) {
         String sql = "update Rooms set room_availability = -1 where room_id = ?";
-        this.jdbcTemplate.update(sql, new String[] {Integer.toString(roomId)});
+        Room room = getRoomInformationByRoomId(roomId);
+        if(room.getRoomAvailability() == 0) {
+            throw new ClosedRoomDeniedException(roomId);
+        }
+
+        this.jdbcTemplate.update(sql, new Object[] {roomId});
     }
 
     public void openRoom(int roomId) {
         String sql = "update Rooms set room_availability = 1 where room_id = ?";
-        this.jdbcTemplate.update(sql, new String[] {Integer.toString(roomId)});
+        this.jdbcTemplate.update(sql, new Object[] {roomId});
     }
 
     public void changeRoom(int reservationId, int roomId, String token) {
         ReservationInfo reservation = getInfoReservationCheckin(reservationId, token);
         Room room = getRoomInformationByRoomId(roomId);
+        Checker checker = getCheckerFromReservationId(reservationId);
         if(reservation.getStatus().equals("no")) {
             throw new ReservationNotConfirmException(reservationId);
         }
         else if(room.getRoomTypeId() != reservation.getRoomType()) {
             throw new ReservationNotMatchException(reservationId);
         }
+
         String sql = "update RoomsChecker set room_id = ? where reservation_id = ?";
-        this.jdbcTemplate.update(sql, new String[] { Integer.toString(roomId), Integer.toString(reservationId) });
+        this.jdbcTemplate.update(sql, new Object[] { roomId,reservationId });
+        String updateOldRoom = "update Rooms set room_availability = 1 where room_id = ?";
+        String updateNewRoom = "update Rooms set room_availability = 0 where room_id = ?";
+        this.jdbcTemplate.update(updateOldRoom, new Object[] { checker.getRoomId() });
+        this.jdbcTemplate.update(updateNewRoom, new Object[] { roomId });
+
     }
 
+    private Checker getCheckerFromReservationId(int reservationId) {
+        Checker checker;
+        String sql = "SELECT reservation_id, checkin, checkout, room_id FROM RoomsChecker WHERE reservation_id = ?;";
+        checker = this.jdbcTemplate.queryForObject(sql, new Object[] { reservationId }, new CheckerRowMapper());
+        return checker;
+    }
 }
