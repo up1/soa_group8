@@ -32,6 +32,7 @@ public class UserRepository {
 
     @Transactional
     public void createUser(User user) {
+        String hash = UserUtils.hash(user.getPassword());
 
         String sql_insert_account = "insert into user_account (username, hash_password, role_id, status) " +
                 "values(?, ?, ?, 'Active');";
@@ -40,7 +41,7 @@ public class UserRepository {
 
         jdbc.update(sql_insert_account,
                 user.getUsername(),
-                UserUtils.hash(user.getPassword()),
+                hash,
                 user.getRole());
         jdbc.update(sql_insert_staff,
                 user.getTitleNameTh(),
@@ -70,7 +71,8 @@ public class UserRepository {
                 user.getFullNameEn(),
                 user.getEmail(),
                 UserUtils.hash(user.getPassword()),
-                user.getRole());
+                user.getRole(),
+                user.getUsername());
     }
 
     @Transactional
@@ -99,7 +101,6 @@ public class UserRepository {
                     new Object[] {username},
                     new UserRowMapper());
         }catch (Exception ex) {
-            ex.printStackTrace();
             throw new UserNotFoundException(username);
         }
 
@@ -154,11 +155,9 @@ public class UserRepository {
         try {
             jwtUser = jwtService.getUser(token);
         } catch (Exception ex) {
-            ex.printStackTrace();
             throw new InvalidTokenException(token);
         }
         return jwtUser;
     }
-
 
 }

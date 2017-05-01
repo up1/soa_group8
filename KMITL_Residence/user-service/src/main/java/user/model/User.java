@@ -1,6 +1,7 @@
 package user.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 /**
  * Created by Adisorn on 2/4/2560.
@@ -46,6 +47,7 @@ public class User {
         return password;
     }
 
+    @JsonSetter
     public void setPassword(String password) {
         this.password = password;
     }
