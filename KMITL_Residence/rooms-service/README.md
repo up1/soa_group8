@@ -98,7 +98,7 @@ Response
     }
 ]
 ```
-> /rooms/{room_id}/checkin/{reservation_id}
+> POST /rooms/{room_id}/checkin/{reservation_id}
 ```
 HEADER
 authenticate-token: some generate token
@@ -109,7 +109,7 @@ Response
     "message": "Success"
 }
 ```
-> /rooms/{room_id}/checkout/{reservation_id}
+> PUT /rooms/checkout?id=2134
 ```
 HEADER
 authenticate-token: some generate token
@@ -120,3 +120,100 @@ Response
     "message": "Success"
 }
 ```
+> GET /rooms
+```
+[
+    {
+        "roomId": 131,
+        "roomDetails": "",
+        "roomTypeId": 2,
+        "roomAvailability": 1
+    },
+    {
+        "roomId": 132,
+        "roomDetails": "",
+        "roomTypeId": 2,
+        "roomAvailability": 1
+    },
+    {
+        "roomId": 133,
+        "roomDetails": "",
+        "roomTypeId": 2,
+        "roomAvailability": 1
+    },
+    {
+        "roomId": 134,
+        "roomDetails": "",
+        "roomTypeId": 2,
+        "roomAvailability": 1
+    },
+    {
+        "roomId": 135,
+        "roomDetails": "",
+        "roomTypeId": 2,
+        "roomAvailability": 1
+    }
+]
+```
+> PUT /rooms/{roomId}/open
+```
+header
+authenticate-token: 12e23
+```
+```
+Response
+{
+    "message": "Success"
+}
+```
+> PUT /rooms/{roomId}/close
+```
+header
+authenticate-token: 12e23
+```
+```
+Response
+{
+    "message": "Success"
+}
+```
+> PUT /rooms/change?reservationId=1&roomId=1
+```
+header
+authenticate-token: 12e23
+```
+```
+Response
+{
+    "message": "Success"
+}
+```
+> GET /checkinfo?id=1
+```
+header
+authenticate-token: 12e23
+```
+```
+Response
+{
+  "id": 1,
+  "checkIn": "2017-05-11",
+  "checkOut": "2017-05-15",
+  "total": 1,
+  "roomType": 1,
+  "status": "completed",
+  "customer": {
+    "titleName": "Mr.",
+    "fullName": "Adisorn Sripakpaisit",
+    "email": "anst_7@hotmail.com",
+    "tel": "0890938473",
+    "country": "United State",
+    "nation": "Thai"
+  },
+  "checkInStatus": "yes",
+  "checkOutStatus": "yes",
+  "roomId": 101
+}
+```
+
+

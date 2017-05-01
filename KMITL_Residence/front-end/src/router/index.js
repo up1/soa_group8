@@ -89,6 +89,10 @@ const router = new Router({
 
         },
         {
+          path: 'users/edit/:username',
+          meta: { requiredAuth: true, requiredAdminRole: true }
+        },
+        {
           path: 'login',
           component: LoginPanel,
           meta: { loginPage: true }
@@ -128,6 +132,14 @@ const match = (to, from, next) => {
         }else{
         next({path: `/administrator/login?redirect=${to.fullPath}`})
         }
+    }
+
+    if(to.matched.some(x => x.meta.requiredAdminRole)){
+      if(store.getters.getUserInfo.role === "Admin" || store.getters.getUserInfo.username === to.params.username){
+        next()
+      } else {
+        next({ path: '/administrator/dashboard'})
+      }
     }
 
     if(to.matched.some(x => x.meta.loginPage)){
