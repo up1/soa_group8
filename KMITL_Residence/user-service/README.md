@@ -69,6 +69,31 @@ Response
     }
 ]
 ```
+> PUT /user/{username}
+```
+HEADER
+authenticate-token: token
+```
+```
+Request JSON
+{
+    "username": "staff001",
+    "password": "newpassword",
+    "role": 2,
+    "titleNameEn": "Mr.",
+    "fullNameEn": "Adisorn Sripakpaisit",
+    "titleNameTh": "นาย",
+    "fullNameTh": "อดิศร ศรีภัคไพสิฐ",
+    "email": "new_example@example.com"
+}
+```
+```
+Response
+{
+    "username": "staff001",
+    "message": "Successfully Updated"
+}
+```
 > DELETE /user/{username}/delete
 ```
 HEADER
