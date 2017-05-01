@@ -33,7 +33,7 @@ public class ReservationController {
         --------------------------------- [GET] View reservation by reservation_id ---------------------------------
     */
     @RequestMapping("/reservation/{reservation_id}")
-    public ReservationDetail getReservation(@PathVariable String reservation_id,
+    public ReservationDetail getReservation(@PathVariable int reservation_id,
                                             @RequestHeader(value = "authenticate-token") String token) {
         if(token == null) {
             throw new UnauthorizedException();
@@ -43,7 +43,7 @@ public class ReservationController {
         } catch (Exception ex) {
             throw new UnauthorizedException();
         }
-        return this.reservationRepository.getReservation(Integer.valueOf(reservation_id));
+        return this.reservationRepository.getReservation(reservation_id);
     }
 
     /*
@@ -64,10 +64,10 @@ public class ReservationController {
         --------------------------------- [PUT] Confirm reservation ---------------------------------
     */
     @RequestMapping(value = "/reservation/{reservation_id}/confirm", method = RequestMethod.PUT)
-    public ResponseEntity<ResultMessage> confirmReservation(@PathVariable String reservation_id,
+    public ResponseEntity<ResultMessage> confirmReservation(@PathVariable int reservation_id,
                                                             @RequestParam(value = "id", required = true) String id) {
-        ResultMessage resultMessage = new ResultMessage(Integer.valueOf(reservation_id), "Success");
-        reservationRepository.confirmReservation(Integer.valueOf(reservation_id), id);
+        ResultMessage resultMessage = new ResultMessage(reservation_id, "Success");
+        reservationRepository.confirmReservation(reservation_id, id);
         return new ResponseEntity(resultMessage, HttpStatus.OK);
     }
 
@@ -75,10 +75,10 @@ public class ReservationController {
         --------------------------------- [PUT] Cancel reservation ---------------------------------
     */
     @RequestMapping(value = "/reservation/{reservation_id}/cancel", method = RequestMethod.PUT)
-    public ResponseEntity<ResultMessage> cancelReservation(@PathVariable String reservation_id,
+    public ResponseEntity<ResultMessage> cancelReservation(@PathVariable int reservation_id,
                                                            @RequestParam(value = "id", required = true) String id) {
-        ResultMessage resultMessage = new ResultMessage(Integer.valueOf(reservation_id), "Success");
-        reservationRepository.cancelReservation(Integer.valueOf(reservation_id), id);
+        ResultMessage resultMessage = new ResultMessage(reservation_id, "Success");
+        reservationRepository.cancelReservation(reservation_id, id);
         return new ResponseEntity(resultMessage, HttpStatus.OK);
     }
 
@@ -86,9 +86,18 @@ public class ReservationController {
         --------------------------------- [PUT] Save partial checkout ---------------------------------
     */
     @RequestMapping(value = "/reservation/{reservation_id}/partialCheckout", method = RequestMethod.PUT)
-    public ResponseEntity<ResultMessage> updatePartialCheckout(@PathVariable String reservation_id) {
-        ResultMessage resultMessage = new ResultMessage(Integer.valueOf(reservation_id), "Success");
-        reservationRepository.updatePartialCheckout(Integer.valueOf(reservation_id));
+    public ResponseEntity<ResultMessage> updatePartialCheckout(@PathVariable int reservation_id,
+                                                               @RequestHeader(value = "authenticate-token") String token) {
+        if(token == null) {
+            throw new UnauthorizedException();
+        }
+        try {
+            JwtUser user = service.getUser(token);
+        } catch (Exception ex) {
+            throw new UnauthorizedException();
+        }
+        ResultMessage resultMessage = new ResultMessage(reservation_id, "Success");
+        reservationRepository.updatePartialCheckout(reservation_id);
         return new ResponseEntity(resultMessage, HttpStatus.OK);
     }
 

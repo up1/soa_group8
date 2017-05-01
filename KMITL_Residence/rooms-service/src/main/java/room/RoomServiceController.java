@@ -71,7 +71,7 @@ public class RoomServiceController {
         } catch (Exception ex) {
             throw new UnauthorizedException();
         }
-        this.roomServiceRepository.roomCheckOutByReservationId(reservationId);
+        this.roomServiceRepository.roomCheckOutByReservationId(reservationId, token);
         return new ResponseEntity(new ResultMessage("Success"),HttpStatus.OK);
     }
 
@@ -86,7 +86,7 @@ public class RoomServiceController {
         } catch (Exception ex) {
             throw new UnauthorizedException();
         }
-        ReservationInfo reservation = this.roomServiceRepository.getInfoReservationCheckin(reservationId, token);
+        ReservationInfo reservation = this.roomServiceRepository.getInfoReservationCheck(reservationId, token);
         return new ResponseEntity(reservation, HttpStatus.OK);
     }
 

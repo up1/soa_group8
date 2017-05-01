@@ -1,25 +1,19 @@
 package room;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.springframework.web.client.RestTemplate;
 import room.exception.*;
-import room.jwt.JwtService;
 import room.mapper.CheckerRowMapper;
 import room.mapper.RoomRowMapper;
 import room.mapper.RoomTypeRowMapper;
 import room.model.*;
+import room.service.ReservationService;
 
 @Repository
 public class RoomServiceRepository {
@@ -28,7 +22,7 @@ public class RoomServiceRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private JwtService jwtService;
+    private ReservationService reservationService;
 
     @Value("${url.reservation.service}")
     String reservationURL;
@@ -97,7 +91,7 @@ public class RoomServiceRepository {
     @Transactional
     public void roomCheckInByReservationId(int roomId, int reservationId, String token){
 
-        Reservation reservation = getReservation(reservationId, token);
+        Reservation reservation = reservationService.getReservation(reservationId, token);
 
         Room room = getRoomInformationByRoomId(roomId);
 
@@ -128,7 +122,7 @@ public class RoomServiceRepository {
     }
 
     @Transactional
-    public void roomCheckOutByReservationId(int reservationId){
+    public void roomCheckOutByReservationId(int reservationId, String token){
 
         List<Checker> checkers = this.jdbcTemplate.query(
                 "SELECT reservation_id, checkin, checkout, room_id FROM RoomsChecker WHERE reservation_id = ?",
@@ -139,46 +133,36 @@ public class RoomServiceRepository {
         }else if(checkers.get(0).getCheckout() != null){
             throw new ReceptionException("This reservation id has already checked-out, Reservation id : " + reservationId);
         }
+
         String sql = "UPDATE Rooms SET room_availability = 1 WHERE room_id = ?";
         this.jdbcTemplate.update(sql, checkers.get(0).getRoomId());
         sql = "UPDATE RoomsChecker SET checkout = CURRENT_TIMESTAMP WHERE reservation_id = ?";
         this.jdbcTemplate.update(sql, reservationId);
+
+        if(isCheckoutBefore(reservationId, token)) {
+            reservationService.partialCheckout(reservationId, token);
+        }
     }
 
-    public ReservationInfo getInfoReservationCheckin(int reservationId, String token) {
-        String sql = "select reservation_id from RoomsChecker where reservation_id = ?;";
+    public ReservationInfo getInfoReservationCheck(int reservationId, String token) {
+
         ReservationInfo reservation;
-        List<Map<String, Object>> id = this.jdbcTemplate.queryForList(sql, new String[] { Integer.toString(reservationId) });
-        if(id.size() < 1) {
-            reservation = getReservationWithCheckinStatus(getReservation(reservationId, token), "no");
+        Checker checker = getCheckerFromReservationId(reservationId);
+        if(checker == null) {
+            reservation = getReservationWithCheckStatus(reservationService.getReservation(reservationId, token), "no", "no");
         }
         else {
-            reservation = getReservationWithCheckinStatus(getReservation(reservationId, token), "yes");
+            if(checker.getCheckout() == null) {
+                reservation = getReservationWithCheckStatus(reservationService.getReservation(reservationId, token), "yes", "no");
+            }
+            else {
+                reservation = getReservationWithCheckStatus(reservationService.getReservation(reservationId, token), "yes", "yes");
+            }
         }
         return reservation;
     }
 
-    private Reservation getReservation(int reservationId, String token) {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set(authTokenHeader, token);
-
-        HttpEntity<String> entity = new HttpEntity<String>(headers);
-
-        RestTemplate template = new RestTemplate();
-        Reservation reservation;
-        try {
-            //reservation = template.getForObject(reservationURL + reservationId + "/", Reservation.class, entity);
-            ResponseEntity<Reservation> reservationResponseEntity =
-                    template.exchange(reservationURL + reservationId + "/", HttpMethod.GET, entity, Reservation.class);
-            reservation = reservationResponseEntity.getBody();
-        }catch(Exception e) {
-            throw new ReservationNotFoundException(reservationId);
-        }
-        return reservation;
-    }
-
-    private ReservationInfo getReservationWithCheckinStatus(Reservation reservation, String status) {
+    private ReservationInfo getReservationWithCheckStatus(Reservation reservation, String checkIn, String checkOut) {
         ReservationInfo reservationInfo = new ReservationInfo(reservation.getId(),
                 reservation.getCheckIn(),
                 reservation.getCheckOut(),
@@ -186,7 +170,8 @@ public class RoomServiceRepository {
                 reservation.getRoomType(),
                 reservation.getStatus(),
                 reservation.getCustomer(),
-                status);
+                checkIn,
+                checkOut);
         return reservationInfo;
     }
 
@@ -214,7 +199,7 @@ public class RoomServiceRepository {
     }
 
     public void changeRoom(int reservationId, int roomId, String token) {
-        ReservationInfo reservation = getInfoReservationCheckin(reservationId, token);
+        ReservationInfo reservation = getInfoReservationCheck(reservationId, token);
         Room room = getRoomInformationByRoomId(roomId);
         Checker checker = getCheckerFromReservationId(reservationId);
         if(reservation.getStatus().equals("no")) {
@@ -236,7 +221,26 @@ public class RoomServiceRepository {
     private Checker getCheckerFromReservationId(int reservationId) {
         Checker checker;
         String sql = "SELECT reservation_id, checkin, checkout, room_id FROM RoomsChecker WHERE reservation_id = ?;";
-        checker = this.jdbcTemplate.queryForObject(sql, new Object[] { reservationId }, new CheckerRowMapper());
+        try {
+            checker = this.jdbcTemplate.queryForObject(sql, new Object[]{reservationId}, new CheckerRowMapper());
+        } catch (Exception ex) {
+            checker = null;
+        }
         return checker;
     }
+
+    private boolean isCheckoutBefore(int reservationId, String token) {
+        Reservation reservation = reservationService.getReservation(reservationId, token);
+        Checker checker = getCheckerFromReservationId(reservationId);
+
+        String oldCheckout = reservation.getCheckOut();
+        String newCheckout = checker.getCheckout().split(" ")[0];
+        int result = oldCheckout.compareTo(newCheckout);
+        boolean isBefore = true;
+        if(result > 0) isBefore = true;
+        else if(result < 0) isBefore = false;
+        else isBefore = true;
+        return isBefore;
+    }
+
 }
