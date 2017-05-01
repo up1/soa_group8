@@ -125,7 +125,7 @@ public class RoomServiceController {
         return new ResponseEntity(new ResultMessage("CLOSE ROOM: " + roomId ), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/rooms/change")
+    @RequestMapping(value = "/rooms/change", method = RequestMethod.PUT)
     public ResponseEntity changeRoom(@RequestParam(value = "reservationId") int reservationId,
                                      @RequestParam(value = "roomId") int roomId,
                                      @RequestHeader(value = "authenticate-token") String token) {
