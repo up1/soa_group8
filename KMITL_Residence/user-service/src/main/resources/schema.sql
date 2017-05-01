@@ -10,8 +10,8 @@ CREATE TABLE user_account (
 DROP TABLE IF EXISTS staff;
 
 CREATE TABLE staff(
-  th_prename VARCHAR (10),
-  th_name VARCHAR (45),
+  th_prename VARCHAR (10) CHARACTER  SET utf8 COLLATE utf8_general_ci,
+  th_name VARCHAR (45) CHARACTER  SET utf8 COLLATE utf8_general_ci,
   en_prename VARCHAR (10),
   en_name VARCHAR (45),
   email VARCHAR (45),
@@ -22,6 +22,6 @@ DROP TABLE IF EXISTS user_role;
 
 CREATE TABLE user_role(
   role_id INT PRIMARY KEY,
-  th_role VARCHAR (45),
+  th_role VARCHAR (45) CHARACTER  SET utf8 COLLATE utf8_general_ci,
   en_role VARCHAR (45)
 );
