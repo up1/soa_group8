@@ -9,6 +9,8 @@ import user.jwt.JwtService;
 import user.model.*;
 import user.repository.UserRepository;
 
+import java.util.List;
+
 /**
  * Created by Adisorn on 2/4/2560.
  */
@@ -39,6 +41,12 @@ public class UserController {
     @RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
     public User getUser(@PathVariable String username) {
         return this.userRepository.getUser(username);
+    }
+
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    public List<User> getUsers(@RequestParam(value = "page", defaultValue = "1") int page,
+                               @RequestParam(value="item_per_page", defaultValue = "10") int item_per_page) {
+        return this.userRepository.getUsers(page, item_per_page);
     }
 
     @RequestMapping(value = "/user/{username}", method = RequestMethod.DELETE)

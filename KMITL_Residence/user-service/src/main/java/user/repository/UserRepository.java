@@ -107,8 +107,28 @@ public class UserRepository {
     }
 
     @Transactional(readOnly = true)
-    public List<User> getUsers() {
-        List<User> users = null;
+    public List<User> getUsers(int page, int item_per_page) {
+        List<User> users;
+        final String sql_get_all_user = "SELECT a.username, a.hash_password, a.role_id, s.th_prename, s.th_name, s.en_prename," +
+                " s.en_name, s.email " +
+                "FROM user_account a " +
+                "JOIN staff s " +
+                "ON a.username = s.username " +
+                "JOIN user_role r " +
+                "ON r.role_id = a.role_id " +
+                "LIMIT ? " +
+                "OFFSET ?;";
+
+        try {
+            if (item_per_page > 0) {
+                int offset = item_per_page * (page - 1);
+                users = this.jdbc.query(sql_get_all_user, new Object[]{item_per_page, offset}, new UserRowMapper());
+            } else {
+                throw new UserNotFoundException();
+            }
+        } catch(Exception ex) {
+            throw new UserNotFoundException();
+        }
         return users;
     }
 
