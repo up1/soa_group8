@@ -12,8 +12,8 @@
                             <th style="width:5%">Closing</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr v-for="room in filteredRoomsData">
+                    <transition-group name="row" tag="tbody" mode="out-in">
+                        <tr v-for="room in filteredRoomsData" :key="room">
                             <td>{{ room.roomId }}</td>
                             <td>{{ room.roomTypeId | matchRoomType }}</td>
                             <td>
@@ -26,7 +26,7 @@
                                 </div>
                             </td>
                         </tr>
-                    </tbody>
+                    </transition-group>
                 </table>
             </div>
         </div>
@@ -69,6 +69,7 @@ export default {
                 Rooms.closeRoom(room.roomId, this.$cookie.get('_token'))
                     .then(res => {
                         console.log("Room ID " + room.roomId + " is now closed.")
+                        room.roomAvailability = -1
                     })
                     .catch(err => {
                         console.log("Can\'t close the room ID " + room.roomId + ". maybe the server is terminated.")
@@ -77,6 +78,7 @@ export default {
                 Rooms.openRoom(room.roomId, this.$cookie.get('_token'))
                     .then(res => {
                         console.log("Rooms ID " + room.roomId + " is now opened.")
+                        room.roomAvailability = 1
                     })
                     .catch(err => {
                         console.log("Can\'t open the room ID " + room.roomId + ". maybe the server is terminated.")

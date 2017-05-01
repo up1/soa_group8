@@ -199,10 +199,18 @@ div.ui.grid > div.row {
 .fade-enter-active, .fade-leave-active {
   transition: opacity .3s ease;
 }
+
 .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
-  opacity: 0
+  opacity: 0;
 }
 
+.row-enter-active, .row-leave-active {
+    transition: all .5s;
+}
+
+.row-enter, .row-leave-to {
+    opacity: 0;
+}
 
 a.link.large {
     font-size: 1.14285714rem;
