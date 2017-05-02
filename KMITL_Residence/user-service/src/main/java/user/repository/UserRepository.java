@@ -57,7 +57,7 @@ public class UserRepository {
                 throw new InvalidDataException("Username has already been taken.");
             }
         } else {
-            throw new InvalidDataException("Username can be alphabet or number.");
+            throw new InvalidDataException("Username can be (ENG) alphabet or number.");
         }
 
     }
