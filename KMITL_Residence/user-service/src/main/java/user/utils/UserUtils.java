@@ -31,4 +31,13 @@ public class UserUtils {
         return null;
     }
 
+    public static boolean checkUsername(String input) {
+        for (int i = 0; i != input.length(); ++i) {
+            if (!Character.isLetterOrDigit(input.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

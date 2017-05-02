@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class UnauthorizedException extends RuntimeException {
 
     public UnauthorizedException() {
-        super("You don't have permission to view this user");
+        super("You don't have permission to view or edit this user");
     }
 
 }
